@@ -12,60 +12,46 @@ class BookStore extends StatefulWidget {
 
 class _BookStoreState extends State<BookStore> {
   List<String> book_images = [
-    './assets/images/books.jpg',
-    './assets/images/lit.jpg',
-    './assets/images/painting.jpg'
+    './assets/images/book_cover1.png',
+    './assets/images/book_cover2.png',
+    './assets/images/book_cover3.png',
+    './assets/images/book_cover4.png'
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.black,
-          leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(CupertinoIcons.back)),
-          title: const Text("Books Store"),
-          actions: [
-            Row(
-              children: [
-                const Text(
-                  "Cart",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(5.0),
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(30.0)),
-                  child: IconButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => const Cart())),
-                      icon: const Icon(CupertinoIcons.cart)),
-                )
-              ],
-            )
-          ]),
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(CupertinoIcons.back, color: Colors.black)),
+        title: const Text("Bookstore", style: TextStyle(color: Colors.black)),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(
+            top: 0.0, left: 15.0, right: 15.0, bottom: 15.0),
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
+            searchContainer(),
+            const SizedBox(height: 5),
             const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.only(top: 8.0),
                 child: Text(
-                  "Soft Copy Version",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  "Most recent books",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black54),
                 )),
             SizedBox(
               height: 230,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
+                physics: const BouncingScrollPhysics(),
+                itemCount: 4,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                       onTap: () => Navigator.push(
@@ -73,32 +59,27 @@ class _BookStoreState extends State<BookStore> {
                           CupertinoPageRoute(
                               builder: (BuildContext context) =>
                                   const BookDetail())),
-                      child: productCard(book_images[index], "First Book"));
+                      child: productCard(book_images[index], "Enoch Ojotisa"));
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(width: 5.0);
+                  return const SizedBox.shrink();
                 },
               ),
             ),
             const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.only(top: 8.0),
                 child: Text(
-                  "Audio Version",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  "Featured books",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black54),
                 )),
-            SizedBox(
-              height: 230,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int index) {
-                  return productCard("./assets/images/books.jpg", "Audio Book");
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(width: 5.0);
-                },
-              ),
-            ),
+            bookSaleCard(),
+            const SizedBox(height: 8.0),
+            bookSaleCard(),
+            const SizedBox(height: 8.0),
+            bookSaleCard()
           ],
         ),
       ),

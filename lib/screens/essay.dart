@@ -4,14 +4,14 @@ import 'package:flutter/services.dart';
 import '../custom_widgets.dart';
 import 'screens.dart';
 
-class Literature extends StatefulWidget {
-  const Literature({Key? key}) : super(key: key);
+class Essay extends StatefulWidget {
+  const Essay({Key? key}) : super(key: key);
 
   @override
-  _LieratureState createState() => _LieratureState();
+  _EssayState createState() => _EssayState();
 }
 
-class _LieratureState extends State<Literature> {
+class _EssayState extends State<Essay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +24,7 @@ class _LieratureState extends State<Literature> {
               CupertinoIcons.back,
               color: Colors.black,
             )),
-        title: const Text("Poetry",
+        title: const Text("Essay",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       ),
       floatingActionButton: FloatingActionButton(
@@ -45,7 +45,7 @@ class _LieratureState extends State<Literature> {
               const SizedBox(
                 height: 10,
               ),
-              const Text("Recent Poems",
+              const Text("Recent Essay",
                   style: TextStyle(
                       color: Colors.black54, fontWeight: FontWeight.bold)),
               const SizedBox(
@@ -80,7 +80,7 @@ class _LieratureState extends State<Literature> {
               const SizedBox(
                 height: 10,
               ),
-              const Text("Featured Poems",
+              const Text("Featured Essay",
                   style: TextStyle(
                       color: Colors.black54, fontWeight: FontWeight.bold)),
               poemCard(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:akewiartshouse/screens/screens.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 Container poetCard(String title, String imagePath) {
   return Container(
@@ -132,81 +133,33 @@ Container booksCard(
 
 Container productCard(String image, String productName) {
   return Container(
-    padding: const EdgeInsets.all(12.0),
     margin: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 5, right: 0),
-    width: 200,
+    width: 90,
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Stack(
-          children: [
-            SizedBox(
-              height: 100,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                child: Image.asset(
-                  image,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 2,
-              right: 3,
-              child: Container(
-                padding: const EdgeInsets.all(0.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.0),
-                    color: Colors.grey[100]),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    CupertinoIcons.heart,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            )
-          ],
+        Expanded(
+          child: Image.asset(
+            image,
+            fit: BoxFit.fitWidth,
+          ),
         ),
         Text(
           productName,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "\$50.9",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            Container(
-              padding: const EdgeInsets.all(0.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
-                  color: Colors.grey[100]),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  CupertinoIcons.cart,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ],
+        const Text(
+          "Commoner's Speech",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
         )
       ],
     ),
     decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15.0),
-        boxShadow: const [
-          BoxShadow(
-              blurRadius: 0.8,
-              spreadRadius: 1.0,
-              offset: Offset(1, 1),
-              color: Colors.black12)
-        ]),
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(15.0),
+    ),
   );
 }
 
@@ -222,41 +175,34 @@ Container roundedContainer(Widget child) {
 }
 
 // cards
-Column itemCard(String text, String imagePath, Color color) {
-  return Column(
-    children: [
-      Container(
-          alignment: Alignment.center,
-          height: 100,
-          width: 100,
-          margin: const EdgeInsets.only(right: 5.0, top: 10.0),
-          padding: const EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-              color: color, borderRadius: BorderRadius.circular(12.0)),
-          child: Container(
-            height: 150,
-            width: 150,
-            padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(12.0)),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: Image.asset(
-                imagePath,
-                height: 70,
-                width: 70,
-                fit: BoxFit.cover,
-              ),
-            ),
-          )),
-      Text(
-        text,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-      ),
-    ],
+Container itemCard(String text, String imagePath, Color color) {
+  return Container(
+    height: 130,
+    width: 130,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      boxShadow: const [
+        BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 5),
+            spreadRadius: 0,
+            blurRadius: 3.0),
+      ],
+      borderRadius: BorderRadius.circular(7.0),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const SizedBox(
+          height: 7,
+        ),
+        Image.asset(imagePath, height: 70, width: 70),
+        Text(text, style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(
+          height: 3,
+        ),
+      ],
+    ),
   );
 }
 
@@ -402,7 +348,7 @@ Container artWorkCard(
           children: [
             Text(description, style: const TextStyle(fontSize: 18)),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              priceTag("24.5"),
+              priceTag(),
               GestureDetector(
                   onTap: () => Navigator.push(
                       context,
@@ -473,14 +419,307 @@ Container editorialCard(BuildContext context, String imagePath, String title,
   );
 }
 
-Container priceTag(String amount) {
+Container priceTag() {
   return Container(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 25.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.black,
+      ),
+      child: const Text("Buy Now",
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)));
+}
+
+Container downloadTag() {
+  return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 25.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30.0),
         color: Colors.grey,
       ),
-      child: Text("\$$amount",
-          style: const TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)));
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Text("Download",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Colors.white)),
+          SizedBox(
+            width: 7,
+          ),
+          Text("|",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Colors.white)),
+          SizedBox(
+            width: 3,
+          ),
+          Icon(
+            CupertinoIcons.chevron_down,
+            color: Colors.white,
+          )
+        ],
+      ));
+}
+
+Column literatureOptionsCard(String text, String imagePath) {
+  return Column(
+    children: [
+      Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(15.0),
+        height: 70,
+        width: 70,
+        color: Colors.grey[300],
+        child: Image.asset(imagePath),
+      ),
+      const SizedBox(height: 5),
+      Text(text, style: const TextStyle(fontWeight: FontWeight.bold))
+    ],
+  );
+}
+
+Container bookSaleCard() {
+  return Container(
+    height: 135,
+    padding: const EdgeInsets.all(15.0),
+    width: double.infinity,
+    margin: const EdgeInsets.all(5.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Row(children: [
+            ClipRRect(
+              child: Image.asset(
+                './assets/images/book_cover4.png',
+              ),
+              borderRadius: BorderRadius.circular(2.0),
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Commoner's Speech",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const Text("By Enoch Ojotisa"),
+                      Row(
+                        children: const [
+                          Icon(
+                            CupertinoIcons.star_fill,
+                            color: Colors.black54,
+                            size: 17,
+                          ),
+                          Icon(
+                            CupertinoIcons.star_fill,
+                            color: Colors.black54,
+                            size: 17,
+                          ),
+                          Icon(
+                            CupertinoIcons.star_fill,
+                            color: Colors.black54,
+                            size: 17,
+                          ),
+                          Icon(
+                            CupertinoIcons.star_fill,
+                            color: Colors.black54,
+                            size: 17,
+                          ),
+                          Icon(
+                            CupertinoIcons.star,
+                            color: Colors.grey,
+                            size: 17,
+                          ),
+                        ],
+                      ),
+                      const Text(
+                        "NGN 1,200",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w900),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                        height: 30,
+                        alignment: Alignment.centerRight,
+                        width: 150,
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(12.0)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text("Add to basket",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12)),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Icon(
+                              CupertinoIcons.shopping_cart,
+                              color: Colors.white,
+                            )
+                          ],
+                        )),
+                  ),
+                ],
+              ),
+            ),
+          ]),
+        ),
+      ],
+    ),
+    decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: const [
+          BoxShadow(
+              blurRadius: 1.0,
+              spreadRadius: 2.0,
+              offset: Offset(1, 1),
+              color: Colors.black12)
+        ]),
+  );
+}
+
+Container poemCard() {
+  return Container(
+    height: 150,
+    padding: const EdgeInsets.all(15.0),
+    margin: const EdgeInsets.all(5.0),
+    width: double.infinity,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Row(children: [
+            ClipRRect(
+              child: Image.asset(
+                './assets/images/bg.jpeg',
+              ),
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Mood Swings",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const Text("By Enoch Ojotisa"),
+                  const Text("Posted 10/02/2022", style: TextStyle()),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(CupertinoIcons.heart,
+                              color: Colors.grey)),
+                      const Text("198",
+                          style: TextStyle(color: Colors.black54)),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            FontAwesomeIcons.shareAlt,
+                            color: Colors.grey,
+                            size: 20,
+                          )),
+                      const Text("198",
+                          style: TextStyle(color: Colors.black54)),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(CupertinoIcons.chat_bubble,
+                              color: Colors.grey)),
+                      const Text("46", style: TextStyle(color: Colors.black54)),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ]),
+        ),
+      ],
+    ),
+    decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: const [
+          BoxShadow(
+              blurRadius: 1.0,
+              spreadRadius: 2.0,
+              offset: Offset(0, 2),
+              color: Colors.black12)
+        ]),
+  );
+}
+
+columnCard(String title, String author, String imagePath) {
+  return Container(
+      height: 130,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ClipRRect(
+                child: Image.asset(imagePath),
+                borderRadius: BorderRadius.circular(12.0)),
+          ),
+          Text(author, style: TextStyle(fontSize: 12)),
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )
+        ],
+      ));
+}
+
+// search container
+Container searchContainer() {
+  return Container(
+    height: 35,
+    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0), color: Colors.grey[300]),
+    child: Row(children: const [
+      Icon(
+        CupertinoIcons.search,
+        color: Colors.grey,
+      ),
+      SizedBox(
+        width: 10,
+      ),
+      Text(
+        "Search for poem title, writer",
+        style: TextStyle(color: Colors.black54),
+      )
+    ]),
+  );
 }

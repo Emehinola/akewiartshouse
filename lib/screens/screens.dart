@@ -14,3 +14,5 @@ export 'music.dart';
 export 'single_music.dart';
 export 'art_works.dart';
 export 'editorial.dart';
+export 'drama.dart';
+export 'essay.dart';

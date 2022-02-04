@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PoetryDetailScreen extends StatelessWidget {
   const PoetryDetailScreen({Key? key}) : super(key: key);
@@ -8,10 +9,14 @@ class PoetryDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black54,
+          backgroundColor: Colors.white,
+          elevation: 0.0,
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: const Icon(CupertinoIcons.back)),
+              icon: const Icon(
+                CupertinoIcons.xmark,
+                color: Colors.black,
+              )),
           title: const Text(
             "Burnt Coins",
           ),
@@ -26,16 +31,6 @@ class PoetryDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Burnt Coins",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 23,
-                        )),
-                    const Text(
-                      "by Enoch Ojototisa",
-                      style: TextStyle(color: Colors.grey),
-                      softWrap: true,
-                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -51,6 +46,47 @@ class PoetryDetailScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: const [
+                          Text("Mood Swing",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text("By Enoch Ojotisa"),
+                          Text("Posted 03/02/2022"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(CupertinoIcons.heart,
+                                color: Colors.black)),
+                        const Text("46",
+                            style: TextStyle(color: Colors.black54)),
+                        const SizedBox(height: 15.0),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(FontAwesomeIcons.shareAlt,
+                                color: Colors.black)),
+                        const Text("198",
+                            style: TextStyle(color: Colors.black54)),
+                        const SizedBox(height: 15.0),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(CupertinoIcons.chat_bubble,
+                                color: Colors.black)),
+                        const Text("198",
+                            style: TextStyle(color: Colors.black54))
+                      ],
+                    ),
+                    const Divider(),
                     const Text(
                       """Crashed economies,
 deaths in the fields of nations,
@@ -69,7 +105,8 @@ like previous plagues, drink Africa’s plants.
         
 """,
                       softWrap: true,
-                      style: TextStyle(fontSize: 18),
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 10,

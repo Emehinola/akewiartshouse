@@ -45,6 +45,7 @@ class Events extends StatelessWidget {
         ],
       ),
       body: ListView(
+        physics: const BouncingScrollPhysics(),
         children: [
           Stack(
             alignment: Alignment.center,
