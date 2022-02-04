@@ -41,7 +41,7 @@ class _EssayState extends State<Essay> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              searchContainer(),
+              searchContainer("Search for essay"),
               const SizedBox(
                 height: 10,
               ),
@@ -62,7 +62,7 @@ class _EssayState extends State<Essay> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    PoetryDetailScreen())),
+                                    SinglePoet())),
                         child: columnCard("Holes", "Enoch Ojotisa",
                             './assets/images/image 37.png'),
                       ),

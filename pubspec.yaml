@@ -81,6 +81,10 @@ flutter:
     - assets/images/book_cover4.png
     - assets/images/image 37.png
     - assets/images/image 38.png
+    - assets/images/music1.png
+    - assets/images/music2.png
+    - assets/images/music3.png
+    - assets/images/music4.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

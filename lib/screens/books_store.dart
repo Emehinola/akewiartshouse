@@ -35,7 +35,7 @@ class _BookStoreState extends State<BookStore> {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
-            searchContainer(),
+            searchContainer("Search for books"),
             const SizedBox(height: 5),
             const Padding(
                 padding: EdgeInsets.only(top: 8.0),

@@ -9,124 +9,97 @@ class Music extends StatefulWidget {
 }
 
 class _MusicState extends State<Music> {
+  List<String> book_images = [
+    './assets/images/music1.png',
+    './assets/images/music2.png',
+    './assets/images/music3.png',
+    './assets/images/music1.png'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          centerTitle: true,
-          title: const Text("Music"),
-          leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(CupertinoIcons.chevron_back)),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        title: const Text(
+          "Music",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
-        body: Stack(
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(CupertinoIcons.chevron_back, color: Colors.black)),
+        actions: [
+          IconButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          const NavigationScreen())),
+              icon: const Icon(
+                CupertinoIcons.add_circled_solid,
+                color: Colors.blueGrey,
+                size: 35,
+              )),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(
+            top: 0.0, left: 15.0, right: 15.0, bottom: 15.0),
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Colors.blueAccent, Colors.blueGrey, Colors.grey],
-                      begin: Alignment.topCenter,
-                      end: AlignmentDirectional.bottomCenter)),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ListView(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: Image.asset(
-                          './assets/images/bg.jpeg',
-                          height: 200,
-                          width: 150,
-                        )),
-                  ),
-                  const Text(
-                    "ROCKSTAR.",
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  const Text(
-                    "(feat. roddy ricch)",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 15.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: Colors.lightBlueAccent),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Icon(CupertinoIcons.play_arrow_solid),
-                                SizedBox(width: 7),
-                                Text("Play")
-                              ],
-                            )),
-                      ),
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      Expanded(
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 15.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: Colors.grey),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Icon(
-                                  CupertinoIcons.shuffle,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(width: 7),
-                                Text("Shuffle",
-                                    style: TextStyle(color: Colors.white))
-                              ],
-                            )),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  const Text("Top Tracks",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 20)),
-                  const SizedBox(height: 20.0),
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MusicDisplay())),
-                    child: musicRow("1", "./assets/images/bg.jpeg", "Rockstar",
-                        "(feat. roddy ricch)"),
-                  ),
-                  const SizedBox(height: 7),
-                  musicRow("2", "./assets/images/music.jpg", "Afro Pop",
-                      "(feat. olamide)"),
-                  const SizedBox(height: 7),
-                  musicRow("3", "./assets/images/painting.jpg", "Hip Pop",
-                      "(feat. Wizkid)")
-                ],
+            searchContainer("Search for song title, artist"),
+            const SizedBox(height: 5),
+            const Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Text(
+                  "Popular music",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black54),
+                )),
+            SizedBox(
+              height: 150,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: 4,
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (BuildContext context) =>
+                                  MusicDisplay())),
+                      child: musicListCard(book_images[index],
+                          "Commoner's Speech", "Enoch Ojotisa"));
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox.shrink();
+                },
               ),
-            )
+            ),
+            const Padding(
+                padding: EdgeInsets.only(top: 8.0, bottom: 10.0),
+                child: Text(
+                  "Featured music",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black54),
+                )),
+            nowPlayingCard(),
+            const SizedBox(height: 8.0),
+            musicTile('./assets/images/music2.png'),
+            const SizedBox(height: 8.0),
+            musicTile('./assets/images/music1.png'),
+            const SizedBox(height: 8.0),
+            musicTile('./assets/images/music3.png'),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }

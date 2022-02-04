@@ -131,6 +131,37 @@ Container booksCard(
   );
 }
 
+// horizontal music list card
+Container musicListCard(String image, String name, String author) {
+  return Container(
+    margin: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 5, right: 0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Image.asset(
+            image,
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+        Text(
+          name,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+        ),
+        Text(
+          author,
+          style: const TextStyle(
+              fontSize: 9, fontWeight: FontWeight.bold, color: Colors.grey),
+        ),
+      ],
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+  );
+}
+
 Container productCard(String image, String productName) {
   return Container(
     margin: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 5, right: 0),
@@ -482,6 +513,7 @@ Column literatureOptionsCard(String text, String imagePath) {
   );
 }
 
+// music tile
 Container bookSaleCard() {
   return Container(
     height: 135,
@@ -601,6 +633,58 @@ Container bookSaleCard() {
   );
 }
 
+Container musicTile(String imagePath) {
+  return Container(
+      height: 70,
+      padding: const EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: Colors.white,
+          boxShadow: const [
+            BoxShadow(
+                blurRadius: 5.0,
+                spreadRadius: 3.0,
+                offset: Offset(1, 1),
+                color: Colors.black12)
+          ]),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(children: [
+          Image.asset(imagePath, height: 55),
+          const SizedBox(width: 5),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text("Oremi",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 12)),
+                Text("Angelique kodja",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        fontSize: 12)),
+                Text("2:34",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 12)),
+              ])
+        ]),
+        Row(
+          children: const [
+            Icon(CupertinoIcons.play_arrow_solid, color: Colors.black),
+            SizedBox(width: 15),
+            Icon(CupertinoIcons.heart, color: Colors.black),
+            SizedBox(width: 15),
+            Icon(CupertinoIcons.ellipsis_vertical, color: Colors.black),
+          ],
+        )
+      ]));
+}
+
 Container poemCard() {
   return Container(
     height: 150,
@@ -702,24 +786,137 @@ columnCard(String title, String author, String imagePath) {
 }
 
 // search container
-Container searchContainer() {
+Container searchContainer(String text) {
   return Container(
     height: 35,
     padding: const EdgeInsets.symmetric(horizontal: 15.0),
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0), color: Colors.grey[300]),
-    child: Row(children: const [
-      Icon(
+    child: Row(children: [
+      const Icon(
         CupertinoIcons.search,
         color: Colors.grey,
       ),
-      SizedBox(
+      const SizedBox(
         width: 10,
       ),
       Text(
-        "Search for poem title, writer",
-        style: TextStyle(color: Colors.black54),
+        text,
+        style: const TextStyle(color: Colors.black54),
       )
     ]),
   );
+}
+
+// event type card
+Container eventTypeCard(String text, [bool live = false]) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 6.0),
+    decoration: BoxDecoration(
+        color: live ? Colors.black : Colors.grey[350],
+        borderRadius: BorderRadius.circular(15.0)),
+    child: Text(text,
+        style: TextStyle(
+            color: live ? Colors.white : Colors.black54,
+            fontWeight: FontWeight.bold)),
+  );
+}
+
+// comment tile
+Row userCommentTile(String name, String comment) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Icon(CupertinoIcons.person_alt_circle_fill, color: Colors.grey),
+      const SizedBox(
+        width: 5,
+      ),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              name,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Text(
+              comment,
+              style: TextStyle(fontSize: 12),
+            ),
+          ],
+        ),
+      )
+    ],
+  );
+}
+
+// mudic playing card
+Container nowPlayingCard() {
+  return Container(
+      height: 100,
+      padding: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0), color: Colors.black),
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(children: [
+            Image.asset('./assets/images/music2.png', height: 55),
+            const SizedBox(width: 5),
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text("Oremi",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text("Angelique kodja",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400, color: Colors.white)),
+                  Text("2:34",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white)),
+                ])
+          ]),
+          Row(
+            children: const [
+              Icon(CupertinoIcons.pause_solid, color: Colors.white),
+              SizedBox(width: 15),
+              Icon(CupertinoIcons.heart_fill, color: Colors.red),
+              SizedBox(width: 15),
+              Icon(CupertinoIcons.ellipsis_vertical, color: Colors.white),
+            ],
+          )
+        ]),
+        Stack(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+                margin: const EdgeInsets.only(top: 4.5),
+                width: double.infinity,
+                height: 5.0,
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12.0))),
+            Container(
+              margin: const EdgeInsets.only(top: 4.5),
+              color: Colors.red,
+              width: 200,
+              height: 5.0,
+            ),
+            Positioned(
+                left: 200,
+                top: 2,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      color: Colors.red),
+                  height: 10.0,
+                  width: 10.0,
+                ))
+          ],
+        ),
+      ]));
 }

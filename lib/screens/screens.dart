@@ -1,7 +1,6 @@
 export 'navigation.dart';
 export 'literature.dart';
 export 'poetry.dart';
-export 'poetry_details.dart';
 export 'profile_page.dart';
 export 'books_store.dart';
 export 'cart.dart';
@@ -16,3 +15,4 @@ export 'art_works.dart';
 export 'editorial.dart';
 export 'drama.dart';
 export 'essay.dart';
+export 'single_poet.dart';
