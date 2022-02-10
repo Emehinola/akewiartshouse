@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:akewiartshouse/screens/screens.dart';
-import 'package:drop_cap_text/drop_cap_text.dart';
+
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

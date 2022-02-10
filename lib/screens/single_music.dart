@@ -34,15 +34,18 @@ class _MusicDisplayState extends State<MusicDisplay> {
         body: Padding(
           padding: const EdgeInsets.all(15.0),
           child: ListView(
+            physics: const BouncingScrollPhysics(),
             children: [
               const SizedBox(height: 15.0),
-              ClipRRect(
-                child: Image.asset(
-                  './assets/images/bg.jpeg',
-                ),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              const SizedBox(height: 10),
+              Container(
+                  height: 230,
+                  decoration: BoxDecoration(
+                    image: const DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage('./assets/images/music3.png')),
+                    borderRadius: BorderRadius.circular(12.0),
+                  )),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -52,7 +55,8 @@ class _MusicDisplayState extends State<MusicDisplay> {
                       Text("Oremi",
                           style: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
                       Text("Angelique Kidjo")
                     ],
                   ),
@@ -73,7 +77,7 @@ class _MusicDisplayState extends State<MusicDisplay> {
                 ],
               ),
               const SizedBox(
-                height: 10,
+                height: 30,
               ),
               Stack(
                 children: [
@@ -116,14 +120,23 @@ class _MusicDisplayState extends State<MusicDisplay> {
                 height: 50,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Icon(CupertinoIcons.shuffle, color: Colors.red, size: 30),
-                      Icon(CupertinoIcons.backward_end_fill,
-                          color: Colors.red, size: 30),
-                      Icon(CupertinoIcons.pause, color: Colors.red, size: 30),
-                      Icon(CupertinoIcons.forward_end_fill,
-                          color: Colors.red, size: 30),
-                      Icon(CupertinoIcons.repeat, color: Colors.red, size: 30)
+                    children: [
+                      const Icon(CupertinoIcons.shuffle,
+                          color: Colors.redAccent, size: 30),
+                      Row(
+                        children: const [
+                          Icon(CupertinoIcons.backward_end,
+                              color: Colors.red, size: 30),
+                          SizedBox(width: 10),
+                          Icon(CupertinoIcons.pause_circle,
+                              color: Colors.red, size: 35),
+                          SizedBox(width: 10),
+                          Icon(CupertinoIcons.forward_end,
+                              color: Colors.redAccent, size: 30),
+                        ],
+                      ),
+                      const Icon(CupertinoIcons.repeat,
+                          color: Colors.red, size: 30)
                     ]),
               )
             ],

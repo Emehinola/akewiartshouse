@@ -34,9 +34,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  drop_cap_text: ^1.1.3
+#  drop_cap_text: ^1.1.3
   flutter_credit_card: ^3.0.1
   font_awesome_flutter: ^9.2.0
+  pin_code_text_field: ^1.8.0
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +87,14 @@ flutter:
     - assets/images/music2.png
     - assets/images/music3.png
     - assets/images/music4.png
+    - assets/images/news1.png
+    - assets/images/news2.png
+    - assets/images/news3.png
+    - assets/images/news4.png
+    - assets/images/welcome_image.png
+    - assets/images/login_image.png
+    - assets/images/email_image.png
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

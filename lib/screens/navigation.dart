@@ -30,7 +30,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 Container(
                   height: 250,
                   decoration: const BoxDecoration(
-                      color: Color.fromRGBO(0, 0, 0, 0.87),
+                      color: Color.fromRGBO(0, 0, 0, 0.75),
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(15.0),
                           bottomRight: Radius.circular(15.0))),

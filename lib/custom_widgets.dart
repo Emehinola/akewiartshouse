@@ -685,7 +685,7 @@ Container musicTile(String imagePath) {
       ]));
 }
 
-Container poemCard() {
+Container poemCard([String imagePath = './assets/images/bg.jpeg']) {
   return Container(
     height: 150,
     padding: const EdgeInsets.all(15.0),
@@ -698,7 +698,7 @@ Container poemCard() {
           child: Row(children: [
             ClipRRect(
               child: Image.asset(
-                './assets/images/bg.jpeg',
+                imagePath,
               ),
               borderRadius: BorderRadius.circular(4.0),
             ),
@@ -716,31 +716,34 @@ Container poemCard() {
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
-                  const Text("By Enoch Ojotisa"),
-                  const Text("Posted 10/02/2022", style: TextStyle()),
-                  const SizedBox(height: 5),
+                  const Text(
+                    "By Enoch Ojotisa",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  const Text("Posted 10/02/2022",
+                      style: TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 25),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.heart,
-                              color: Colors.grey)),
-                      const Text("198",
-                          style: TextStyle(color: Colors.black54)),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            FontAwesomeIcons.shareAlt,
-                            color: Colors.grey,
-                            size: 20,
-                          )),
-                      const Text("198",
-                          style: TextStyle(color: Colors.black54)),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.chat_bubble,
-                              color: Colors.grey)),
-                      const Text("46", style: TextStyle(color: Colors.black54)),
+                      Row(
+                        children: const [
+                          Icon(CupertinoIcons.heart, color: Colors.grey),
+                          Text("198", style: TextStyle(color: Colors.black54)),
+                        ],
+                      ),
+                      Row(children: const [
+                        Icon(
+                          FontAwesomeIcons.shareAlt,
+                          color: Colors.grey,
+                          size: 15,
+                        ),
+                        Text("198", style: TextStyle(color: Colors.black54)),
+                      ]),
+                      Row(children: const [
+                        Icon(CupertinoIcons.chat_bubble, color: Colors.grey),
+                        Text("46", style: TextStyle(color: Colors.black54)),
+                      ])
                     ],
                   )
                 ],
@@ -811,7 +814,7 @@ Container searchContainer(String text) {
 // event type card
 Container eventTypeCard(String text, [bool live = false]) {
   return Container(
-    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 6.0),
+    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
     decoration: BoxDecoration(
         color: live ? Colors.black : Colors.grey[350],
         borderRadius: BorderRadius.circular(15.0)),
@@ -919,4 +922,65 @@ Container nowPlayingCard() {
           ],
         ),
       ]));
+}
+
+// upcoming events card
+SizedBox upcomingEventCard(String imagePath) {
+  return SizedBox(
+    height: 160,
+    width: double.infinity,
+    child: Stack(children: [
+      Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+        fit: BoxFit.cover,
+        image: AssetImage(imagePath),
+      ))),
+      Container(color: const Color.fromRGBO(0, 0, 0, 0.70)),
+      Align(
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "Home Drive Hangout",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 17),
+                    ),
+                    Text("GBVN Hangout",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 14)),
+                  ],
+                ),
+                Column(children: [
+                  const Text("Starts in",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 12)),
+                  Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.all(10.0),
+                    child: const Text("00:21:32:09",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 13)),
+                  )
+                ])
+              ]),
+        ),
+      )
+    ]),
+  );
 }

@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Akewi',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Nunito'),
-      home: const NavigationScreen(),
+      home: WelcomeScreen(),
     );
   }
 }

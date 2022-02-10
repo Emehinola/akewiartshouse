@@ -1,0 +1,1 @@
+export 'getter.dart';
