@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,12 @@ class _LoginScreenState extends State<LoginScreen> {
   // for loading
   bool loading = false;
 
+  // text fields contoller
+  TextEditingController emailCtrl = TextEditingController();
+  TextEditingController passwordCtrl = TextEditingController();
+
   // for logging in
-  Future login() async {
+  Future login(String email, String password) async {
     final response = await http.post(
       Uri.parse('http://placid-001-site50.itempurl.com/api/User/login'),
       headers: {
@@ -23,10 +27,9 @@ class _LoginScreenState extends State<LoginScreen> {
         'Authorization':
             'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzIiwiZW1haWwiOiJvbGFkZXBvb2xhdHVuZGVAZ21haWwuY29tIiwibmJmIjoxNjQ0NDM5MjA2LCJleHAiOjE2NDQ1MjU2MDYsImlhdCI6MTY0NDQzOTIwNn0.8Q62kFcL0CAmg8PAMq8VSnW_9jEvLRIsCZA4MM3l_q7NHG5-MhNQNolE79OxgHRy4gK9tUW37KXIRqJT0wfxAw'
       },
-      body: jsonEncode(
-          {'email': 'oladepoolatunde@gmail.com', 'password': 'Admin@123'}),
+      body: jsonEncode({'email': email, 'password': password}),
     );
-
+    // print(response.body);
     return response;
   }
 
@@ -72,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         height: 55,
                         child: TextFormField(
+                          controller: emailCtrl,
                           decoration: const InputDecoration(
                               hintText: "Email Address",
                               border: OutlineInputBorder(),
@@ -94,6 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         height: 55,
                         child: TextFormField(
+                          controller: passwordCtrl,
                           obscureText: true,
                           decoration: const InputDecoration(
                               hintText: "Password",
@@ -110,26 +115,48 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            loading = true;
-                          });
-                          login().then((value) {
-                            if (value == 'success') {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          NavigationScreen()));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          "Incorrect username or password")));
-                              setState(() {
-                                loading = false;
-                              });
-                            }
-                          });
+                          if (emailCtrl.text.isNotEmpty &&
+                              passwordCtrl.text.isNotEmpty) {
+                            setState(() {
+                              loading = true;
+                            });
+                            login(emailCtrl.text, passwordCtrl.text)
+                                .then((value) {
+                              try {
+                                Map<String, dynamic> result =
+                                    json.decode(value.body);
+
+                                if (result['status'] == 'success') {
+                                  Database.box.putAll({
+                                    'isLoggedIn': true,
+                                    'authorization': result['data'],
+                                    'email': emailCtrl.text
+                                  }).then((value) {
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                NavigationScreen()));
+                                  });
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              "Incorrect username or password")));
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                }
+                              } catch (e) {
+                                // error handling
+                              }
+                            });
+                          } else {
+                            //
+                          }
                         },
                         child: Container(
                           height: 50,

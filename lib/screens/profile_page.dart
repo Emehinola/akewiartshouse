@@ -150,11 +150,11 @@ class ProfilePage extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: poetCard("Holes", './assets/images/events.jpg'),
+                child: poetCard("Holes", "", './assets/images/events.jpg'),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: poetCard("Mood Swings", './assets/images/music.jpg'),
+                child: poetCard("Mood Swings", "", './assets/images/music.jpg'),
               )
             ],
           ),

@@ -263,7 +263,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                 context,
                                 CupertinoPageRoute(
                                     builder: (BuildContext context) =>
-                                        ArtWork())),
+                                        Editorial())),
                             child: itemCard(
                                 "Editorial",
                                 "./assets/images/editorial-design.png",
@@ -283,8 +283,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                         onTap: () => Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (BuildContext context) =>
-                                    Editorial())),
+                                builder: (BuildContext context) => ArtWork())),
                         child: Container(
                           height: 130,
                           width: 310,

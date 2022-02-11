@@ -8,43 +8,66 @@ class ArtWork extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.black,
-          leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(CupertinoIcons.back)),
-          title: const Text("Art Works"),
-          actions: [
-            Row(
-              children: [
-                const Text(
-                  "Add",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(5.0),
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(30.0)),
-                  child: IconButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => const Cart())),
-                      icon: const Icon(CupertinoIcons.add)),
-                )
-              ],
-            )
-          ]),
-      body: ListView(physics: const BouncingScrollPhysics(), children: [
-        artWorkCard(context, './assets/images/painting.jpg',
-            'Africa Map Photography', 'John K'),
-        const SizedBox(height: 25.0),
-        artWorkCard(
-            context, './assets/images/events.jpg', 'Art name.', 'Chijioke')
-      ]),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              CupertinoIcons.back,
+              color: Colors.black,
+            )),
+        title: const Text(
+          "Photography",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 5.0),
+        child: ListView(physics: const BouncingScrollPhysics(), children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: searchContainer("Search for art works"),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => PictureDisplay()));
+            },
+            child: artWorkCard(
+                context,
+                './assets/images/events.jpg',
+                '"Lorem Ipsum is simply dummy text of the printing and typesetting industry."',
+                'Chijioke',
+                './assets/images/news1.png',
+                './assets/images/news2.png',
+                'Picture Series 1'),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          artWorkCard(
+              context,
+              './assets/images/news1.png',
+              '"Lorem Ipsum is simply dummy text of the printing and typesetting industry."',
+              'Sam',
+              './assets/images/news3.png',
+              './assets/images/news4.png',
+              'Real photograph'),
+          const SizedBox(height: 10.0),
+          artWorkCard(
+              context,
+              './assets/images/news1.png',
+              '"Lorem Ipsum is simply dummy text of the printing and typesetting industry."',
+              'Sam',
+              './assets/images/news3.png',
+              './assets/images/news4.png',
+              'Real photograph'),
+          const SizedBox(height: 25.0),
+        ]),
+      ),
     );
   }
 }

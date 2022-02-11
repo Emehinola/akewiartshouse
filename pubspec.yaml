@@ -39,6 +39,7 @@ dependencies:
   font_awesome_flutter: ^9.2.0
   pin_code_text_field: ^1.8.0
   http: ^0.13.4
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +95,8 @@ flutter:
     - assets/images/welcome_image.png
     - assets/images/login_image.png
     - assets/images/email_image.png
+    - assets/images/bg.jpeg
+    - assets/images/events.jpg
 
 
 

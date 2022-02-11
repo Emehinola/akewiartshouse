@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'screens/screens.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter(); // initializing hive store
+  await Hive.openBox('akewiartshouse');
   runApp(const MyApp());
 }
 

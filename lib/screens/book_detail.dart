@@ -6,7 +6,28 @@ import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BookDetail extends StatefulWidget {
-  const BookDetail({Key? key}) : super(key: key);
+  String? image;
+  String? title;
+  String? author;
+  String? amount;
+  String? likes;
+  String? shares;
+  String? comments;
+  String? description;
+  String? version;
+
+  BookDetail(
+      {Key? key,
+      this.author,
+      this.shares,
+      this.likes,
+      this.title,
+      this.image,
+      this.amount,
+      this.comments,
+      this.description,
+      this.version})
+      : super(key: key);
 
   @override
   _BookDetailState createState() => _BookDetailState();
@@ -34,8 +55,8 @@ class _BookDetailState extends State<BookDetail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    './assets/images/book_cover1.png',
+                  Image.network(
+                    widget.image.toString(),
                     height: 200,
                   ),
                   Row(
@@ -71,20 +92,22 @@ class _BookDetailState extends State<BookDetail> {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text(
-                    "Commoner's Speech",
+                  Text(
+                    widget.title.toString(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 17, fontWeight: FontWeight.bold),
                   ),
-                  const Text(
-                    "By Enoch Ojotisa",
+                  Text(
+                    widget.author.toString(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13),
+                    style: const TextStyle(fontSize: 13),
                   ),
-                  const Text(
-                    "NGN 2,500",
+                  Text(
+                    "NGN ${widget.amount}",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 17, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     height: 15,
@@ -99,7 +122,8 @@ class _BookDetailState extends State<BookDetail> {
                           onPressed: () {},
                           icon: const Icon(CupertinoIcons.heart,
                               color: Colors.black)),
-                      const Text("46", style: TextStyle(color: Colors.black54)),
+                      Text(widget.likes.toString(),
+                          style: const TextStyle(color: Colors.black54)),
                       const SizedBox(height: 15.0),
                       IconButton(
                           onPressed: () {},
@@ -108,14 +132,15 @@ class _BookDetailState extends State<BookDetail> {
                             color: Colors.black54,
                             size: 19,
                           )),
-                      const Text("198",
-                          style: TextStyle(color: Colors.black54)),
+                      Text(widget.shares.toString(),
+                          style: const TextStyle(color: Colors.black54)),
                       const SizedBox(height: 15.0),
                       IconButton(
                           onPressed: () {},
                           icon: const Icon(CupertinoIcons.chat_bubble,
                               color: Colors.black)),
-                      const Text("198", style: TextStyle(color: Colors.black54))
+                      Text(widget.comments.toString(),
+                          style: const TextStyle(color: Colors.black54))
                     ],
                   ),
                   const Divider(
@@ -130,14 +155,12 @@ class _BookDetailState extends State<BookDetail> {
                           TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      """Weird feeling, feel like I was wired through, oh another empty soul. You wake up to a new day, yea, the creator, God, you must thank, still you are moody.
-
-You wake up to a new day, yea, the creator, God, you must thank, still you are moody.""",
+                      widget.description.toString(),
                       textAlign: TextAlign.left,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                       ),
                     ),

@@ -22,3 +22,4 @@ export 'welcome_screen.dart';
 export 'login.dart';
 export 'signup.dart';
 export 'email_confirmation.dart';
+export 'picture_display.dart';

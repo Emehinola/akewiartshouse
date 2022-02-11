@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-Container poetCard(String title, String imagePath) {
+Container poetCard(String title, String author, String imagePath) {
   return Container(
     height: 105,
     padding: const EdgeInsets.all(15.0),
@@ -14,9 +14,7 @@ Container poetCard(String title, String imagePath) {
         Expanded(
           child: Row(children: [
             CircleAvatar(
-              backgroundImage: AssetImage(
-                imagePath,
-              ),
+              backgroundImage: NetworkImage(imagePath),
             ),
             const SizedBox(
               width: 10.0,
@@ -27,10 +25,10 @@ Container poetCard(String title, String imagePath) {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(color: Colors.black, fontSize: 22),
+                    style: const TextStyle(color: Colors.black, fontSize: 22),
                   ),
-                  Text("by Enoch Ojotisa"),
-                  Text("Click to read poetry",
+                  Text("by $author"),
+                  const Text("Click to read poetry",
                       style: TextStyle(color: Colors.red))
                 ],
               ),
@@ -162,7 +160,7 @@ Container musicListCard(String image, String name, String author) {
   );
 }
 
-Container productCard(String image, String productName) {
+Container productCard(String image, String productName, String author) {
   return Container(
     margin: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 5, right: 0),
     width: 90,
@@ -171,19 +169,20 @@ Container productCard(String image, String productName) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: Image.asset(
-            image,
-            fit: BoxFit.fitWidth,
+          child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(image), fit: BoxFit.fill)),
           ),
         ),
         Text(
-          productName,
+          author,
           style: const TextStyle(
               fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
         ),
-        const Text(
-          "Commoner's Speech",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+        Text(
+          productName,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
         )
       ],
     ),
@@ -357,51 +356,140 @@ SizedBox musicRow(
 }
 
 Container artWorkCard(
-    BuildContext context, String imagePath, String description, String author) {
+    BuildContext context,
+    String imagePath,
+    String description,
+    String author,
+    String image2,
+    String image3,
+    String title) {
   return Container(
+    padding: const EdgeInsets.all(10.0),
+    height: 290,
+    width: double.infinity,
     decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              offset: Offset(1, 1),
-              blurRadius: 0.8,
+              offset: Offset(6, 1),
+              blurRadius: 8,
               spreadRadius: 1.0,
-              color: Colors.grey)
+              color: Colors.black26)
         ],
         borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(12.0),
             bottomRight: Radius.circular(12.0))),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Image.asset(imagePath),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
+      const Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text("Posted 10/02/2022"),
+          )),
+      Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(description, style: const TextStyle(fontSize: 18)),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              priceTag(),
-              GestureDetector(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => PaymentPage())),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(imagePath), fit: BoxFit.cover)),
+              ),
+            ),
+            const SizedBox(
+              width: 7,
+            ),
+            Expanded(
+                child: Column(
+              children: [
+                Expanded(
                   child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: Colors.lightBlue,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(image2), fit: BoxFit.cover)),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(image3), fit: BoxFit.cover)),
                       ),
-                      child: const Text("Buy Now",
+                      Container(
+                        color: Colors.black26,
+                      ),
+                      const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "2+",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                              color: Colors.white))))
-            ]),
-            Text("designed by $author",
-                style: const TextStyle(fontSize: 20, color: Colors.grey))
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ))
           ],
         ),
-      )
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                author,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.grey),
+              ),
+              Text(
+                title,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: const [
+                  Icon(CupertinoIcons.heart_fill, color: Colors.red),
+                  Text("198", style: TextStyle(color: Colors.black54)),
+                ],
+              ),
+              const SizedBox(
+                width: 7,
+              ),
+              Row(children: const [
+                Icon(
+                  FontAwesomeIcons.shareAlt,
+                  color: Colors.grey,
+                  size: 15,
+                ),
+                Text("198", style: TextStyle(color: Colors.black54)),
+              ]),
+              const SizedBox(
+                width: 7,
+              ),
+              Row(children: const [
+                Icon(CupertinoIcons.chat_bubble, color: Colors.grey),
+                Text("46", style: TextStyle(color: Colors.black54)),
+              ])
+            ],
+          )
+        ],
+      ),
+      Text(description)
     ]),
   );
 }
@@ -514,9 +602,10 @@ Column literatureOptionsCard(String text, String imagePath) {
 }
 
 // music tile
-Container bookSaleCard() {
+Container bookSaleCard(
+    String image, String title, String author, String amount) {
   return Container(
-    height: 135,
+    height: 140,
     padding: const EdgeInsets.all(15.0),
     width: double.infinity,
     margin: const EdgeInsets.all(5.0),
@@ -525,16 +614,18 @@ Container bookSaleCard() {
       children: [
         Expanded(
           child: Row(children: [
-            ClipRRect(
-              child: Image.asset(
-                './assets/images/book_cover4.png',
-              ),
-              borderRadius: BorderRadius.circular(2.0),
-            ),
+            Expanded(
+                flex: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(image), fit: BoxFit.cover)),
+                )),
             const SizedBox(
-              width: 10.0,
+              width: 5,
             ),
             Expanded(
+              flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -542,14 +633,14 @@ Container bookSaleCard() {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Commoner's Speech",
-                        style: TextStyle(
+                      Text(
+                        title,
+                        style: const TextStyle(
                             color: Colors.black,
                             fontSize: 15,
                             fontWeight: FontWeight.bold),
                       ),
-                      const Text("By Enoch Ojotisa"),
+                      Text(author),
                       Row(
                         children: const [
                           Icon(
@@ -579,9 +670,9 @@ Container bookSaleCard() {
                           ),
                         ],
                       ),
-                      const Text(
-                        "NGN 1,200",
-                        style: TextStyle(
+                      Text(
+                        "NGN $amount",
+                        style: const TextStyle(
                             color: Colors.black,
                             fontSize: 12,
                             fontWeight: FontWeight.w900),
@@ -776,13 +867,15 @@ columnCard(String title, String author, String imagePath) {
         children: [
           Expanded(
             child: ClipRRect(
-                child: Image.asset(imagePath),
+                child: Image.network(
+                  imagePath,
+                ),
                 borderRadius: BorderRadius.circular(12.0)),
           ),
-          Text(author, style: TextStyle(fontSize: 12)),
+          Text(author, style: const TextStyle(fontSize: 12)),
           Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           )
         ],
       ));
