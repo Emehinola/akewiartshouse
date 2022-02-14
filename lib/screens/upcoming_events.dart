@@ -1,4 +1,5 @@
 import 'package:akewiartshouse/custom_widgets.dart';
+import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,7 +11,10 @@ class UpcomingEvent extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: ListView(
         children: [
-          upcomingEventCard('./assets/images/image 38.png'),
+          GestureDetector(
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UpcomingEventView())),
+              child: upcomingEventCard('./assets/images/image 38.png')),
           const SizedBox(
             height: 15,
           ),

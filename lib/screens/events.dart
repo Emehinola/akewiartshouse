@@ -2,27 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Events extends StatefulWidget {
   @override
-  State<Events> createState() => _EventsState();
+  _EventsState createState() => _EventsState();
 }
 
 class _EventsState extends State<Events> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    int _index = 0;
+    int _index = 1;
     List<Widget> _events = [
       LiveEvent(),
       UpcomingEvent(),
-      const Scaffold(),
+      PastEvent(),
     ];
-
-    @override
-    void initState() {
-      super.initState();
-    }
 
     return Scaffold(
         appBar: AppBar(
@@ -86,6 +85,9 @@ class _EventsState extends State<Events> {
             ),
           ),
         ),
-        body: _events[_index]);
+        body: Builder(builder: (context) {
+          print(_index);
+          return _events[_index];
+        }));
   }
 }

@@ -80,7 +80,7 @@ class _SinglePoetState extends State<SinglePoet> {
                         fontSize: 17, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    widget.author.toString(),
+                    "By ${widget.author.toString()}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 13),
                   ),

@@ -97,6 +97,15 @@ flutter:
     - assets/images/email_image.png
     - assets/images/bg.jpeg
     - assets/images/events.jpg
+    - assets/images/profile_image.png
+    - assets/images/prof_bg.png
+    - assets/images/live_image.png
+    - assets/images/manage_post.png
+    - assets/images/donate.png
+    - assets/images/events.png
+    - assets/images/help.png
+    - assets/images/settings.png
+    - assets/images/bookstore.png
 
 
 

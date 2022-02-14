@@ -58,6 +58,7 @@ class _BookStoreState extends State<BookStore> {
                   child: CircularProgressIndicator(),
                 );
               }
+              print(snapshot.data);
               return ListView(
                 physics: const BouncingScrollPhysics(),
                 children: [
@@ -73,7 +74,7 @@ class _BookStoreState extends State<BookStore> {
                             color: Colors.black54),
                       )),
                   SizedBox(
-                    height: 230,
+                    height: 180,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       physics: const BouncingScrollPhysics(),
@@ -129,16 +130,46 @@ class _BookStoreState extends State<BookStore> {
                   ListView.separated(
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return bookSaleCard(
-                            json.decode(snapshot.data.toString())['data'][index]
-                                ['image'],
-                            json.decode(snapshot.data.toString())['data'][index]
-                                ['title'],
-                            "By Enouch Ojotisa",
-                            json
-                                .decode(snapshot.data.toString())['data'][index]
-                                    ['amount']
-                                .toString());
+                        return GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => BookDetail(
+                                        shares: "12",
+                                        author: json
+                                            .decode(snapshot.data.toString())[
+                                                'data'][index]['author']
+                                            .toString(),
+                                        amount: json
+                                            .decode(snapshot.data.toString())[
+                                                'data'][index]['amount']
+                                            .toString(),
+                                        comments: "34",
+                                        description: json.decode(snapshot.data
+                                                .toString())['data'][index]
+                                            ['contentDesc'],
+                                        version: "Hard copy",
+                                        image: json.decode(snapshot.data
+                                                .toString())['data'][index]
+                                            ['image'],
+                                        likes: "34",
+                                        title: json.decode(snapshot.data
+                                                .toString())['data'][index]
+                                            ['title'],
+                                      ))),
+                          child: bookSaleCard(
+                              json.decode(snapshot.data.toString())['data']
+                                  [index]['image'],
+                              json.decode(snapshot.data.toString())['data']
+                                  [index]['title'],
+                              "By ${json.decode(snapshot.data.toString())['data'][index]['amount']}",
+                              json
+                                  .decode(snapshot.data.toString())['data']
+                                      [index]['amount']
+                                  .toString(),
+                              json.decode(snapshot.data.toString())['data']
+                                  [index]['rating']),
+                        );
                       },
                       separatorBuilder: (context, index) => const SizedBox(
                             height: 10,

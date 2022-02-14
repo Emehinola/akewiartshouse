@@ -1,3 +1,4 @@
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'screens.dart';
@@ -11,13 +12,222 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
+  List<String> texts = [
+    "Manage posts",
+    "Book store",
+    "Events",
+    "Donate",
+    "Help/Support",
+    "Settings"
+  ];
+
+  // drawer icons
+  List<String> icons = [
+    "manage_post",
+    "bookstore",
+    "events",
+    "donate",
+    "help",
+    "settings"
+  ];
+
   @override
   Widget build(BuildContext context) {
+    print(Database.box.get('authorization'));
     return Scaffold(
+      drawer: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width * 0.8,
+        color: Colors.white,
+        child: SafeArea(
+            child: Padding(
+          padding: const EdgeInsets.only(top: 10.0, right: 20, left: 20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 70,
+                        width: 70,
+                        child: GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfilePage())),
+                          child: const CircleAvatar(
+                            backgroundImage:
+                                AssetImage('./assets/images/profile_image.png'),
+                          ),
+                        ),
+                      ),
+                      const Text(
+                        "Emeh Sam",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const Text(
+                        "Samurl",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: const [
+                      Text(
+                        "15",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      Text(
+                        "posts",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "6k",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      Text(
+                        "likes",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  )
+                ],
+              ),
+              const Divider(
+                color: Colors.grey,
+              ),
+              GestureDetector(
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProfilePage())),
+                child: Container(
+                  height: 100,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(color: Colors.black),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        CupertinoIcons.person_alt_circle_fill,
+                        color: Colors.white,
+                        size: 35,
+                      ),
+                      SizedBox(height: 15.0),
+                      Text(
+                        "Manage Profile",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height - 450,
+                child: GridView.builder(
+                    itemCount: 6,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 20,
+                            crossAxisSpacing: 20),
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    icons[index] == "manage_post"
+                                        ? ManagePost()
+                                        : MyBookStore())),
+                        child: Container(
+                          decoration: const BoxDecoration(color: Colors.black),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                  "./assets/images/${icons[index]}.png"),
+                              const SizedBox(height: 10.0),
+                              Text(
+                                texts[index],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(
+                color: Colors.grey,
+                height: 3,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: 60,
+                width: double.infinity,
+                decoration: const BoxDecoration(color: Colors.black),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      "Developed by Placid Global Intl.",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                    Text(
+                      "(Akewi Artshouse limited)",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                children: const [
+                  Icon(CupertinoIcons.square_arrow_left_fill),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Logout",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        )),
+      ),
       body: Stack(
         children: [
           SizedBox(
-            height: 250,
+            height: 300,
             width: MediaQuery.of(context).size.width,
             child: Stack(
               children: [
@@ -28,13 +238,22 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       bottomRight: Radius.circular(15.0)),
                 ),
                 Container(
-                  height: 250,
+                  height: 300,
                   decoration: const BoxDecoration(
                       color: Color.fromRGBO(0, 0, 0, 0.75),
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(15.0),
                           bottomRight: Radius.circular(15.0))),
-                )
+                ),
+                SafeArea(
+                  child: IconButton(
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                      icon: const Icon(
+                        CupertinoIcons.bars,
+                        color: Colors.white,
+                        size: 35,
+                      )),
+                ),
               ],
             ),
           ),
@@ -45,7 +264,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 35),
                       Image.asset('./assets/images/logo.png',
                           height: 70, width: 60),
                       const SizedBox(

@@ -230,12 +230,53 @@ class _DramaState extends State<Drama> {
                                 .decode(snapshot.data.toString())['data']
                                 .length,
                             itemBuilder: (BuildContext context, int index) {
-                              return poetCard(
-                                  "${json.decode(snapshot.data.toString())['data'][index]['title'].toString().substring(0, 6)}...",
-                                  json.decode(snapshot.data.toString())['data']
-                                      [index]['postBy'],
-                                  json.decode(snapshot.data.toString())['data']
-                                      [index]['image']);
+                              return GestureDetector(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              SinglePoet(
+                                                shares: 87,
+                                                image: json.decode(snapshot.data
+                                                        .toString())['data']
+                                                    [index]['image'],
+                                                title: json.decode(snapshot.data
+                                                        .toString())['data']
+                                                    [index]['title'],
+                                                author: json.decode(snapshot
+                                                        .data
+                                                        .toString())['data']
+                                                    [index]['postBy'],
+                                                comment: 90,
+                                                content: json.decode(snapshot
+                                                        .data
+                                                        .toString())['data']
+                                                    [index]['contDesc'],
+                                                datePosted: json.decode(snapshot
+                                                        .data
+                                                        .toString())['data']
+                                                    [index]['date'],
+                                                likes: 78,
+                                                poetId: json.decode(snapshot
+                                                        .data
+                                                        .toString())['data']
+                                                    [index]['id'],
+                                              ))),
+                                  child: Visibility(
+                                    visible:
+                                        json.decode(snapshot.data.toString())[
+                                                'data'][index]['catId'] ==
+                                            2,
+                                    replacement: const SizedBox.shrink(),
+                                    child: poemCard(
+                                        "${json.decode(snapshot.data.toString())['data'][index]['title'].toString().substring(0, 6)}...",
+                                        json.decode(snapshot.data.toString())[
+                                            'data'][index]['postBy'],
+                                        json.decode(snapshot.data.toString())[
+                                            'data'][index]['date'],
+                                        json.decode(snapshot.data.toString())[
+                                            'data'][index]['image']),
+                                  ));
                             });
                       }
                       return const Center(child: Text("Something went wrong"));
