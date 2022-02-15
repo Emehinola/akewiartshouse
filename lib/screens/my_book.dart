@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:akewiartshouse/backend/backend.dart';
+import 'package:akewiartshouse/screens/books_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -38,14 +40,31 @@ class MyBook extends StatefulWidget {
 class _MyBookState extends State<MyBook> {
   // delete book
   Future deleteBook() async {
-    var response = await http.get(Uri.parse(
-        'http://placid-001-site50.itempurl.com/api/Books/deleteBookById/${widget.book_id}'));
-    var result = json.decode(response.body);
+    var response = await http.post(
+        Uri.parse(
+            'http://placid-001-site50.itempurl.com/api/Books/deleteBookById/${widget.book_id}'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        });
+    var result = json.decode(response.body.toString());
 
-    try{
-      if result.data['data']
-    }catch(e){
-
+    try {
+      print("try: $result");
+      if (result.data['data']['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Book deleted successfully")));
+      } else {
+        print(result);
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Unable to delete book")));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => BookStore()));
+      }
+    } catch (e) {
+      print("error: ${e.toString()}");
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Unable to delete book")));
     }
   }
 
@@ -63,25 +82,27 @@ class _MyBookState extends State<MyBook> {
                 color: Colors.black,
               )),
           actions: [
-            Row(
-              children: const [
-                Text(
-                  "Delete",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black),
-                ),
-                Icon(
-                  CupertinoIcons.delete,
-                  color: Colors.black,
-                  size: 15,
-                )
-              ],
+            InkWell(
+              onTap: () => deleteBook(),
+              child: Row(
+                children: const [
+                  Text(
+                    "Delete",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.black),
+                  ),
+                  Icon(
+                    CupertinoIcons.delete,
+                    color: Colors.black,
+                    size: 15,
+                  )
+                ],
+              ),
             ),
             const SizedBox(
               width: 20,
             ),
             InkWell(
-              onTap: () => deleteBook(),
               child: Row(
                 children: const [
                   Text(
