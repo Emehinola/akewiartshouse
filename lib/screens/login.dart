@@ -22,11 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future login(String email, String password) async {
     final response = await http.post(
       Uri.parse('http://placid-001-site50.itempurl.com/api/User/login'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzIiwiZW1haWwiOiJvbGFkZXBvb2xhdHVuZGVAZ21haWwuY29tIiwibmJmIjoxNjQ0NDM5MjA2LCJleHAiOjE2NDQ1MjU2MDYsImlhdCI6MTY0NDQzOTIwNn0.8Q62kFcL0CAmg8PAMq8VSnW_9jEvLRIsCZA4MM3l_q7NHG5-MhNQNolE79OxgHRy4gK9tUW37KXIRqJT0wfxAw'
-      },
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );
     // print(response.body);
@@ -175,12 +171,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 5,
                       ),
-                      const Align(
+                      Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("Forgot Password?",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black)))
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EmailInput())),
+                            child: const Text("Forgot Password?",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black)),
+                          ))
                     ],
                   ),
                   const SizedBox(

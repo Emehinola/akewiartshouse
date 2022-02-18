@@ -18,7 +18,7 @@ class _EditorialState extends State<Editorial> {
   Future getPolitics() async {
     var response = await http.get(
         Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Politics/getAllPolitics'),
+            'http://placid-001-site50.itempurl.com/api/Editorial/getAllEditorial'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${Database.box.get('authorization')}'

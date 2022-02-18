@@ -895,6 +895,7 @@ Container searchContainer(String text) {
 // event type card
 Container eventTypeCard(String text, bool live) {
   return Container(
+    alignment: Alignment.center,
     padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
     decoration: BoxDecoration(
         color: live ? Colors.black : Colors.grey[350],
@@ -1221,6 +1222,49 @@ Container publishedPostCard(String tag) {
           "Published 4 days ago",
           style: TextStyle(),
         )
+      ],
+    ),
+  );
+}
+
+// image seslcton card
+SizedBox imageSelectionCard(BuildContext context) {
+  return SizedBox(
+    height: 40,
+    width: MediaQuery.of(context).size.width,
+    child: Row(
+      children: [
+        Expanded(
+          child: Container(
+            alignment: Alignment.center,
+            height: 40,
+            width: double.infinity,
+            padding: const EdgeInsets.all(5.0),
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    bottomLeft: Radius.circular(15.0))),
+            child: const Text("Select image here"),
+          ),
+        ),
+        Expanded(
+          child: Container(
+              height: 40,
+              width: 30,
+              alignment: Alignment.center,
+              padding:
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+              decoration: const BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15.0),
+                      bottomRight: Radius.circular(15.0))),
+              child: const Icon(
+                CupertinoIcons.cloud_upload,
+                color: Colors.white,
+              )),
+        ),
       ],
     ),
   );

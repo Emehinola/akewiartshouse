@@ -37,7 +37,7 @@ class _UpcomingEventViewState extends State<UpcomingEventView> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () => Navigator.pop(context),
                             icon: const Icon(
                               CupertinoIcons.xmark,
                               color: Colors.white,
@@ -60,7 +60,6 @@ class _UpcomingEventViewState extends State<UpcomingEventView> {
                 Positioned(
                   top: 300,
                   child: Container(
-                    height: MediaQuery.of(context).size.height - 300,
                     width: MediaQuery.of(context).size.width,
                     decoration: const BoxDecoration(
                         color: Colors.white,

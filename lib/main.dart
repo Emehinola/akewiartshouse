@@ -1,3 +1,4 @@
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:flutter/material.dart';
 import 'screens/screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -18,7 +19,9 @@ class MyApp extends StatelessWidget {
       title: 'Akewi',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Nunito'),
-      home: WelcomeScreen(),
+      home: (Database.box.get('isLoggedIn') ?? false)
+          ? const NavigationScreen()
+          : WelcomeScreen(),
     );
   }
 }

@@ -85,6 +85,12 @@ class _EventsState extends State<Events> {
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
+          child: const Icon(CupertinoIcons.add, color: Colors.white),
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => CreateEvent())),
+        ),
         body: Builder(builder: (context) {
           print(_index);
           return _events[_index];

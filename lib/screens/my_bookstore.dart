@@ -1,4 +1,5 @@
 import 'package:akewiartshouse/screens/my_book.dart';
+import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,12 @@ class MyBookStore extends StatelessWidget {
             "My bookstore",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          child: const Icon(CupertinoIcons.add, color: Colors.white),
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => UploadBook())),
         ),
         body: Padding(
           padding: const EdgeInsets.only(top: 20.0, right: 40, left: 40),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/screens/books_store.dart';
+import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -40,7 +41,7 @@ class MyBook extends StatefulWidget {
 class _MyBookState extends State<MyBook> {
   // delete book
   Future deleteBook() async {
-    var response = await http.post(
+    var response = await http.delete(
         Uri.parse(
             'http://placid-001-site50.itempurl.com/api/Books/deleteBookById/${widget.book_id}'),
         headers: {
@@ -50,19 +51,16 @@ class _MyBookState extends State<MyBook> {
     var result = json.decode(response.body.toString());
 
     try {
-      print("try: $result");
       if (result.data['data']['status'] == 'success') {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Book deleted successfully")));
       } else {
-        print(result);
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Unable to delete book")));
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => BookStore()));
       }
     } catch (e) {
-      print("error: ${e.toString()}");
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Unable to delete book")));
     }
@@ -103,6 +101,8 @@ class _MyBookState extends State<MyBook> {
               width: 20,
             ),
             InkWell(
+              onTap: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => EditBook())),
               child: Row(
                 children: const [
                   Text(
