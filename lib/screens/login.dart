@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 if (result['status'] == 'success') {
                                   Database.box.putAll({
                                     'isLoggedIn': true,
-                                    'authorization': result['data'],
+                                    'authorization': result['data']['token'],
                                     'email': emailCtrl.text
                                   }).then((value) {
                                     setState(() {

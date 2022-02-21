@@ -26,7 +26,6 @@ class _LieratureState extends State<Literature> {
       },
     );
 
-    // print()
 
     return response.body;
   }

@@ -24,6 +24,7 @@ class _BookStoreState extends State<BookStore> {
 
   @override
   Widget build(BuildContext context) {
+    print(Database.box.name);
     // getting books
     Future getBooks() async {
       var response = await http.get(
