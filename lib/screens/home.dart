@@ -171,33 +171,35 @@ class Home extends StatelessWidget {
                     }),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               const Divider(
                 color: Colors.grey,
                 height: 3,
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
-              Container(
-                alignment: Alignment.center,
-                height: 60,
-                width: double.infinity,
-                decoration: const BoxDecoration(color: Colors.black),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "Developed by Placid Global Intl.",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                    Text(
-                      "(Akewi Artshouse limited)",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(color: Colors.black),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "Developed by Placid Global Intl.",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      Text(
+                        "(Akewi Artshouse limited)",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(

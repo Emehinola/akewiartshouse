@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/screens/books_store.dart';
 import 'package:akewiartshouse/screens/screens.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -133,8 +134,8 @@ class _MyBookState extends State<MyBook> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.network(
-                    widget.image.toString(),
+                  CachedNetworkImage(
+                    imageUrl: widget.image.toString(),
                     height: 200,
                   ),
                   Row(

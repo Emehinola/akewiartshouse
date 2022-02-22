@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
@@ -55,8 +56,8 @@ class _BookDetailState extends State<BookDetail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.network(
-                    widget.image.toString(),
+                  CachedNetworkImage(
+                    imageUrl: widget.image.toString(),
                     height: 200,
                   ),
                   Row(
