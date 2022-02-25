@@ -39,6 +39,26 @@ class _BookStoreState extends State<BookStore> {
       return response.body;
     }
 
+    // add to cart
+    Future addToCart(
+        int bookId, int userId, int quantity, double unitPrice) async {
+      var response = await http.post(
+          Uri.parse(
+              'http://placid-001-site50.itempurl.com/api/Cart/createCart'),
+          headers: {
+            'Authorization': 'Bearer ${Database.box.get('authorization')}',
+            'Content-Type': 'application/json'
+          },
+          body: jsonEncode({
+            'bookId': bookId,
+            'userId': userId,
+            'unitPrice': unitPrice,
+            'quantity': quantity
+          }));
+
+      return response.body;
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -46,6 +66,15 @@ class _BookStoreState extends State<BookStore> {
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(CupertinoIcons.back, color: Colors.black)),
+        actions: [
+          IconButton(
+              icon: const Icon(
+                CupertinoIcons.cart,
+                color: Colors.black,
+              ),
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Cart())))
+        ],
         title: const Text("Bookstore", style: TextStyle(color: Colors.black)),
       ),
       body: Padding(
@@ -132,45 +161,213 @@ class _BookStoreState extends State<BookStore> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) => BookDetail(
-                                        shares: "12",
-                                        author: json
-                                            .decode(snapshot.data.toString())[
-                                                'data'][index]['author']
-                                            .toString(),
-                                        amount: json
-                                            .decode(snapshot.data.toString())[
-                                                'data'][index]['amount']
-                                            .toString(),
-                                        comments: "34",
-                                        description: json.decode(snapshot.data
-                                                .toString())['data'][index]
-                                            ['contentDesc'],
-                                        version: "Hard copy",
-                                        image: json.decode(snapshot.data
-                                                .toString())['data'][index]
-                                            ['image'],
-                                        likes: "34",
-                                        title: json.decode(snapshot.data
-                                                .toString())['data'][index]
-                                            ['title'],
-                                      ))),
-                          child: bookSaleCard(
-                              json.decode(snapshot.data.toString())['data']
-                                  [index]['image'],
-                              json.decode(snapshot.data.toString())['data']
-                                  [index]['title'],
-                              "By ${json.decode(snapshot.data.toString())['data'][index]['amount']}",
-                              json
-                                  .decode(snapshot.data.toString())['data']
-                                      [index]['amount']
-                                  .toString(),
-                              json.decode(snapshot.data.toString())['data']
-                                  [index]['rating']),
-                        );
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        BookDetail(
+                                          shares: "12",
+                                          author: json
+                                              .decode(snapshot.data.toString())[
+                                                  'data'][index]['author']
+                                              .toString(),
+                                          amount: json
+                                              .decode(snapshot.data.toString())[
+                                                  'data'][index]['amount']
+                                              .toString(),
+                                          comments: "34",
+                                          description: json.decode(snapshot.data
+                                                  .toString())['data'][index]
+                                              ['contentDesc'],
+                                          version: "Hard copy",
+                                          image: json.decode(snapshot.data
+                                                  .toString())['data'][index]
+                                              ['image'],
+                                          likes: "34",
+                                          title: json.decode(snapshot.data
+                                                  .toString())['data'][index]
+                                              ['title'],
+                                        ))),
+                            child: Container(
+                              height: 140,
+                              padding: const EdgeInsets.all(15.0),
+                              width: double.infinity,
+                              margin: const EdgeInsets.all(5.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Row(children: [
+                                      Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: NetworkImage(json
+                                                            .decode(snapshot
+                                                                .data
+                                                                .toString())[
+                                                        'data'][index]['image']),
+                                                    fit: BoxFit.cover)),
+                                          )),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  json.decode(snapshot.data
+                                                          .toString())['data']
+                                                      [index]['title'],
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                    "By ${json.decode(snapshot.data.toString())['data'][index]['author']}"),
+                                                Row(
+                                                    children: List.generate(
+                                                  int.parse(double.parse(json
+                                                          .decode(
+                                                              snapshot.data
+                                                                  .toString())[
+                                                              'data'][index]
+                                                              ['rating']
+                                                          .toString())
+                                                      .toStringAsFixed(0)),
+                                                  (index) => const Icon(
+                                                    CupertinoIcons.star_fill,
+                                                    color: Colors.black54,
+                                                    size: 17,
+                                                  ),
+                                                )),
+                                                Text(
+                                                  "NGN ${json.decode(snapshot.data.toString())['data'][index]['amount']}",
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w900),
+                                                ),
+                                              ],
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  addToCart(
+                                                          json.decode(snapshot
+                                                                      .data
+                                                                      .toString())[
+                                                                  'data'][index]
+                                                              ['id'],
+                                                          Database.box
+                                                              .get('userId'),
+                                                          1,
+                                                          json.decode(snapshot
+                                                                      .data
+                                                                      .toString())[
+                                                                  'data'][index]
+                                                              ['amount'])
+                                                      .then((value) {
+                                                    if (value == null) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              const SnackBar(
+                                                        content: Text(
+                                                            "Unable to add item"),
+                                                      ));
+                                                    } else {
+                                                      if (json.decode(value
+                                                                  .toString())[
+                                                              'status'] ==
+                                                          'success') {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                const SnackBar(
+                                                          content: Text(
+                                                              "Item added to cart"),
+                                                        ));
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                SnackBar(
+                                                          content: Text(
+                                                              json.decode(value
+                                                                      .toString())[
+                                                                  'message']),
+                                                        ));
+                                                      }
+                                                    }
+                                                  });
+                                                },
+                                                child: Container(
+                                                    height: 30,
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    width: 150,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.black,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    12.0)),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: const [
+                                                        Text("Add to basket",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 12)),
+                                                        SizedBox(
+                                                          width: 5.0,
+                                                        ),
+                                                        Icon(
+                                                          CupertinoIcons
+                                                              .shopping_cart,
+                                                          color: Colors.white,
+                                                        )
+                                                      ],
+                                                    )),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
+                                ],
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                        blurRadius: 1.0,
+                                        spreadRadius: 2.0,
+                                        offset: Offset(1, 1),
+                                        color: Colors.black12)
+                                  ]),
+                            ));
                       },
                       separatorBuilder: (context, index) => const SizedBox(
                             height: 10,
@@ -184,3 +381,18 @@ class _BookStoreState extends State<BookStore> {
     );
   }
 }
+
+/*
+bookSaleCard(
+                              json.decode(snapshot.data.toString())['data']
+                                  [index]['image'],
+                              json.decode(snapshot.data.toString())['data']
+                                  [index]['title'],
+                              "By ${json.decode(snapshot.data.toString())['data'][index]['amount']}",
+                              json
+                                  .decode(snapshot.data.toString())['data']
+                                      [index]['amount']
+                                  .toString(),
+                              json.decode(snapshot.data.toString())['data']
+                                  [index]['rating']),
+* */

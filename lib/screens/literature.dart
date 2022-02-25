@@ -26,7 +26,6 @@ class _LieratureState extends State<Literature> {
       },
     );
 
-
     return response.body;
   }
 
@@ -46,8 +45,9 @@ class _LieratureState extends State<Literature> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Colors.blueGrey,
+        onPressed: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => CreateLiterature())),
+        backgroundColor: Colors.black,
         child: const Icon(
           CupertinoIcons.add,
         ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:akewiartshouse/backend/backend.dart';
+import 'package:akewiartshouse/screens/create_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -43,16 +44,17 @@ class _PoliticsState extends State<Politics> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Colors.blueGrey,
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => CreatePost())),
+        backgroundColor: Colors.black,
         child: const Icon(
           CupertinoIcons.add,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: FutureBuilder(
               future: getPolitics(),
               builder: (context, snapshot) {
@@ -66,6 +68,13 @@ class _PoliticsState extends State<Politics> {
                 if (snapshot.hasData) {
                   var result = json.decode(snapshot.data.toString())[
                       'data']; // returned data in json format
+
+                  if (result.length == 0) {
+                    // for empty post
+                    return const Center(
+                      child: Text("No post here"),
+                    );
+                  }
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,6 +147,7 @@ class _PoliticsState extends State<Politics> {
                               fontWeight: FontWeight.bold)),
                       ListView.separated(
                           shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
                             return GestureDetector(
                                 onTap: () => Navigator.push(

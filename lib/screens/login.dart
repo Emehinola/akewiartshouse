@@ -126,7 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Database.box.putAll({
                                     'isLoggedIn': true,
                                     'authorization': result['data']['token'],
-                                    'email': emailCtrl.text
+                                    'email': emailCtrl.text,
+                                    'userId': result['data']['id']
                                   }).then((value) {
                                     setState(() {
                                       loading = false;

@@ -383,63 +383,91 @@ Container artWorkCard(BuildContext context, List<dynamic> images,
             padding: EdgeInsets.all(8.0),
             child: Text("Posted 10/02/2022"),
           )),
-      Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(images[0]['link']),
-                        fit: BoxFit.cover)),
-              ),
-            ),
-            const SizedBox(
-              width: 7,
-            ),
-            Expanded(
-                child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(images[1]['link']),
-                            fit: BoxFit.cover)),
+      images.length == 3
+          ? Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(images[0]['link']),
+                              fit: BoxFit.cover)),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
-                Expanded(
-                  child: Stack(
+                  const SizedBox(
+                    width: 7,
+                  ),
+                  Expanded(
+                      child: Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(images[2]['link']),
-                                fit: BoxFit.cover)),
-                      ),
-                      Container(
-                        color: Colors.black26,
-                      ),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "2+",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(images[1]['link']),
+                                  fit: BoxFit.cover)),
                         ),
-                      )
+                      ),
+                      const SizedBox(height: 5),
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(images[2]['link']),
+                                      fit: BoxFit.cover)),
+                            ),
+                            Container(
+                              color: Colors.black26,
+                            ),
+                            const Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "2+",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
+                  ))
+                ],
+              ),
+            )
+          : const SizedBox.shrink(),
+      images.length == 1
+          ? Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(images[0]['link']),
+                      fit: BoxFit.cover)),
+            )
+          : const SizedBox.shrink(),
+      images.length == 1
+          ? Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(images[0]['link']),
+                          fit: BoxFit.cover)),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(images[1]['link']),
+                          fit: BoxFit.cover)),
                 ),
               ],
-            ))
-          ],
-        ),
-      ),
+            )
+          : const SizedBox.shrink(),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -1269,3 +1297,201 @@ SizedBox imageSelectionCard(BuildContext context) {
     ),
   );
 }
+
+/*
+
+showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      contentPadding: EdgeInsets.zero,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0))),
+                                      content: SizedBox(
+                                        height: 400,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              height: 50,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 30.0),
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.black,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  12.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  12.0))),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Text("Payment",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.white)),
+                                                  ),
+                                                  IconButton(
+                                                      icon: const Icon(
+                                                        CupertinoIcons.xmark,
+                                                        color: Colors.white,
+                                                      ),
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context))
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    height: 50,
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(
+                                                          hintText:
+                                                              "Card Holder's Name",
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0))),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 50,
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(
+                                                          hintText:
+                                                              "Card Number",
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0))),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 2,
+                                                        child: SizedBox(
+                                                          height: 50,
+                                                          child: TextFormField(
+                                                            decoration: InputDecoration(
+                                                                hintText:
+                                                                    "Expiration Date",
+                                                                border: OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            8.0))),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: SizedBox(
+                                                          height: 50,
+                                                          child: TextFormField(
+                                                            decoration: InputDecoration(
+                                                                hintText: "CVV",
+                                                                border: OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            8.0))),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 50,
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(
+                                                          hintText: "Country",
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0))),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                  Container(
+                                                    width: 300,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    height: 70,
+                                                    child: InkWell(
+                                                      onTap: () => Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      contect) =>
+                                                                  NavigationScreen())),
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                vertical: 5.0,
+                                                                horizontal:
+                                                                    20.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: 45,
+                                                        child: const Text(
+                                                          "Pay Now",
+                                                          style: TextStyle(
+                                                              fontSize: 17,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.black,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5)),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+* */

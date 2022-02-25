@@ -3,8 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
+import 'package:flutterwave/flutterwave.dart';
+import 'package:flutterwave/models/responses/charge_response.dart';
 
 class PaymentPage extends StatefulWidget {
+  int numberOfItems;
+  double totalCost;
+  String email;
+  String phone;
+  String name;
+
+  PaymentPage(
+      {required this.numberOfItems,
+      required this.totalCost,
+      required this.email,
+      required this.name,
+      required this.phone});
   @override
   _PaymentPageState createState() => _PaymentPageState();
 }
@@ -15,11 +29,13 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black54,
+        backgroundColor: Colors.white,
+        elevation: 0.0,
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(CupertinoIcons.back)),
-        title: const Text("Checkout"),
+            icon: const Icon(CupertinoIcons.back, color: Colors.black)),
+        title: const Text("Checkout",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
       ),
       body: Center(
         child: ListView(
@@ -41,6 +57,10 @@ class _PaymentPageState extends State<PaymentPage> {
                   formKey: formKey,
                   themeColor: Colors.yellow,
                 ),
+                const SizedBox(height: 20),
+                Text("Number of items: ${widget.numberOfItems}",
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 20),
                 Container(
                   width: 300,
                   padding: const EdgeInsets.all(8.0),
@@ -49,16 +69,16 @@ class _PaymentPageState extends State<PaymentPage> {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext contect) =>
+                            builder: (BuildContext context) =>
                                 NavigationScreen())),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 5.0, horizontal: 20.0),
                       alignment: Alignment.center,
                       height: 50,
-                      child: const Text(
-                        "Pay NGN107,000.0",
-                        style: TextStyle(
+                      child: Text(
+                        "Pay NGN ${widget.totalCost}",
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       decoration: BoxDecoration(

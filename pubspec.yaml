@@ -41,6 +41,8 @@ dependencies:
   http: ^0.13.4
   hive_flutter: ^1.1.0
   email_validator: ^1.0.6
+  flutterwave: ^1.0.1
+  image_picker: ^0.8.4+9
 
 dev_dependencies:
   flutter_test:
