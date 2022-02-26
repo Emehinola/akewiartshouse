@@ -53,18 +53,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Column(
                     children: [
-                      Align(
-                          alignment: Alignment.center,
-                          child:
-                              Image.asset('./assets/images/login_image.png')),
+                      Align(alignment: Alignment.center, child: Image.asset('./assets/images/login_image.png')),
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text("Login",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 21)),
+                      const Text("Login", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 21)),
                       const SizedBox(
                         height: 30,
                       ),
@@ -75,12 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: const InputDecoration(
                               hintText: "Email Address",
                               border: OutlineInputBorder(),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black)),
-                              disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black)),
+                              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                              disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                              focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
                               contentPadding: EdgeInsets.zero,
                               prefixIcon: Icon(
                                 CupertinoIcons.mail,
@@ -111,37 +101,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          if (emailCtrl.text.isNotEmpty &&
-                              passwordCtrl.text.isNotEmpty) {
+                          if (emailCtrl.text.isNotEmpty && passwordCtrl.text.isNotEmpty) {
                             setState(() {
                               loading = true;
                             });
-                            login(emailCtrl.text, passwordCtrl.text)
-                                .then((value) {
+                            login(emailCtrl.text, passwordCtrl.text).then((value) {
                               try {
-                                Map<String, dynamic> result =
-                                    json.decode(value.body);
+                                Map<String, dynamic> result = json.decode(value.body);
 
                                 if (result['status'] == 'success') {
                                   Database.box.putAll({
                                     'isLoggedIn': true,
                                     'authorization': result['data']['token'],
-                                    'email': emailCtrl.text
+                                    'email': emailCtrl.text,
+                                    'password': passwordCtrl.text,
                                   }).then((value) {
                                     setState(() {
                                       loading = false;
                                     });
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                NavigationScreen()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => NavigationScreen()));
                                   });
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              "Incorrect username or password")));
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Incorrect username or password")));
                                   setState(() {
                                     loading = false;
                                   });
@@ -157,14 +138,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Container(
                           height: 50,
                           alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              color: Colors.black),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0), color: Colors.black),
                           child: Text(
                             loading ? "Logging In..." : "Login",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ),
                       ),
@@ -174,14 +151,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       Align(
                           alignment: Alignment.centerLeft,
                           child: GestureDetector(
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EmailInput())),
-                            child: const Text("Forgot Password?",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black)),
+                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EmailInput())),
+                            child: const Text("Forgot Password?", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
                           ))
                     ],
                   ),
@@ -193,13 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       const Text("Don't have an account? "),
                       GestureDetector(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    SignUpScreen())),
-                        child: const Text("Register Now",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SignUpScreen())),
+                        child: const Text("Register Now", style: TextStyle(fontWeight: FontWeight.bold)),
                       )
                     ],
                   )
