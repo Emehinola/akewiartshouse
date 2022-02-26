@@ -1,3 +1,4 @@
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +13,7 @@ class Home extends StatelessWidget {
       "Events",
       "Donate",
       "Help/Support",
-      "Settings"
+      // "Settings"
     ];
 
     // drawer icons
@@ -22,7 +23,7 @@ class Home extends StatelessWidget {
       "events",
       "donate",
       "help",
-      "settings"
+      // "settings"
     ];
 
     List<Widget> drawerScreens = [
@@ -31,7 +32,7 @@ class Home extends StatelessWidget {
       MyEvents(),
       Donate(),
       Help(),
-      Scaffold()
+      // Scaffold()
     ];
 
     return Scaffold(
@@ -40,184 +41,197 @@ class Home extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.8,
         color: Colors.white,
         child: SafeArea(
-            child: Padding(
-          padding: const EdgeInsets.only(top: 10.0, right: 20, left: 20),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 70,
-                        width: 70,
-                        child: GestureDetector(
+            child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10.0, right: 20, left: 20),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 70,
+                          width: 70,
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfilePage())),
+                            child: const CircleAvatar(
+                              backgroundImage: AssetImage(
+                                  './assets/images/profile_image.png'),
+                            ),
+                          ),
+                        ),
+                        const Text(
+                          "Emeh Sam",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        const Text(
+                          "Samurl",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: const [
+                        Text(
+                          "15",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        Text(
+                          "posts",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "6k",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        Text(
+                          "likes",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                const Divider(
+                  color: Colors.grey,
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfilePage())),
+                  child: Container(
+                    height: 100,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(color: Colors.black),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          CupertinoIcons.person_alt_circle_fill,
+                          color: Colors.white,
+                          size: 35,
+                        ),
+                        SizedBox(height: 15.0),
+                        Text(
+                          "Manage Profile",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height - 450,
+                  child: GridView.builder(
+                      itemCount: icons.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 20,
+                              crossAxisSpacing: 20),
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
                           onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ProfilePage())),
-                          child: const CircleAvatar(
-                            backgroundImage:
-                                AssetImage('./assets/images/profile_image.png'),
+                                  builder: (context) => drawerScreens[index])),
+                          child: Container(
+                            decoration:
+                                const BoxDecoration(color: Colors.black),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                    "./assets/images/${icons[index]}.png"),
+                                const SizedBox(height: 10.0),
+                                Text(
+                                  texts[index],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                      const Text(
-                        "Emeh Sam",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      const Text(
-                        "Samurl",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: const [
-                      Text(
-                        "15",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      Text(
-                        "posts",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "6k",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      Text(
-                        "likes",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              const Divider(
-                color: Colors.grey,
-              ),
-              GestureDetector(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfilePage())),
-                child: Container(
-                  height: 100,
+                        );
+                      }),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Divider(
+                  color: Colors.grey,
+                  height: 3,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  height: 60,
                   width: double.infinity,
                   decoration: const BoxDecoration(color: Colors.black),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(
-                        CupertinoIcons.person_alt_circle_fill,
-                        color: Colors.white,
-                        size: 35,
-                      ),
-                      SizedBox(height: 15.0),
                       Text(
-                        "Manage Profile",
+                        "Developed by Placid Global Intl.",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      Text(
+                        "(Akewi Artshouse limited)",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Database.box.clear().then((value) =>
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen())));
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(CupertinoIcons.square_arrow_left_fill),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Logout",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       )
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height - 450,
-                child: GridView.builder(
-                    itemCount: 6,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 20,
-                            crossAxisSpacing: 20),
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => drawerScreens[index])),
-                        child: Container(
-                          decoration: const BoxDecoration(color: Colors.black),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                  "./assets/images/${icons[index]}.png"),
-                              const SizedBox(height: 10.0),
-                              Text(
-                                texts[index],
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(
-                color: Colors.grey,
-                height: 3,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                alignment: Alignment.center,
-                height: 60,
-                width: double.infinity,
-                decoration: const BoxDecoration(color: Colors.black),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "Developed by Placid Global Intl.",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                    Text(
-                      "(Akewi Artshouse limited)",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: const [
-                  Icon(CupertinoIcons.square_arrow_left_fill),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "Logout",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )
-            ],
+                const SizedBox(height: 10.0)
+              ],
+            ),
           ),
         )),
       ),

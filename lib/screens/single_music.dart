@@ -1,14 +1,75 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 
 class MusicDisplay extends StatefulWidget {
+  String? musicUrl;
+  String? imageUrl;
+
+  MusicDisplay({this.musicUrl, this.imageUrl});
+
   @override
   _MusicDisplayState createState() => _MusicDisplayState();
 }
 
 class _MusicDisplayState extends State<MusicDisplay> {
+  // player controller
+  bool playing = false;
+
+  // player
+  AudioPlayer? _player;
+  AudioCache? cache;
+
+  Duration currentPosition = Duration();
+  Duration musicLength = Duration();
+
+  // slider
+  Widget slider() {
+    return Slider.adaptive(
+      value: currentPosition.inSeconds.toDouble(),
+      inactiveColor: Colors.grey[200],
+      max: musicLength.inSeconds.toDouble(),
+      activeColor: Colors.red,
+      onChanged: (val) {
+        seekToSec(val.toInt());
+      },
+    );
+  }
+
+  void seekToSec(int sec) {
+    Duration newPosition = Duration(seconds: sec);
+    _player!.seek(newPosition);
+  }
+
+  @override
+  void initState() {
+    _player = AudioPlayer();
+    cache = AudioCache(fixedPlayer: _player);
+
+    _player!.getDuration().then((duration) {
+      setState(() {
+        musicLength = Duration(seconds: duration);
+      });
+    });
+    _player!.onAudioPositionChanged.length.then((value) {
+      setState(() {
+        currentPosition = Duration(seconds: value);
+      });
+    });
+    // _player!.getCurrentPosition().then((position) {
+    //   setState(() {
+    //     currentPosition = Duration(seconds: position);
+    //   });
+    // });
+
+    cache!.load('johnny.mp3');
+
+    // _player!.setUrl(widget.musicUrl.toString());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +101,9 @@ class _MusicDisplayState extends State<MusicDisplay> {
               Container(
                   height: 230,
                   decoration: BoxDecoration(
-                    image: const DecorationImage(
+                    image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage('./assets/images/music3.png')),
+                        image: NetworkImage(widget.imageUrl.toString())),
                     borderRadius: BorderRadius.circular(12.0),
                   )),
               const SizedBox(height: 20),
@@ -79,36 +140,7 @@ class _MusicDisplayState extends State<MusicDisplay> {
               const SizedBox(
                 height: 30,
               ),
-              Stack(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                      margin: const EdgeInsets.only(top: 4.5),
-                      width: double.infinity,
-                      height: 5.0,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12.0))),
-                  Container(
-                    margin: const EdgeInsets.only(top: 4.5),
-                    color: Colors.red,
-                    width: 125,
-                    height: 5.0,
-                  ),
-                  Positioned(
-                      left: 120,
-                      top: 2.5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                            color: Colors.red),
-                        height: 10.0,
-                        width: 10.0,
-                      ))
-                ],
-              ),
+              slider(),
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -124,14 +156,33 @@ class _MusicDisplayState extends State<MusicDisplay> {
                       const Icon(CupertinoIcons.shuffle,
                           color: Colors.redAccent, size: 30),
                       Row(
-                        children: const [
-                          Icon(CupertinoIcons.backward_end,
+                        children: [
+                          const Icon(CupertinoIcons.backward_end,
                               color: Colors.red, size: 30),
-                          SizedBox(width: 10),
-                          Icon(CupertinoIcons.pause_circle,
-                              color: Colors.red, size: 35),
-                          SizedBox(width: 10),
-                          Icon(CupertinoIcons.forward_end,
+                          const SizedBox(width: 10),
+                          IconButton(
+                            onPressed: () {
+                              if (playing) {
+                                _player!.pause();
+                              } else {
+                                // _player!.play(widget.musicUrl.toString(), isLocal: false, );
+                                cache!.play('johnny.mp3');
+                                // _player!.resume();
+                              }
+
+                              setState(() {
+                                playing = !playing;
+                              });
+                            },
+                            icon: Icon(
+                                playing
+                                    ? CupertinoIcons.pause_circle
+                                    : CupertinoIcons.play_circle,
+                                color: Colors.red,
+                                size: 35),
+                          ),
+                          const SizedBox(width: 10),
+                          const Icon(CupertinoIcons.forward_end,
                               color: Colors.redAccent, size: 30),
                         ],
                       ),

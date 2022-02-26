@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:http/http.dart' as http;
 
+import 'create_photograph.dart';
+
 class ArtWork extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,14 @@ class ArtWork extends StatelessWidget {
           style: TextStyle(color: Colors.black),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => CreatePhotograph())),
+        backgroundColor: Colors.black,
+        child: const Icon(
+          CupertinoIcons.add,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 5.0),
         child: FutureBuilder(
@@ -49,6 +59,7 @@ class ArtWork extends StatelessWidget {
                 );
               }
               return ListView.separated(
+                  physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () => Navigator.push(
@@ -66,6 +77,8 @@ class ArtWork extends StatelessWidget {
                           context,
                           json.decode(snapshot.data.toString())['data'][index]
                               ['images'],
+                          json.decode(snapshot.data.toString())['data'][index]
+                              ['image'],
                           json.decode(snapshot.data.toString())['data'][index]
                               ['description'],
                           'Sam',

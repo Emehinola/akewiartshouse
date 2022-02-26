@@ -43,6 +43,7 @@ dependencies:
   email_validator: ^1.0.6
   flutterwave: ^1.0.1
   image_picker: ^0.8.4+9
+  audioplayers: ^0.20.1
 
 dev_dependencies:
   flutter_test:
@@ -109,6 +110,7 @@ flutter:
     - assets/images/help.png
     - assets/images/settings.png
     - assets/images/bookstore.png
+    - assets/johnny.mp3
 
 
 

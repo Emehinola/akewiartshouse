@@ -1,6 +1,11 @@
 import 'package:akewiartshouse/custom_widgets.dart';
+import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:akewiartshouse/backend/backend.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class CreateLiterature extends StatefulWidget {
   @override
@@ -10,6 +15,106 @@ class CreateLiterature extends StatefulWidget {
 class _CreateLiteratureState extends State<CreateLiterature> {
   // controllers
   TextEditingController categoryCtrl = TextEditingController();
+  TextEditingController title = TextEditingController();
+  TextEditingController description = TextEditingController();
+  TextEditingController author = TextEditingController();
+
+  // loading controller
+  bool loading = false;
+
+  // IMAGE
+  File? pickedImage;
+  ImagePicker? _imagePicker;
+
+  // get lost data
+  getLostData() async {
+    final LostDataResponse response = await _imagePicker!.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      setState(() {
+        pickedImage = File(response.file!.path);
+        //
+      });
+    } else {
+      //
+    }
+  }
+
+  // pick image to upload
+  pickImage() async {
+    var pickedFile = await _imagePicker!.pickImage(source: ImageSource.gallery);
+    setState(() {
+      pickedImage = File(pickedFile!.path);
+      // print("picked: $pickedImage");
+    });
+  }
+
+  // posting article
+  Future createPost(String title, String category, String author, imagePath,
+      String content) async {
+    try {
+      int catId = 0;
+
+      if (category.toLowerCase() == 'poetry') {
+        catId = 1;
+      } else if (category.toLowerCase() == 'drama') {
+        catId = 2;
+      } else {
+        catId = 3;
+      }
+      var request = http.MultipartRequest(
+          'POST',
+          Uri.parse(
+              'http://placid-001-site50.itempurl.com/api/Literature/createLiterature'));
+
+      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+      request.fields.addAll({
+        'title': title,
+        'postBy': author,
+        'contDesc': content,
+        'catId': catId.toString(),
+        'userId': Database.box.get('userId').toString()
+      });
+      request.headers['Authorization'] =
+          'Bearer ${Database.box.get('authorization')}';
+
+      var response = await request.send();
+      print('response: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        setState(() {
+          loading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Post created successfully")));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Literature()));
+      } else {
+        setState(() {
+          loading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Unable to submit post. Try again")));
+      }
+    } catch (error) {
+      setState(() {
+        loading = false;
+      });
+      print(error);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Something went wrong")));
+    }
+
+    // print("response: ${response.body}");
+  }
+
+  void initState() {
+    _imagePicker = ImagePicker();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +141,22 @@ class _CreateLiteratureState extends State<CreateLiterature> {
             SizedBox(
               height: 45,
               child: TextField(
+                controller: title,
                 decoration: InputDecoration(
                     hintText: "Title",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0))),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 45,
+              child: TextField(
+                controller: author,
+                decoration: InputDecoration(
+                    hintText: "Author",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0))),
               ),
@@ -166,6 +285,7 @@ class _CreateLiteratureState extends State<CreateLiterature> {
             SizedBox(
               height: 150,
               child: TextField(
+                controller: description,
                 minLines: 5,
                 maxLines: 6,
                 keyboardType: TextInputType.multiline,
@@ -186,21 +306,39 @@ class _CreateLiteratureState extends State<CreateLiterature> {
             const SizedBox(
               height: 5,
             ),
-            imageSelectionCard(context),
+            GestureDetector(
+                onTap: () => pickImage(), child: imageSelectionCard(context)),
+            pickedImage != null
+                ? Text(pickedImage!.path.split('/').last)
+                : const SizedBox.shrink(),
             const SizedBox(
               height: 40,
             ),
-            Container(
-              height: 50,
-              margin: const EdgeInsets.only(bottom: 20.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  color: Colors.black),
-              child: const Text(
-                "Submit",
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  loading = true;
+                });
+
+                createPost(
+                    title.text.toString(),
+                    categoryCtrl.text.toString(),
+                    author.text.toString(),
+                    pickedImage!.path,
+                    description.text.toString());
+              },
+              child: Container(
+                height: 50,
+                margin: const EdgeInsets.only(bottom: 20.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: Colors.black),
+                child: Text(
+                  loading ? "Posting... Please wait" : "Submit",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                ),
               ),
             )
           ],

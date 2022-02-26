@@ -73,6 +73,8 @@ class _CreatePostState extends State<CreatePost> {
         'description': content,
         'userId': Database.box.get('userId')
       });
+      request.headers['Authorization'] =
+          'Bearer ${Database.box.get('authorization')}';
 
       var response = await request.send();
       print('response: ${response.statusCode}');

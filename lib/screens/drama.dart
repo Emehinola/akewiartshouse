@@ -269,13 +269,23 @@ class _DramaState extends State<Drama> {
                                             2,
                                     replacement: const SizedBox.shrink(),
                                     child: poemCard(
-                                        "${json.decode(snapshot.data.toString())['data'][index]['title'].toString().substring(0, 6)}...",
-                                        json.decode(snapshot.data.toString())[
-                                            'data'][index]['postBy'],
-                                        json.decode(snapshot.data.toString())[
-                                            'data'][index]['date'],
-                                        json.decode(snapshot.data.toString())[
-                                            'data'][index]['image']),
+                                        json
+                                                    .decode(snapshot.data.toString())['data']
+                                                        [index]['title']
+                                                    .toString()
+                                                    .length <=
+                                                15
+                                            ? json
+                                                .decode(snapshot.data.toString())[
+                                                    'data'][index]['title']
+                                                .toString()
+                                            : "${json.decode(snapshot.data.toString())['data'][index]['title'].toString().substring(0, 14)}...",
+                                        json.decode(snapshot.data.toString())['data']
+                                            [index]['postBy'],
+                                        json.decode(snapshot.data.toString())['data']
+                                            [index]['date'],
+                                        json.decode(snapshot.data.toString())['data']
+                                            [index]['image']),
                                   ));
                             });
                       }

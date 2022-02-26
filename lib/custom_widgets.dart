@@ -359,7 +359,7 @@ SizedBox musicRow(
 }
 
 Container artWorkCard(BuildContext context, List<dynamic> images,
-    String description, String author, String title) {
+    String defaultImage, String description, String author, String title) {
   return Container(
     padding: const EdgeInsets.all(10.0),
     height: 290,
@@ -383,7 +383,7 @@ Container artWorkCard(BuildContext context, List<dynamic> images,
             padding: EdgeInsets.all(8.0),
             child: Text("Posted 10/02/2022"),
           )),
-      images.length == 3
+      images.length > 3
           ? Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -423,11 +423,11 @@ Container artWorkCard(BuildContext context, List<dynamic> images,
                             Container(
                               color: Colors.black26,
                             ),
-                            const Align(
+                            Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "2+",
-                                style: TextStyle(
+                                "${images.length - 3}+",
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold),
@@ -442,6 +442,70 @@ Container artWorkCard(BuildContext context, List<dynamic> images,
               ),
             )
           : const SizedBox.shrink(),
+      images.length == 3
+          ? Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(images[0]['link']),
+                              fit: BoxFit.cover)),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 7,
+                  ),
+                  Expanded(
+                      child: Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(images[1]['link']),
+                                  fit: BoxFit.cover)),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(images[2]['link']),
+                                  fit: BoxFit.cover)),
+                        ),
+                      ),
+                    ],
+                  ))
+                ],
+              ),
+            )
+          : const SizedBox.shrink(),
+      images.length == 2
+          ? Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(images[0]['link']),
+                            fit: BoxFit.cover)),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(images[1]['link']),
+                            fit: BoxFit.cover)),
+                  ),
+                ),
+              ],
+            )
+          : const SizedBox.shrink(),
       images.length == 1
           ? Container(
               decoration: BoxDecoration(
@@ -450,22 +514,11 @@ Container artWorkCard(BuildContext context, List<dynamic> images,
                       fit: BoxFit.cover)),
             )
           : const SizedBox.shrink(),
-      images.length == 1
-          ? Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(images[0]['link']),
-                          fit: BoxFit.cover)),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(images[1]['link']),
-                          fit: BoxFit.cover)),
-                ),
-              ],
+      images.isEmpty
+          ? Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(defaultImage), fit: BoxFit.cover)),
             )
           : const SizedBox.shrink(),
       Row(
@@ -480,7 +533,7 @@ Container artWorkCard(BuildContext context, List<dynamic> images,
                     fontWeight: FontWeight.bold, color: Colors.grey),
               ),
               Text(
-                "${title.toString().substring(0, 10)}...",
+                "${title.toString().length <= 10 ? title.toString() : title.toString().substring(0, 10)}...",
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
@@ -732,7 +785,8 @@ Container bookSaleCard(
   );
 }
 
-Container musicTile(String imagePath) {
+Container musicTile(
+    String imagePath, String title, String artist, String duration) {
   return Container(
       height: 70,
       padding: const EdgeInsets.all(10.0),
@@ -749,24 +803,24 @@ Container musicTile(String imagePath) {
           ]),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Row(children: [
-          Image.asset(imagePath, height: 55),
+          Image.network(imagePath, height: 55),
           const SizedBox(width: 5),
           Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text("Oremi",
-                    style: TextStyle(
+              children: [
+                Text(title,
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                         fontSize: 12)),
-                Text("Angelique kodja",
-                    style: TextStyle(
+                Text(artist,
+                    style: const TextStyle(
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
                         fontSize: 12)),
-                Text("2:34",
-                    style: TextStyle(
+                Text(duration,
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                         fontSize: 12)),
