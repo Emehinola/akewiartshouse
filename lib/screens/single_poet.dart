@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -69,7 +70,7 @@ class _SinglePoetState extends State<SinglePoet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.network(widget.image.toString()),
+                  CachedNetworkImage(imageUrl: widget.image.toString()),
                   const SizedBox(
                     height: 5,
                   ),

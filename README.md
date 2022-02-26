@@ -1,5 +1,4 @@
 # akewiartshouse
-<<<<<<< HEAD
 
 A new Flutter project.
 
@@ -17,4 +16,4 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 =======
 Mobile App to display and exhibit art works
->>>>>>> bb69c615508e75adcc714015ebdd21e21e4fbf58
+

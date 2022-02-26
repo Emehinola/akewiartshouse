@@ -88,7 +88,6 @@ class _BookStoreState extends State<BookStore> {
                   child: CircularProgressIndicator(),
                 );
               }
-              print(snapshot.data);
               return ListView(
                 physics: const BouncingScrollPhysics(),
                 children: [
