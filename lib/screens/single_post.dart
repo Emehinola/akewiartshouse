@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -122,6 +123,7 @@ class _SinglePostState extends State<SinglePost> {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("comment posted"),
         ));
+        setState(() {});
       } else {
         setState(() {
           loading = false;
@@ -138,6 +140,20 @@ class _SinglePostState extends State<SinglePost> {
         content: Text("Unable to comment"),
       ));
     }
+  }
+
+  // get all comments
+  Future getComments(int postId) async {
+    var request = await http.get(
+        Uri.parse(widget.category.toString().toLowerCase() == 'politics'
+            ? 'http://placid-001-site50.itempurl.com/api/Politics/GetAllPoliticsComment/$postId'
+            : 'http://placid-001-site50.itempurl.com/api/Editorial/getAllEditorialComments/$postId'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        });
+
+    return request.body;
   }
 
   @override
@@ -298,6 +314,38 @@ class _SinglePostState extends State<SinglePost> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  FutureBuilder(
+                    future: getComments(widget.postId!.toInt()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: Text("Loading comments..."),
+                        );
+                      }
+                      try {
+                        var result =
+                            json.decode(snapshot.data.toString())['data'];
+                        return ListView.separated(
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => userCommentTile(
+                                result[index]['postedBy'] ?? 'anonymous',
+                                result[index]['coments']),
+                            separatorBuilder: (context, index) =>
+                                const Divider(),
+                            itemCount: result.length);
+                      } catch (error) {
+                        return const Center(
+                          child: Text("Unable to get comments"),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 30,
                   ),
                   SizedBox(
                     height: 45,

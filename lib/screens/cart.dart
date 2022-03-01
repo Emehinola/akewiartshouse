@@ -305,19 +305,11 @@ class _CartState extends State<Cart> {
                         onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MyBook(
-                                      book_id: 20,
-                                      title: "Commoner's cry",
-                                      image:
-                                          'https://i.ibb.co/R6pg49X/koins-full-logo.png',
-                                      shares: '320',
-                                      likes: '32',
-                                      author: 'Samuel',
-                                      version: 'Audio',
-                                      comments: '231',
-                                      amount: '2,394',
-                                      description:
-                                          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. \n\nIt has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+                                builder: (context) => BookDetail(
+                                      bookId:
+                                          jsonDecode(snapshot.data.toString())[
+                                                  'data'][index]['bookId']
+                                              .toString(),
                                     ))),
                         child: SizedBox(
                           child: Column(
@@ -326,25 +318,29 @@ class _CartState extends State<Cart> {
                             children: [
                               Expanded(
                                   child: Container(
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: AssetImage(
-                                            './assets/images/book_cover1.png'),
+                                        image: NetworkImage(jsonDecode(snapshot
+                                                .data
+                                                .toString())['data'][index]
+                                            ['imageUrl']),
                                         fit: BoxFit.cover)),
                               )),
-                              const Text(
-                                "Commoner's cry",
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              Text(
+                                jsonDecode(snapshot.data.toString())['data']
+                                    [index]['bookName'],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
-                              Row(
-                                  children: List.generate(
-                                5,
-                                (index) => const Icon(
-                                  CupertinoIcons.star_fill,
-                                  color: Colors.black54,
-                                  size: 13,
-                                ),
-                              )),
+                              // Row(
+                              //     children: List.generate(
+                              //   5,
+                              //   (index) => const Icon(
+                              //     CupertinoIcons.star_fill,
+                              //     color: Colors.black54,
+                              //     size: 13,
+                              //   ),
+                              // )),
                               Text(
                                 "N ${jsonDecode(snapshot.data.toString())['data'][index]['totalPrice']}",
                                 style: const TextStyle(

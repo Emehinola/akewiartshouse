@@ -1,11 +1,47 @@
+import 'dart:convert';
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class PictureDisplay extends StatelessWidget {
+class PictureDisplay extends StatefulWidget {
   List<dynamic> images;
   String title;
+  int photoId;
 
-  PictureDisplay({required this.images, required this.title});
+  PictureDisplay(
+      {required this.images, required this.title, required this.photoId});
+
+  @override
+  State<PictureDisplay> createState() => _PictureDisplayState();
+}
+
+class _PictureDisplayState extends State<PictureDisplay> {
+  Future deletePhoto(int photoId) async {
+    var request = await http.delete(
+        Uri.parse(
+            'http://placid-001-site50.itempurl.com/api/Photography/deletePhotographyById/$photoId'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        });
+
+    var response = json.decode(request.body);
+
+    if (response != null) {
+      if (response['status'] == 'success') {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Photos deleted")));
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Unable to delete photos")));
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Something went wrong")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +57,18 @@ class PictureDisplay extends StatelessWidget {
                 color: Colors.black,
               )),
           title: Text(
-            title,
+            widget.title,
             style: const TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.black),
           ),
+          actions: [
+            IconButton(
+                icon: const Icon(
+                  CupertinoIcons.cart,
+                  color: Colors.black,
+                ),
+                onPressed: () => deletePhoto(widget.photoId))
+          ],
         ),
         body: ListView.separated(
             physics: const BouncingScrollPhysics(),
@@ -33,7 +77,7 @@ class PictureDisplay extends StatelessWidget {
                 height: 300,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(images[index]['link']),
+                        image: NetworkImage(widget.images[index]['link']),
                         fit: BoxFit.cover)),
               );
             },
@@ -42,6 +86,6 @@ class PictureDisplay extends StatelessWidget {
                 height: 10.0,
               );
             },
-            itemCount: images.length));
+            itemCount: widget.images.length));
   }
 }

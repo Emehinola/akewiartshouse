@@ -73,6 +73,9 @@ class ArtWork extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PictureDisplay(
+                                      photoId: json.decode(
+                                              snapshot.data.toString())['data']
+                                          [index]['id'],
                                       title: json.decode(
                                               snapshot.data.toString())['data']
                                           [index]['title'],

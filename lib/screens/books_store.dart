@@ -118,27 +118,12 @@ class _BookStoreState extends State<BookStore> {
                                   CupertinoPageRoute(
                                       builder: (BuildContext context) =>
                                           BookDetail(
-                                            shares: "12",
-                                            author: "Enoch Ojotisa",
-                                            amount: json
+                                            bookId: json
                                                 .decode(
                                                     snapshot.data
                                                         .toString())['data']
-                                                    [index]['amount']
+                                                    [index]['id']
                                                 .toString(),
-                                            comments: "34",
-                                            description: json.decode(snapshot
-                                                    .data
-                                                    .toString())['data'][index]
-                                                ['contentDesc'],
-                                            version: "Hard copy",
-                                            image: json.decode(snapshot.data
-                                                    .toString())['data'][index]
-                                                ['image'],
-                                            likes: "34",
-                                            title: json.decode(snapshot.data
-                                                    .toString())['data'][index]
-                                                ['title'],
                                           ))),
                               child: productCard(
                                   json.decode(snapshot.data.toString())['data']
@@ -170,32 +155,12 @@ class _BookStoreState extends State<BookStore> {
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           BookDetail(
-                                            shares: "12",
-                                            author: json
+                                            bookId: json
                                                 .decode(
                                                     snapshot.data
                                                         .toString())['data']
-                                                    [index]['author']
+                                                    [index]['id']
                                                 .toString(),
-                                            amount: json
-                                                .decode(
-                                                    snapshot.data
-                                                        .toString())['data']
-                                                    [index]['amount']
-                                                .toString(),
-                                            comments: "34",
-                                            description: json.decode(snapshot
-                                                    .data
-                                                    .toString())['data'][index]
-                                                ['contentDesc'],
-                                            version: "Hard copy",
-                                            image: json.decode(snapshot.data
-                                                    .toString())['data'][index]
-                                                ['image'],
-                                            likes: "34",
-                                            title: json.decode(snapshot.data
-                                                    .toString())['data'][index]
-                                                ['title'],
                                           ))),
                               child: Container(
                                 height: 140,

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -74,52 +75,40 @@ class _SinglePoetState extends State<SinglePoet> {
     return response.body;
   }
 
-  GlobalKey<FormState> formKey = GlobalKey();
-  @override
-  Widget build(BuildContext context) {
-    Future getSingleItem() async {
-      var response = await http.get(
+  Future getSingleItem() async {
+    var response = await http.get(
+      Uri.parse(
+          'http://placid-001-site50.itempurl.com/api/Literature/getLiteratureById/${widget.postId}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Database.box.get('authorization')}'
+      },
+    );
+
+    // print()
+
+    return response.body;
+  }
+
+  // create comment
+  Future createComment(String comment) async {
+    var request = await http.post(
         Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Literature/getLiteratureById/${widget.postId}'),
+            'http://placid-001-site50.itempurl.com/api/Literature/createLiteratureComment'),
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${Database.box.get('authorization')}'
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
         },
-      );
+        body: jsonEncode({'coments': comment, 'literatureId': widget.postId}));
 
-      // print()
+    var response = json.decode(request.body.toString());
 
-      return response.body;
-    }
-
-    // create comment
-    Future createComment(String comment) async {
-      var request = await http.post(
-          Uri.parse(
-              'http://placid-001-site50.itempurl.com/api/Literature/createLiteratureComment'),
-          headers: {
-            'Authorization': 'Bearer ${Database.box.get('authorization')}',
-            'Content-Type': 'application/json'
-          },
-          body:
-              jsonEncode({'coments': comment, 'literatureId': widget.postId}));
-
-      var response = json.decode(request.body.toString());
-
-      if (response != null) {
-        if (response['status'] == 'success') {
-          commentCtrl.clear(); // clear the comment field data
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("comment posted"),
-          ));
-        } else {
-          setState(() {
-            loading = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Unable to comment"),
-          ));
-        }
+    if (response != null) {
+      if (response['status'] == 'success') {
+        commentCtrl.clear(); // clear the comment field data
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("comment posted"),
+        ));
       } else {
         setState(() {
           loading = false;
@@ -128,8 +117,32 @@ class _SinglePoetState extends State<SinglePoet> {
           content: Text("Unable to comment"),
         ));
       }
+    } else {
+      setState(() {
+        loading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Unable to comment"),
+      ));
     }
+  }
 
+  // get all comments
+  Future getComments(int postId) async {
+    var request = await http.get(
+        Uri.parse(
+            'http://placid-001-site50.itempurl.com/api/Literature/GetAllLiteratureComment/$postId'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        });
+
+    return request.body;
+  }
+
+  GlobalKey<FormState> formKey = GlobalKey();
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -276,7 +289,36 @@ class _SinglePoetState extends State<SinglePoet> {
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 30,
+                  ),
+                  FutureBuilder(
+                    future: getComments(widget.postId!.toInt()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: Text("Loading comments..."),
+                        );
+                      }
+                      try {
+                        var result =
+                            json.decode(snapshot.data.toString())['data'];
+                        return ListView.separated(
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => userCommentTile(
+                                result[index]['postedBy'] ?? 'anonymous',
+                                result[index]['coments']),
+                            separatorBuilder: (context, index) =>
+                                const Divider(),
+                            itemCount: result.length);
+                      } catch (error) {
+                        return const Center(
+                          child: Text("Unable to get comments"),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 30,
                   ),
                   SizedBox(
                     height: 45,
