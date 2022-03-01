@@ -1,7 +1,9 @@
+import 'dart:convert';
+
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:akewiartshouse/custom_widgets.dart';
-import 'package:akewiartshouse/screens/screens.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 
 class MusicDisplay extends StatefulWidget {
@@ -16,6 +18,7 @@ class MusicDisplay extends StatefulWidget {
 
 class _MusicDisplayState extends State<MusicDisplay> {
   // player controller
+  PlayerState _playerState = PlayerState.STOPPED;
   bool playing = false;
 
   // player
@@ -25,22 +28,29 @@ class _MusicDisplayState extends State<MusicDisplay> {
   Duration currentPosition = Duration();
   Duration musicLength = Duration();
 
+  // all music
+  List<dynamic> musicsUrl = [
+    // empty @ default
+  ];
+
   // slider
   Widget slider() {
     return Slider.adaptive(
-      value: currentPosition.inSeconds.toDouble(),
+      value: currentPosition.inMicroseconds.toDouble(),
       inactiveColor: Colors.grey[200],
-      max: musicLength.inSeconds.toDouble(),
+      min: 0,
+      max: musicLength.inMicroseconds.toDouble(),
       activeColor: Colors.red,
       onChanged: (val) {
-        seekToSec(val.toInt());
+        seekToSec(val.round());
       },
     );
   }
 
-  void seekToSec(int sec) {
+  void seekToSec(int sec) async {
     Duration newPosition = Duration(seconds: sec);
-    _player!.seek(newPosition);
+
+    await _player!.seek(newPosition);
   }
 
   @override
@@ -48,26 +58,87 @@ class _MusicDisplayState extends State<MusicDisplay> {
     _player = AudioPlayer();
     cache = AudioCache(fixedPlayer: _player);
 
-    _player!.getDuration().then((duration) {
+    _player!.onDurationChanged.listen((value) {
       setState(() {
-        musicLength = Duration(seconds: duration);
+        musicLength = value;
       });
     });
-    _player!.onAudioPositionChanged.length.then((value) {
+    _player!.onAudioPositionChanged.listen((value) {
       setState(() {
-        currentPosition = Duration(seconds: value);
+        currentPosition = value;
       });
     });
-    // _player!.getCurrentPosition().then((position) {
-    //   setState(() {
-    //     currentPosition = Duration(seconds: position);
-    //   });
-    // });
 
-    cache!.load('johnny.mp3');
+    _player!.onPlayerError.listen((msg) {
+      setState(() {
+        _playerState = PlayerState.STOPPED;
+      });
+    });
 
-    // _player!.setUrl(widget.musicUrl.toString());
+    _player!.onPlayerCompletion.listen((event) {
+      PlayerState.COMPLETED;
+      _player!.stop();
+      setState(() {
+        playing = false;
+      });
+    });
+
+    playing = _playerState == PlayerState.PLAYING ? true : false;
     super.initState();
+
+    // cache!.load('johnny.mp3');
+
+    _player!.setUrl(widget.musicUrl.toString());
+    super.initState();
+  }
+
+  // get music
+  Future getAllMusic() async {
+    var request = await http.get(
+        Uri.parse(
+            'http://placid-001-site50.itempurl.com/api/Music/getAllMusic'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        });
+
+    musicsUrl = json.decode(
+        request.body)['data']; // list of all the links of available music
+
+    return json.decode(request.body)['data'];
+  }
+
+  // change music
+  void changeMusic(int currentMusicIndex, String type) async {
+    getAllMusic().then((listOfMusicLink) {
+      if (listOfMusicLink.isEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("No music")));
+      } else {
+        try {
+          setState(() {
+            _player!.stop();
+            playing = false;
+            _player!.setUrl(type == 'forward'
+                ? musicsUrl[currentMusicIndex + 1]['musicPath']
+                : musicsUrl[currentMusicIndex - 1]['musicPath']);
+            playing = true;
+          });
+        } catch (error) {
+          setState(() {
+            playing = false;
+          });
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("No music")));
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _player!.dispose();
+    super.dispose();
   }
 
   @override
@@ -141,38 +212,49 @@ class _MusicDisplayState extends State<MusicDisplay> {
                 height: 30,
               ),
               slider(),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text("0:59", style: TextStyle(color: Colors.black)),
-                    Text("2:02")
-                  ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text(
+                    "${currentPosition.inHours}:${currentPosition.inMinutes}:${currentPosition.inSeconds}",
+                    style: const TextStyle(color: Colors.black)),
+                Text(
+                    "${musicLength.inHours}:${musicLength.inMinutes}:${musicLength.inSeconds}")
+              ]),
               const SizedBox(height: 10),
               SizedBox(
                 height: 50,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(CupertinoIcons.shuffle,
-                          color: Colors.redAccent, size: 30),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(CupertinoIcons.shuffle,
+                            color: Colors.red, size: 30),
+                      ),
                       Row(
                         children: [
-                          const Icon(CupertinoIcons.backward_end,
-                              color: Colors.red, size: 30),
+                          IconButton(
+                            onPressed: () => changeMusic(1, 'reverse'),
+                            icon: const Icon(CupertinoIcons.backward_end,
+                                color: Colors.red, size: 30),
+                          ),
                           const SizedBox(width: 10),
                           IconButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (playing) {
-                                _player!.pause();
+                                var result = await _player!.pause();
+                                if (result == 1) {
+                                  setState(() {
+                                    playing = false;
+                                  });
+                                }
                               } else {
-                                // _player!.play(widget.musicUrl.toString(), isLocal: false, );
-                                cache!.play('johnny.mp3');
-                                // _player!.resume();
+                                var result = await _player!.resume();
+                                if (result == 1) {
+                                  setState(() {
+                                    playing = true;
+                                  });
+                                }
                               }
-
-                              setState(() {
-                                playing = !playing;
-                              });
                             },
                             icon: Icon(
                                 playing
@@ -182,12 +264,18 @@ class _MusicDisplayState extends State<MusicDisplay> {
                                 size: 35),
                           ),
                           const SizedBox(width: 10),
-                          const Icon(CupertinoIcons.forward_end,
-                              color: Colors.redAccent, size: 30),
+                          IconButton(
+                            onPressed: () => changeMusic(1, 'forward'),
+                            icon: const Icon(CupertinoIcons.forward_end,
+                                color: Colors.red, size: 30),
+                          )
                         ],
                       ),
-                      const Icon(CupertinoIcons.repeat,
-                          color: Colors.red, size: 30)
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(CupertinoIcons.repeat,
+                            color: Colors.red, size: 30),
+                      )
                     ]),
               )
             ],

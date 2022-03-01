@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
 
 class Events extends StatefulWidget {
-  int _index = 1;
+  int _index = 0;
   @override
   _EventsState createState() => _EventsState();
 }
@@ -42,7 +42,8 @@ class _EventsState extends State<Events> {
           preferredSize: const Size(double.infinity, 35),
           child: Container(
             alignment: Alignment.topCenter,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -81,11 +82,11 @@ class _EventsState extends State<Events> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        child: const Icon(CupertinoIcons.add, color: Colors.white),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateEvent())),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.red,
+      //   child: const Icon(CupertinoIcons.add, color: Colors.white),
+      //   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateEvent())),
+      // ),
       body: Builder(
         builder: (context) {
           return _events[widget._index];

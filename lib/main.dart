@@ -1,4 +1,5 @@
 import 'package:akewiartshouse/backend/backend.dart';
+import 'package:akewiartshouse/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'screens/screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -16,12 +17,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Akewi',
+      title: 'Akewi Arts',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Nunito'),
-      home: (Database.box.get('isLoggedIn') ?? false)
-          ? const NavigationScreen()
-          : WelcomeScreen(),
+      home: SplashScreen(),
     );
   }
 }

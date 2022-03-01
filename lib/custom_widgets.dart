@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:date_count_down/date_count_down.dart';
 
 Container poetCard(String title, String author, String imagePath) {
   return Container(
@@ -29,19 +30,32 @@ Container poetCard(String title, String author, String imagePath) {
                     style: const TextStyle(color: Colors.black, fontSize: 22),
                   ),
                   Text("by $author"),
-                  const Text("Click to read poetry", style: TextStyle(color: Colors.red))
+                  const Text("Click to read poetry",
+                      style: TextStyle(color: Colors.red))
                 ],
               ),
             ),
           ]),
         ),
-        IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.chat_bubble)),
+        IconButton(
+            onPressed: () {}, icon: const Icon(CupertinoIcons.chat_bubble)),
         const Text("981"),
-        IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.heart_fill, color: Colors.red)),
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(CupertinoIcons.heart_fill, color: Colors.red)),
         const Text("2k")
       ],
     ),
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12.0), boxShadow: const [BoxShadow(blurRadius: 0.8, spreadRadius: 1.0, offset: Offset(1, 1), color: Colors.black12)]),
+    decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: const [
+          BoxShadow(
+              blurRadius: 0.8,
+              spreadRadius: 1.0,
+              offset: Offset(1, 1),
+              color: Colors.black12)
+        ]),
   );
 }
 
@@ -50,10 +64,17 @@ Stack profileCard() {
 }
 
 // for books
-Container booksCard(String title, String amount, bool inWishList, String imagePath) {
+Container booksCard(
+    String title, String amount, bool inWishList, String imagePath) {
   return Container(
     height: 200,
-    decoration: BoxDecoration(gradient: const LinearGradient(colors: [Colors.lightBlue, Colors.orangeAccent, Colors.purple], begin: Alignment.topLeft, end: Alignment.bottomRight), color: Colors.red, borderRadius: BorderRadius.circular(4.0)),
+    decoration: BoxDecoration(
+        gradient: const LinearGradient(
+            colors: [Colors.lightBlue, Colors.orangeAccent, Colors.purple],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight),
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(4.0)),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -73,18 +94,33 @@ Container booksCard(String title, String amount, bool inWishList, String imagePa
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 23)),
-              Text(amount, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 23)),
+              Text(title,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 23)),
+              Text(amount,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 23)),
               Row(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(8.0),
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(12.0)),
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(12.0)),
                     height: 35.0,
-                    child: const Text("Add to Cart", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    child: const Text("Add to Cart",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
-                  IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.heart, color: Colors.white))
+                  IconButton(
+                      onPressed: () {},
+                      icon:
+                          const Icon(CupertinoIcons.heart, color: Colors.white))
                 ],
               )
             ],
@@ -115,7 +151,8 @@ Container musicListCard(String image, String name, String author) {
         ),
         Text(
           author,
-          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.grey),
+          style: const TextStyle(
+              fontSize: 9, fontWeight: FontWeight.bold, color: Colors.grey),
         ),
       ],
     ),
@@ -138,12 +175,15 @@ Container productCard(String image, String productName, String author) {
           child: Container(
             height: 100,
             width: 100,
-            decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(image), fit: BoxFit.fill)),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(image), fit: BoxFit.fill)),
           ),
         ),
         Text(
           author,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
+          style: const TextStyle(
+              fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
         ),
         Text(
           productName,
@@ -163,7 +203,8 @@ Container roundedContainer(Widget child) {
     margin: const EdgeInsets.all(5.0),
     height: 40,
     width: 40,
-    decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(30.0)),
+    decoration: BoxDecoration(
+        color: Colors.grey, borderRadius: BorderRadius.circular(30.0)),
     child: child,
   );
 }
@@ -171,12 +212,16 @@ Container roundedContainer(Widget child) {
 // cards
 Container itemCard(String text, String imagePath, Color color) {
   return Container(
-    height: 130,
-    width: 130,
+    height: 110,
+    width: 110,
     decoration: BoxDecoration(
       color: Colors.white,
       boxShadow: const [
-        BoxShadow(color: Colors.black26, offset: Offset(0, 5), spreadRadius: 0, blurRadius: 3.0),
+        BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 5),
+            spreadRadius: 0,
+            blurRadius: 3.0),
       ],
       borderRadius: BorderRadius.circular(7.0),
     ),
@@ -200,9 +245,19 @@ SizedBox politicsCard(BuildContext context) {
   return SizedBox(
     height: 100,
     child: GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SinglePolitics())),
+      onTap: () => Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) => SinglePost())),
       child: Container(
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4.0), boxShadow: const [BoxShadow(offset: Offset(1, 1), blurRadius: 0.8, spreadRadius: 2.0, color: Colors.black12)]),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(4.0),
+            boxShadow: const [
+              BoxShadow(
+                  offset: Offset(1, 1),
+                  blurRadius: 0.8,
+                  spreadRadius: 2.0,
+                  color: Colors.black12)
+            ]),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -270,16 +325,32 @@ SizedBox politicsCard(BuildContext context) {
   );
 }
 
-SizedBox musicRow(String number, String imagePath, String title, String subtitle) {
+SizedBox musicRow(
+    String number, String imagePath, String title, String subtitle) {
   return SizedBox(
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Row(
         children: [
-          Text(number, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+          Text(number,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.white)),
           const SizedBox(width: 3),
-          ClipRRect(borderRadius: BorderRadius.circular(20.0), child: Image.asset(imagePath, height: 80, width: 80)),
+          ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Image.asset(imagePath, height: 80, width: 80)),
           const SizedBox(width: 5.0),
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18)), Text(subtitle, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white60, fontSize: 16))]),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(title,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 18)),
+            Text(subtitle,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white60,
+                    fontSize: 16))
+          ]),
         ],
       ),
       const Icon(CupertinoIcons.bars, color: Colors.white)
@@ -287,25 +358,37 @@ SizedBox musicRow(String number, String imagePath, String title, String subtitle
   );
 }
 
-<<<<<<< HEAD
-Container artWorkCard(BuildContext context, List<dynamic> images,
-    String defaultImage, String description, String author, String title) {
-=======
-Container artWorkCard(BuildContext context, List<dynamic> images, String description, String author, String title) {
->>>>>>> 0a726e47995bcd9285d81ae36ea878e6b7f8bc5c
+Container artWorkCard(
+    BuildContext context,
+    List<dynamic> images,
+    String defaultImage,
+    String description,
+    String author,
+    String title,
+    String date) {
   return Container(
     padding: const EdgeInsets.all(10.0),
     height: 290,
     width: double.infinity,
-    decoration: const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(offset: Offset(6, 1), blurRadius: 8, spreadRadius: 1.0, color: Colors.black26)], borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.0), bottomRight: Radius.circular(12.0))),
+    decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+              offset: Offset(6, 1),
+              blurRadius: 8,
+              spreadRadius: 1.0,
+              color: Colors.black26)
+        ],
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(12.0),
+            bottomRight: Radius.circular(12.0))),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Align(
+      Align(
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text("Posted 10/02/2022"),
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Posted $date"),
           )),
-<<<<<<< HEAD
       images.length > 3
           ? Expanded(
               child: Row(
@@ -362,15 +445,6 @@ Container artWorkCard(BuildContext context, List<dynamic> images, String descrip
                     ],
                   ))
                 ],
-=======
-      Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(images[0]['link']), fit: BoxFit.cover)),
->>>>>>> 0a726e47995bcd9285d81ae36ea878e6b7f8bc5c
               ),
             )
           : const SizedBox.shrink(),
@@ -417,63 +491,60 @@ Container artWorkCard(BuildContext context, List<dynamic> images, String descrip
             )
           : const SizedBox.shrink(),
       images.length == 2
-          ? Row(
-              children: [
-                Expanded(
-                  child: Container(
-<<<<<<< HEAD
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(images[0]['link']),
-                            fit: BoxFit.cover)),
-=======
-                    decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(images[1]['link']), fit: BoxFit.cover)),
->>>>>>> 0a726e47995bcd9285d81ae36ea878e6b7f8bc5c
+          ? Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(images[0]['link']),
+                              fit: BoxFit.cover)),
+                    ),
                   ),
-                ),
-                Expanded(
-<<<<<<< HEAD
-                  child: Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(images[1]['link']),
-                            fit: BoxFit.cover)),
-=======
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(images[2]['link']), fit: BoxFit.cover)),
-                      ),
-                      Container(
-                        color: Colors.black26,
-                      ),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "2+",
-                          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
->>>>>>> 0a726e47995bcd9285d81ae36ea878e6b7f8bc5c
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(images[1]['link']),
+                              fit: BoxFit.cover)),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             )
           : const SizedBox.shrink(),
       images.length == 1
-          ? Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(images[0]['link']),
-                      fit: BoxFit.cover)),
+          ? Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(defaultImage),
+                              fit: BoxFit.cover)),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(images[0]['link']),
+                              fit: BoxFit.cover)),
+                    ),
+                  ),
+                ],
+              ),
             )
           : const SizedBox.shrink(),
       images.isEmpty
-          ? Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(defaultImage), fit: BoxFit.cover)),
+          ? Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage(defaultImage), fit: BoxFit.cover)),
+              ),
             )
           : const SizedBox.shrink(),
       Row(
@@ -484,17 +555,13 @@ Container artWorkCard(BuildContext context, List<dynamic> images, String descrip
             children: [
               Text(
                 author,
-                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.grey),
               ),
               Text(
-<<<<<<< HEAD
                 "${title.toString().length <= 10 ? title.toString() : title.toString().substring(0, 10)}...",
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-=======
-                "${title.toString().substring(0, 10)}...",
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
->>>>>>> 0a726e47995bcd9285d81ae36ea878e6b7f8bc5c
               ),
             ],
           ),
@@ -534,9 +601,21 @@ Container artWorkCard(BuildContext context, List<dynamic> images, String descrip
   );
 }
 
-Container editorialCard(BuildContext context, String imagePath, String title, String content, String category, String author) {
+Container editorialCard(BuildContext context, String imagePath, String title,
+    String content, String category, String author) {
   return Container(
-    decoration: const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(offset: Offset(1, 1), blurRadius: 0.8, spreadRadius: 1.0, color: Colors.grey)], borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.0), bottomRight: Radius.circular(12.0))),
+    decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+              offset: Offset(1, 1),
+              blurRadius: 0.8,
+              spreadRadius: 1.0,
+              color: Colors.grey)
+        ],
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(12.0),
+            bottomRight: Radius.circular(12.0))),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Image.asset(imagePath),
       Padding(
@@ -544,15 +623,21 @@ Container editorialCard(BuildContext context, String imagePath, String title, St
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(title,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             Text(content,
                 style: const TextStyle(
                   fontSize: 18,
                 )),
             const SizedBox(height: 5),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [const Icon(CupertinoIcons.heart_fill, color: Colors.red), Text(category)]),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              const Icon(CupertinoIcons.heart_fill, color: Colors.red),
+              Text(category)
+            ]),
             const SizedBox(height: 5),
-            Text("written by $author | 23rd D ec, 2021", style: const TextStyle(fontSize: 20, color: Colors.grey))
+            Text("written by $author | 23rd D ec, 2021",
+                style: const TextStyle(fontSize: 20, color: Colors.grey))
           ],
         ),
       )
@@ -567,7 +652,9 @@ Container priceTag() {
         borderRadius: BorderRadius.circular(30.0),
         color: Colors.black,
       ),
-      child: const Text("Buy Now", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)));
+      child: const Text("Buy Now",
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)));
 }
 
 Container downloadTag() {
@@ -580,11 +667,19 @@ Container downloadTag() {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
-          Text("Download", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
+          Text("Download",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Colors.white)),
           SizedBox(
             width: 7,
           ),
-          Text("|", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
+          Text("|",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Colors.white)),
           SizedBox(
             width: 3,
           ),
@@ -614,7 +709,8 @@ Column literatureOptionsCard(String text, String imagePath) {
 }
 
 // music tile
-Container bookSaleCard(String image, String title, String author, String amount, int rating) {
+Container bookSaleCard(
+    String image, String title, String author, String amount, int rating) {
   return Container(
     height: 140,
     padding: const EdgeInsets.all(15.0),
@@ -628,7 +724,9 @@ Container bookSaleCard(String image, String title, String author, String amount,
             Expanded(
                 flex: 1,
                 child: Container(
-                  decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover)),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(image), fit: BoxFit.cover)),
                 )),
             const SizedBox(
               width: 5,
@@ -644,7 +742,10 @@ Container bookSaleCard(String image, String title, String author, String amount,
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
                       ),
                       Text(author),
                       Row(
@@ -658,7 +759,10 @@ Container bookSaleCard(String image, String title, String author, String amount,
                       )),
                       Text(
                         "NGN $amount",
-                        style: const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w900),
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w900),
                       ),
                     ],
                   ),
@@ -668,11 +772,15 @@ Container bookSaleCard(String image, String title, String author, String amount,
                         height: 30,
                         alignment: Alignment.centerRight,
                         width: 150,
-                        decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(12.0)),
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(12.0)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Text("Add to basket", style: TextStyle(color: Colors.white, fontSize: 12)),
+                            Text("Add to basket",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12)),
                             SizedBox(
                               width: 5.0,
                             ),
@@ -690,7 +798,16 @@ Container bookSaleCard(String image, String title, String author, String amount,
         ),
       ],
     ),
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8.0), boxShadow: const [BoxShadow(blurRadius: 1.0, spreadRadius: 2.0, offset: Offset(1, 1), color: Colors.black12)]),
+    decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: const [
+          BoxShadow(
+              blurRadius: 1.0,
+              spreadRadius: 2.0,
+              offset: Offset(1, 1),
+              color: Colors.black12)
+        ]),
   );
 }
 
@@ -700,12 +817,20 @@ Container musicTile(
       height: 70,
       padding: const EdgeInsets.all(10.0),
       margin: const EdgeInsets.all(5.0),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0), color: Colors.white, boxShadow: const [BoxShadow(blurRadius: 5.0, spreadRadius: 3.0, offset: Offset(1, 1), color: Colors.black12)]),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: Colors.white,
+          boxShadow: const [
+            BoxShadow(
+                blurRadius: 5.0,
+                spreadRadius: 3.0,
+                offset: Offset(1, 1),
+                color: Colors.black12)
+          ]),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Row(children: [
           Image.network(imagePath, height: 55),
           const SizedBox(width: 5),
-<<<<<<< HEAD
           Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -726,13 +851,6 @@ Container musicTile(
                         color: Colors.black,
                         fontSize: 12)),
               ])
-=======
-          Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: const [
-            Text("Oremi", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12)),
-            Text("Angelique kodja", style: TextStyle(fontWeight: FontWeight.w400, color: Colors.black, fontSize: 12)),
-            Text("2:34", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12)),
-          ])
->>>>>>> 0a726e47995bcd9285d81ae36ea878e6b7f8bc5c
         ]),
         Row(
           children: const [
@@ -760,7 +878,10 @@ Container poemCard(String title, String author, String date, String imagePath) {
             Container(
               width: 120,
               height: 140,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), image: DecorationImage(image: NetworkImage(imagePath), fit: BoxFit.fill)),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  image: DecorationImage(
+                      image: NetworkImage(imagePath), fit: BoxFit.fill)),
             ),
             const SizedBox(
               width: 10.0,
@@ -771,13 +892,17 @@ Container poemCard(String title, String author, String date, String imagePath) {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
                   ),
                   Text(
                     "By $author",
                     style: const TextStyle(color: Colors.grey),
                   ),
-                  Text("Posted $date", style: const TextStyle(color: Colors.grey)),
+                  Text("Posted $date",
+                      style: const TextStyle(color: Colors.grey)),
                   const SizedBox(height: 25),
                   Expanded(
                     child: Row(
@@ -786,7 +911,8 @@ Container poemCard(String title, String author, String date, String imagePath) {
                         Row(
                           children: const [
                             Icon(CupertinoIcons.heart, color: Colors.grey),
-                            Text("198", style: TextStyle(color: Colors.black54)),
+                            Text("198",
+                                style: TextStyle(color: Colors.black54)),
                           ],
                         ),
                         Row(children: const [
@@ -811,7 +937,16 @@ Container poemCard(String title, String author, String date, String imagePath) {
         ),
       ],
     ),
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12.0), boxShadow: const [BoxShadow(blurRadius: 1.0, spreadRadius: 2.0, offset: Offset(0, 2), color: Colors.black12)]),
+    decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: const [
+          BoxShadow(
+              blurRadius: 1.0,
+              spreadRadius: 2.0,
+              offset: Offset(0, 2),
+              color: Colors.black12)
+        ]),
   );
 }
 
@@ -827,7 +962,10 @@ columnCard(String title, String author, String imagePath) {
             child: Container(
               width: 100,
               height: 200,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), image: DecorationImage(image: NetworkImage(imagePath), fit: BoxFit.cover)),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: DecorationImage(
+                      image: NetworkImage(imagePath), fit: BoxFit.cover)),
             ),
           ),
           Text(author, style: const TextStyle(fontSize: 12)),
@@ -844,7 +982,8 @@ Container searchContainer(String text) {
   return Container(
     height: 35,
     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0), color: Colors.grey[300]),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0), color: Colors.grey[300]),
     child: Row(children: [
       const Icon(
         CupertinoIcons.search,
@@ -866,8 +1005,13 @@ Container eventTypeCard(String text, bool live) {
   return Container(
     alignment: Alignment.center,
     padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-    decoration: BoxDecoration(color: live ? Colors.black : Colors.grey[350], borderRadius: BorderRadius.circular(15.0)),
-    child: Text(text, style: TextStyle(color: live ? Colors.white : Colors.black54, fontWeight: FontWeight.bold)),
+    decoration: BoxDecoration(
+        color: live ? Colors.black : Colors.grey[350],
+        borderRadius: BorderRadius.circular(15.0)),
+    child: Text(text,
+        style: TextStyle(
+            color: live ? Colors.white : Colors.black54,
+            fontWeight: FontWeight.bold)),
   );
 }
 
@@ -887,11 +1031,14 @@ Row userCommentTile(String name, String comment, [live = false]) {
           children: [
             Text(
               name,
-              style: TextStyle(fontWeight: FontWeight.bold, color: live ? Colors.white : Colors.black),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: live ? Colors.white : Colors.black),
             ),
             Text(
               comment,
-              style: TextStyle(fontSize: 12, color: live ? Colors.white : Colors.black),
+              style: TextStyle(
+                  fontSize: 12, color: live ? Colors.white : Colors.black),
             ),
           ],
         ),
@@ -905,17 +1052,27 @@ Container nowPlayingCard() {
   return Container(
       height: 100,
       padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0), color: Colors.black),
-      child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0), color: Colors.black),
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Row(children: [
             Image.asset('./assets/images/music2.png', height: 55),
             const SizedBox(width: 5),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
-              Text("Oremi", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-              Text("Angelique kodja", style: TextStyle(fontWeight: FontWeight.w400, color: Colors.white)),
-              Text("2:34", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-            ])
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text("Oremi",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text("Angelique kodja",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400, color: Colors.white)),
+                  Text("2:34",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white)),
+                ])
           ]),
           Row(
             children: const [
@@ -932,7 +1089,13 @@ Container nowPlayingCard() {
             const SizedBox(
               height: 20,
             ),
-            Container(margin: const EdgeInsets.only(top: 4.5), width: double.infinity, height: 5.0, decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12.0))),
+            Container(
+                margin: const EdgeInsets.only(top: 4.5),
+                width: double.infinity,
+                height: 5.0,
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12.0))),
             Container(
               margin: const EdgeInsets.only(top: 4.5),
               color: Colors.red,
@@ -943,7 +1106,9 @@ Container nowPlayingCard() {
                 left: 200,
                 top: 2,
                 child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: Colors.red),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      color: Colors.red),
                   height: 10.0,
                   width: 10.0,
                 ))
@@ -953,7 +1118,11 @@ Container nowPlayingCard() {
 }
 
 // upcoming events card
-Container upcomingEventCard({required String title, required String subtitle, required String eventDate, required String imagePath}) {
+Container upcomingEventCard(
+    {required String title,
+    required String subtitle,
+    required String eventDate,
+    required String imagePath}) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12.0),
@@ -968,48 +1137,74 @@ Container upcomingEventCard({required String title, required String subtitle, re
                 fit: BoxFit.cover,
                 image: NetworkImage(imagePath),
               ))),
-      Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: const Color.fromRGBO(0, 0, 0, 0.70))),
+      Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+              color: const Color.fromRGBO(0, 0, 0, 0.70))),
       Align(
         alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
-          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 18),
+                      ),
+                      Text(subtitle,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 12)),
+                    ],
                   ),
-                  Text(subtitle, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12)),
-                ],
-              ),
-            ),
-            Column(children: [const Text("Starts in", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12)), eventTimeCard(eventDate)])
-          ]),
+                ),
+                Column(children: [
+                  const Text("Starts in",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 12)),
+                  eventTimeCard(eventDate)
+                ])
+              ]),
         ),
       )
     ]),
   );
 }
 
-Container pastEventCard() {
+Container pastEventCard(
+    String title, String duration, String date, String time, String image) {
   return Container(
-    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: Colors.red),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.0), color: Colors.red),
     height: 200,
     width: 150,
     child: Stack(
       fit: StackFit.expand,
       children: [
         Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), image: const DecorationImage(image: AssetImage('./assets/images/bg.jpeg'), fit: BoxFit.cover)),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+              image: DecorationImage(
+                  image: NetworkImage(image), fit: BoxFit.cover)),
         ),
         Container(
           height: 200,
           width: 150,
-          decoration: BoxDecoration(color: Colors.black26, borderRadius: BorderRadius.circular(12.0)),
+          decoration: BoxDecoration(
+              color: Colors.black26, borderRadius: BorderRadius.circular(12.0)),
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1017,11 +1212,12 @@ Container pastEventCard() {
             Align(
                 alignment: Alignment.centerRight,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 7),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2.0, horizontal: 7),
                   decoration: const BoxDecoration(color: Colors.black),
                   child: const Text(
-                    "23hrs 4mins",
-                    style: TextStyle(color: Colors.white),
+                    'Past',
+                    style: const TextStyle(color: Colors.white),
                   ),
                 )),
             const Align(
@@ -1038,13 +1234,26 @@ Container pastEventCard() {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
-                      "Studio Hangout",
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                      title.length >= 15
+                          ? "${title.substring(0, 15)}..."
+                          : title,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
                     ),
-                    Text("Enoch Ojotisa", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
-                    Text("Feb 4, 2022 | 4:45pm", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                    const Text("Enoch Ojotisa",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15)),
+                    Text("$date | $time",
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12)),
                   ],
                 ),
               ),
@@ -1060,7 +1269,8 @@ Container pastEventCard() {
 Container attendanceCard(String text, Color bgColor) {
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 15),
-    decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(5.0)),
+    decoration:
+        BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(5.0)),
     child: Text(
       text,
       style: const TextStyle(color: Colors.white),
@@ -1073,14 +1283,25 @@ Container eventTimeCard(String time) {
   return Container(
     color: Colors.white,
     padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),
-    child: Text(time, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 14)),
+    child: CountDownText(
+      due: DateTime.parse(time),
+      finishedText: "Now Live",
+      showLabel: true,
+      longDateName: true,
+      daysTextLong: " DAYS ",
+      hoursTextLong: " HOURS ",
+      minutesTextLong: " MINUTES ",
+      secondsTextLong: " SECONDS ",
+      style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+    ),
   );
 }
 
 // published posts
 Container publishedPostCard(String tag) {
   return Container(
-    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: Colors.transparent),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.0), color: Colors.transparent),
     height: 250,
     width: 150,
     child: Column(
@@ -1091,18 +1312,25 @@ Container publishedPostCard(String tag) {
             fit: StackFit.expand,
             children: [
               Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), image: const DecorationImage(image: AssetImage('./assets/images/bg.jpeg'), fit: BoxFit.cover)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.0),
+                    image: const DecorationImage(
+                        image: AssetImage('./assets/images/bg.jpeg'),
+                        fit: BoxFit.cover)),
               ),
               Container(
                 height: 250,
                 width: 150,
-                decoration: BoxDecoration(color: Colors.black26, borderRadius: BorderRadius.circular(12.0)),
+                decoration: BoxDecoration(
+                    color: Colors.black26,
+                    borderRadius: BorderRadius.circular(12.0)),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   tag,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               )
             ],
@@ -1122,7 +1350,8 @@ Container publishedPostCard(String tag) {
 }
 
 // image seslcton card
-SizedBox imageSelectionCard(BuildContext context) {
+SizedBox imageSelectionCard(BuildContext context,
+    [String text = 'Select image here']) {
   return SizedBox(
     height: 40,
     width: MediaQuery.of(context).size.width,
@@ -1134,8 +1363,12 @@ SizedBox imageSelectionCard(BuildContext context) {
             height: 40,
             width: double.infinity,
             padding: const EdgeInsets.all(5.0),
-            decoration: BoxDecoration(color: Colors.grey[200], borderRadius: const BorderRadius.only(topLeft: Radius.circular(15.0), bottomLeft: Radius.circular(15.0))),
-            child: const Text("Select image here"),
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    bottomLeft: Radius.circular(15.0))),
+            child: Text(text),
           ),
         ),
         Expanded(
@@ -1143,13 +1376,51 @@ SizedBox imageSelectionCard(BuildContext context) {
               height: 40,
               width: 30,
               alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-              decoration: const BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.only(topRight: Radius.circular(15.0), bottomRight: Radius.circular(15.0))),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+              decoration: const BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15.0),
+                      bottomRight: Radius.circular(15.0))),
               child: const Icon(
                 CupertinoIcons.cloud_upload,
                 color: Colors.white,
               )),
         ),
+      ],
+    ),
+  );
+}
+
+Container NotificationTile(String text, String time) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+    height: 80,
+    width: double.infinity,
+    decoration: BoxDecoration(boxShadow: const [
+      BoxShadow(
+          color: Colors.black26,
+          offset: Offset(2, 2),
+          blurRadius: 5,
+          spreadRadius: 0)
+    ], borderRadius: BorderRadius.circular(8.0), color: Colors.grey[200]),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Align(
+            alignment: Alignment.topLeft,
+            child: Text(text,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline))),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Text(
+            time,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        )
       ],
     ),
   );

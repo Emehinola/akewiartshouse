@@ -77,6 +77,14 @@ class _MusicState extends State<Music> {
         currentPosition = Duration(seconds: value);
       });
     });
+
+    _player!.onPlayerCompletion.listen((event) {
+      PlayerState.COMPLETED;
+      _player!.stop();
+      setState(() {
+        playing = false;
+      });
+    });
     // _player!.getCurrentPosition().then((position) {
     //   setState(() {
     //     currentPosition = Duration(seconds: position);
@@ -86,6 +94,10 @@ class _MusicState extends State<Music> {
     cache!.load('johnny.mp3');
 
     super.initState();
+  }
+
+  void dispose() {
+    _player!.dispose();
   }
 
   @override
@@ -106,8 +118,7 @@ class _MusicState extends State<Music> {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          const NavigationScreen())),
+                      builder: (BuildContext context) => MusicUploadScreen())),
               icon: const Icon(
                 CupertinoIcons.add_circled_solid,
                 color: Colors.blueGrey,
@@ -166,113 +177,112 @@ class _MusicState extends State<Music> {
                       fontSize: 18,
                       color: Colors.black54),
                 )),
-            Container(
-                height: 130,
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    color: Colors.black),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(children: [
-                              Image.asset('./assets/images/music2.png',
-                                  height: 55),
-                              const SizedBox(width: 5),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text("Oremi",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white)),
-                                    const Text("Angelique kodja",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.white)),
-                                    Text(
-                                        "${musicLength.inMinutes}:${musicLength.inSeconds}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white)),
-                                  ])
-                            ]),
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    if (playing) {
-                                      _player!.pause();
-                                    } else {
-                                      cache!.play('johnny.mp3');
-                                    }
-
-                                    setState(() {
-                                      playing = !playing;
-                                    });
-                                  },
-                                  icon: Icon(
-                                      playing
-                                          ? CupertinoIcons.pause_solid
-                                          : CupertinoIcons.play_arrow_solid,
-                                      color: Colors.white),
-                                ),
-                                const SizedBox(width: 15),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(CupertinoIcons.heart_fill,
-                                      color: Colors.red),
-                                ),
-                                const SizedBox(width: 15),
-                                const Icon(CupertinoIcons.ellipsis_vertical,
-                                    color: Colors.white),
-                              ],
-                            )
-                          ]),
-                      slider(),
-                    ])),
+            // Container(
+            //     height: 130,
+            //     padding: const EdgeInsets.all(10.0),
+            //     decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(5.0),
+            //         color: Colors.black),
+            //     child: Column(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Row(
+            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //               children: [
+            //                 Row(children: [
+            //                   Image.asset('./assets/images/music2.png',
+            //                       height: 55),
+            //                   const SizedBox(width: 5),
+            //                   Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: [
+            //                         const Text("Oremi",
+            //                             style: TextStyle(
+            //                                 fontWeight: FontWeight.bold,
+            //                                 color: Colors.white)),
+            //                         const Text("Angelique kodja",
+            //                             style: TextStyle(
+            //                                 fontWeight: FontWeight.w400,
+            //                                 color: Colors.white)),
+            //                         Text(
+            //                             "${musicLength.inMinutes}:${musicLength.inSeconds}",
+            //                             style: const TextStyle(
+            //                                 fontWeight: FontWeight.bold,
+            //                                 color: Colors.white)),
+            //                       ])
+            //                 ]),
+            //                 Row(
+            //                   children: [
+            //                     IconButton(
+            //                       onPressed: () {
+            //                         if (playing) {
+            //                           _player!.pause();
+            //                         } else {
+            //                           cache!.play('johnny.mp3');
+            //                         }
+            //
+            //                         setState(() {
+            //                           playing = !playing;
+            //                         });
+            //                       },
+            //                       icon: Icon(
+            //                           playing
+            //                               ? CupertinoIcons.pause_solid
+            //                               : CupertinoIcons.play_arrow_solid,
+            //                           color: Colors.white),
+            //                     ),
+            //                     const SizedBox(width: 15),
+            //                     IconButton(
+            //                       onPressed: () {},
+            //                       icon: const Icon(CupertinoIcons.heart_fill,
+            //                           color: Colors.red),
+            //                     ),
+            //                     const SizedBox(width: 15),
+            //                     const Icon(CupertinoIcons.ellipsis_vertical,
+            //                         color: Colors.white),
+            //                   ],
+            //                 )
+            //               ]),
+            //           slider(),
+            //         ])),
             SizedBox(
-              height: 200,
+              height: MediaQuery.of(context).size.height * 0.6,
               child: FutureBuilder(
                   future: getMusic(),
                   builder: (context, snapshot) {
-                    var result = jsonDecode(snapshot.data.toString())['data'];
-
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator(
-                        color: Colors.black,
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      var result = jsonDecode(snapshot.data.toString())['data'];
+                      return ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => MusicDisplay(
+                                        musicUrl: jsonDecode(snapshot.data
+                                                .toString())['data'][index]
+                                            ['musicPath'],
+                                        imageUrl: jsonDecode(snapshot.data
+                                                .toString())['data'][index]
+                                            ['image']))),
+                            child: musicTile(
+                                jsonDecode(snapshot.data.toString())['data']
+                                    [index]['image'],
+                                'Nice music',
+                                'Samuel',
+                                '2:32'),
+                          );
+                        },
+                        itemCount:
+                            jsonDecode(snapshot.data.toString())['data'].length,
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: 8.0);
+                        },
                       );
                     }
-
-                    return ListView.separated(
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => MusicDisplay(
-                                      musicUrl: jsonDecode(
-                                              snapshot.data.toString())['data']
-                                          [index]['musicPath'],
-                                      imageUrl: jsonDecode(
-                                              snapshot.data.toString())['data']
-                                          [index]['image']))),
-                          child: musicTile(
-                              jsonDecode(snapshot.data.toString())['data']
-                                  [index]['image'],
-                              'Nice music',
-                              'Samuel',
-                              '2:32'),
-                        );
-                      },
-                      itemCount:
-                          jsonDecode(snapshot.data.toString())['data'].length,
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: 8.0);
-                      },
+                    return const CircularProgressIndicator(
+                      color: Colors.black,
                     );
                   }),
             ),

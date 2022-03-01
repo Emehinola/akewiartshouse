@@ -83,7 +83,9 @@ class ArtWork extends StatelessWidget {
                               ['description'],
                           'Sam',
                           json.decode(snapshot.data.toString())['data'][index]
-                              ['title']),
+                              ['title'],
+                          json.decode(snapshot.data.toString())['data'][index]
+                              ['date']),
                     );
                   },
                   separatorBuilder: (context, index) {

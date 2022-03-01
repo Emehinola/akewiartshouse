@@ -108,7 +108,8 @@ class _Essay extends State<Essay> {
                                                       .toString())['data'][0]
                                                   ['date'],
                                               likes: 78,
-                                              poetId: json.decode(snapshot.data
+                                              category: 'essay',
+                                              postId: json.decode(snapshot.data
                                                   .toString())['data'][0]['id'],
                                             ))),
                                 child: columnCard(
@@ -144,11 +145,12 @@ class _Essay extends State<Essay> {
                                             content: json.decode(snapshot.data
                                                     .toString())['data'][1]
                                                 ['contDesc'],
+                                            category: 'essay',
                                             datePosted: json.decode(snapshot
                                                 .data
                                                 .toString())['data'][1]['date'],
                                             likes: 78,
-                                            poetId: json.decode(snapshot.data
+                                            postId: json.decode(snapshot.data
                                                 .toString())['data'][1]['id'],
                                           ))),
                               child: columnCard(
@@ -187,7 +189,8 @@ class _Essay extends State<Essay> {
                                                 .data
                                                 .toString())['data'][2]['date'],
                                             likes: 78,
-                                            poetId: json.decode(snapshot.data
+                                            category: 'essay',
+                                            postId: json.decode(snapshot.data
                                                 .toString())['data'][2]['id'],
                                           ))),
                               child: columnCard(
@@ -257,7 +260,8 @@ class _Essay extends State<Essay> {
                                                         .toString())['data']
                                                     [index]['date'],
                                                 likes: 78,
-                                                poetId: json.decode(snapshot
+                                                category: 'essay',
+                                                postId: json.decode(snapshot
                                                         .data
                                                         .toString())['data']
                                                     [index]['id'],

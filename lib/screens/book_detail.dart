@@ -193,18 +193,7 @@ class _BookDetailState extends State<BookDetail> {
                           onTap: () => Navigator.push(context,
                               MaterialPageRoute(builder: (context) => Cart())),
                           child: priceTag()),
-                      GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      PaymentPage(
-                                          numberOfItems: 3,
-                                          totalCost: 3299,
-                                          email: '',
-                                          phone: '',
-                                          name: ''))),
-                          child: downloadTag())
+                      GestureDetector(onTap: () {}, child: downloadTag())
                     ],
                   )
                 ],

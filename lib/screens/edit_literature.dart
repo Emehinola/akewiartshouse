@@ -1,27 +1,38 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
-import 'package:akewiartshouse/screens/politics.dart';
+import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
+import 'package:akewiartshouse/backend/backend.dart';
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:http_parser/http_parser.dart';
 
-// for politics and editorial
-class CreatePost extends StatefulWidget {
+class EditLiterature extends StatefulWidget {
+  String? title;
+  String? author;
+  String? category;
+  String? content;
+
+  String? image;
+  int litId;
+
+  EditLiterature(
+      {this.title,
+      this.author,
+      this.category,
+      this.content,
+      this.image,
+      required this.litId});
+
   @override
-  _CreatePostState createState() => _CreatePostState();
+  _EditLiteratureState createState() => _EditLiteratureState();
 }
 
-class _CreatePostState extends State<CreatePost> {
-// controlllers
+class _EditLiteratureState extends State<EditLiterature> {
+  // controllers
   TextEditingController categoryCtrl = TextEditingController();
   TextEditingController title = TextEditingController();
-  TextEditingController content = TextEditingController();
+  TextEditingController description = TextEditingController();
   TextEditingController author = TextEditingController();
 
   // loading controller
@@ -57,20 +68,30 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   // posting article
-  Future createPost(String title, String category, String author, imagePath,
+  Future editLiterature(String title, String category, String author, imagePath,
       String content) async {
     try {
+      int catId = 0;
+
+      if (category.toLowerCase() == 'poetry') {
+        catId = 1;
+      } else if (category.toLowerCase() == 'drama') {
+        catId = 2;
+      } else {
+        catId = 3;
+      }
       var request = http.MultipartRequest(
-          'POST',
-          Uri.parse(category.toLowerCase() == 'politics'
-              ? 'http://placid-001-site50.itempurl.com/api/Politics/createPolitics'
-              : 'http://placid-001-site50.itempurl.com/api/Editorial/createEditorial'));
+          'PUT',
+          Uri.parse(
+              'http://placid-001-site50.itempurl.com/api/Literature/updateLiterature'));
 
       request.files.add(await http.MultipartFile.fromPath('image', imagePath));
       request.fields.addAll({
+        'id': widget.litId.toString(),
         'title': title,
-        'postedby': author,
-        'description': content,
+        'postBy': author,
+        'contDesc': content,
+        'catId': catId.toString(),
         'userId': Database.box.get('userId').toString()
       });
       request.headers['Authorization'] =
@@ -84,9 +105,9 @@ class _CreatePostState extends State<CreatePost> {
           loading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Post created successfully")));
+            const SnackBar(content: Text("Literature edited successfully")));
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Politics()));
+            context, MaterialPageRoute(builder: (context) => Literature()));
       } else {
         setState(() {
           loading = false;
@@ -95,10 +116,10 @@ class _CreatePostState extends State<CreatePost> {
             const SnackBar(content: Text("Unable to submit post. Try again")));
       }
     } catch (error) {
-      print(error);
       setState(() {
         loading = false;
       });
+      print(error);
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Something went wrong")));
     }
@@ -108,6 +129,11 @@ class _CreatePostState extends State<CreatePost> {
 
   void initState() {
     _imagePicker = ImagePicker();
+    _imagePicker = ImagePicker();
+    categoryCtrl.text = widget.category.toString();
+    title.text = widget.title.toString();
+    author.text = widget.author.toString();
+    description.text = widget.content.toString();
     super.initState();
   }
 
@@ -125,7 +151,7 @@ class _CreatePostState extends State<CreatePost> {
           ),
         ),
         title: const Text(
-          "Create new post",
+          "Edit literature post",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
@@ -215,7 +241,7 @@ class _CreatePostState extends State<CreatePost> {
                                         GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              categoryCtrl.text = 'Politics';
+                                              categoryCtrl.text = 'Poetry';
                                             });
                                             Navigator.pop(context);
                                           },
@@ -223,14 +249,14 @@ class _CreatePostState extends State<CreatePost> {
                                             height: 120,
                                             width: 70,
                                             child: literatureOptionsCard(
-                                                "Politics",
+                                                "Poetry",
                                                 "./assets/images/poem.png"),
                                           ),
                                         ),
                                         GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              categoryCtrl.text = 'Editorial';
+                                              categoryCtrl.text = 'Drama';
                                             });
                                             Navigator.pop(context);
                                           },
@@ -238,8 +264,23 @@ class _CreatePostState extends State<CreatePost> {
                                             height: 120,
                                             width: 70,
                                             child: literatureOptionsCard(
-                                                "Editorial",
+                                                "Drama",
                                                 "./assets/images/drama.png"),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              categoryCtrl.text = 'Essay';
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                          child: SizedBox(
+                                            height: 120,
+                                            width: 70,
+                                            child: literatureOptionsCard(
+                                                "Essay",
+                                                "./assets/images/essay.png"),
                                           ),
                                         ),
                                       ])),
@@ -266,7 +307,7 @@ class _CreatePostState extends State<CreatePost> {
             SizedBox(
               height: 150,
               child: TextField(
-                controller: content,
+                controller: description,
                 minLines: 5,
                 maxLines: 6,
                 keyboardType: TextInputType.multiline,
@@ -292,26 +333,37 @@ class _CreatePostState extends State<CreatePost> {
             pickedImage != null
                 ? Text(pickedImage!.path.split('/').last)
                 : const SizedBox.shrink(),
-            const SizedBox(
-              height: 20,
-            ),
+            pickedImage == null
+                ? Text(widget.image.toString())
+                : const SizedBox.shrink(),
             const SizedBox(
               height: 40,
             ),
             GestureDetector(
               onTap: () {
-                if (!loading && pickedImage != null) {
+                setState(() {
+                  loading = true;
+                });
+
+                if (pickedImage == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Please reselect an image")));
                   setState(() {
-                    loading = true;
+                    loading = false;
                   });
-                  // get lost data
-                  getLostData();
-                  createPost(
+                  return;
+                }
+
+                if (title.text.isNotEmpty &&
+                    author.text.isNotEmpty &&
+                    categoryCtrl.text.isNotEmpty &&
+                    description.text.isNotEmpty) {
+                  editLiterature(
                       title.text.toString(),
                       categoryCtrl.text.toString(),
                       author.text.toString(),
                       pickedImage!.path,
-                      content.text.toString());
+                      description.text.toString());
                 }
               },
               child: Container(

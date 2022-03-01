@@ -1,79 +1,72 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
-import 'package:akewiartshouse/screens/screens.dart';
+import 'package:akewiartshouse/screens/politics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:akewiartshouse/backend/backend.dart';
-import 'dart:io';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http_parser/http_parser.dart';
 
-class CreatePhotograph extends StatefulWidget {
+// for politics and editorial
+class MusicUploadScreen extends StatefulWidget {
   @override
-  _CreatePhotographState createState() => _CreatePhotographState();
+  _MusicUploadState createState() => _MusicUploadState();
 }
 
-class _CreatePhotographState extends State<CreatePhotograph> {
-  // controllers
-  TextEditingController categoryCtrl = TextEditingController();
-  TextEditingController title = TextEditingController();
-  TextEditingController description = TextEditingController();
+class _MusicUploadState extends State<MusicUploadScreen> {
+// controlllers
   TextEditingController author = TextEditingController();
 
   // loading controller
   bool loading = false;
 
   // IMAGE
-  List<File>? pickedImages;
+  File? pickedImage;
   ImagePicker? _imagePicker;
 
   // get lost data
-  // getLostData() async {
-  //   final LostDataResponse response = await _imagePicker!.retrieveLostData();
-  //   if (response.isEmpty) {
-  //     return;
-  //   }
-  //   if (response.file != null) {
-  //     setState(() {
-  //       pickedImages = File(response.file!.path);
-  //       //
-  //     });
-  //   } else {
-  //     //
-  //   }
-  // }
+  getLostData() async {
+    final LostDataResponse response = await _imagePicker!.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      setState(() {
+        pickedImage = File(response.file!.path);
+        //
+      });
+    } else {
+      //
+    }
+  }
 
   // pick image to upload
   pickImage() async {
-    var pickedFiles = await _imagePicker!.pickMultiImage();
+    var pickedFile = await _imagePicker!.pickImage(source: ImageSource.gallery);
     setState(() {
-      pickedImages = List.generate(
-          pickedFiles!.length, (index) => File(pickedFiles[index].path));
+      pickedImage = File(pickedFile!.path);
       // print("picked: $pickedImage");
     });
   }
 
   // posting article
-  Future uploadPhotos(String title, String category, String author, imagePaths,
-      String content) async {
+  Future uploadMusic(String author, imagePath) async {
     try {
       var request = http.MultipartRequest(
           'POST',
           Uri.parse(
-              'http://placid-001-site50.itempurl.com/api/Photography/createPhotography'));
+              'http://placid-001-site50.itempurl.com/api/Editorial/createEditorial'));
 
-      request.files.add(await http.MultipartFile.fromPath('mainImage',
-          imagePaths[0].path)); // sets the first image as the main image
-      imagePaths.removeAt(0); // removes the main image
-
-      for (var i = 1; i < imagePaths!.length; i++) {
-        request.files.add(
-            await http.MultipartFile.fromPath('photos', imagePaths[i].path));
-      }
-
+      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
       request.fields.addAll({
-        'title': title,
-        'description': content,
-        'userId': Database.box.get('userId').toString()
+        'postedby': author,
+        'musicPath': '',
+        'image': imagePath,
+        'userId': Database.box.get('userId')
       });
       request.headers['Authorization'] =
           'Bearer ${Database.box.get('authorization')}';
@@ -86,21 +79,20 @@ class _CreatePhotographState extends State<CreatePhotograph> {
           loading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Photos uploaded successfully")));
+            const SnackBar(content: Text("Post created successfully")));
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => ArtWork()));
+            context, MaterialPageRoute(builder: (context) => Politics()));
       } else {
         setState(() {
           loading = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Unable to upload photos. Try again")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Unable to submit post. Try again")));
       }
     } catch (error) {
       setState(() {
         loading = false;
       });
-      print("{erro: $error}");
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Something went wrong")));
     }
@@ -127,7 +119,7 @@ class _CreatePhotographState extends State<CreatePhotograph> {
           ),
         ),
         title: const Text(
-          "Upload photos",
+          "Create new post",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
@@ -136,19 +128,6 @@ class _CreatePhotographState extends State<CreatePhotograph> {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
-            SizedBox(
-              height: 45,
-              child: TextField(
-                controller: title,
-                decoration: InputDecoration(
-                    hintText: "Title",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0))),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
             SizedBox(
               height: 45,
               child: TextField(
@@ -162,24 +141,8 @@ class _CreatePhotographState extends State<CreatePhotograph> {
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              height: 150,
-              child: TextField(
-                controller: description,
-                minLines: 5,
-                maxLines: 6,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration(
-                    hintText: "Description/write up",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0))),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
             const Text(
-              "Select multiple images",
+              "Featured images",
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
             ),
@@ -188,24 +151,39 @@ class _CreatePhotographState extends State<CreatePhotograph> {
             ),
             GestureDetector(
                 onTap: () => pickImage(), child: imageSelectionCard(context)),
-            pickedImages != null
-                ? Text("${pickedImages!.length} images selected")
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              "Select music",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            GestureDetector(
+                onTap: () => pickImage(),
+                child: imageSelectionCard(context, 'Select music here')),
+            pickedImage != null
+                ? Text(pickedImage!.path.split('/').last)
                 : const SizedBox.shrink(),
+            const SizedBox(
+              height: 20,
+            ),
             const SizedBox(
               height: 40,
             ),
             GestureDetector(
               onTap: () {
-                setState(() {
-                  loading = true;
-                });
-
-                uploadPhotos(
-                    title.text.toString(),
-                    categoryCtrl.text.toString(),
-                    author.text.toString(),
-                    pickedImages,
-                    description.text.toString());
+                if (!loading && pickedImage != null) {
+                  setState(() {
+                    loading = true;
+                  });
+                  // get lost data
+                  getLostData();
+                  uploadMusic(author.text.toString(), pickedImage!.path);
+                }
               },
               child: Container(
                 height: 50,

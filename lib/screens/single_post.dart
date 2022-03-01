@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:akewiartshouse/screens/screens.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,8 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:akewiartshouse/backend/backend.dart';
 
-class SinglePoet extends StatefulWidget {
-  int? poetId;
+class SinglePost extends StatefulWidget {
+  int? postId;
   String? image;
   String? author;
   String? title;
@@ -15,14 +18,16 @@ class SinglePoet extends StatefulWidget {
   int? shares;
   int? comment;
   String? content;
+  String? category;
 
-  SinglePoet(
+  SinglePost(
       {Key? key,
-      this.poetId,
+      this.postId,
       this.title,
       this.content,
       this.author,
       this.comment,
+      this.category,
       this.image,
       this.datePosted,
       this.likes,
@@ -30,28 +35,30 @@ class SinglePoet extends StatefulWidget {
       : super(key: key);
 
   @override
-  _SinglePoetState createState() => _SinglePoetState();
+  _SinglePostState createState() => _SinglePostState();
 }
 
-class _SinglePoetState extends State<SinglePoet> {
+class _SinglePostState extends State<SinglePost> {
   GlobalKey<FormState> formKey = GlobalKey();
+
+  Future deletePost() async {
+    var response = await http.delete(
+      Uri.parse(widget.category == 'politics'
+          ? 'http://placid-001-site50.itempurl.com/api/Politics/deletePoliticsById/${widget.postId}'
+          : 'http://placid-001-site50.itempurl.com/api/Editorial/deleteEditorialById/${widget.postId}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Database.box.get('authorization')}'
+      },
+    );
+
+    // print()
+
+    return response.body;
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future getSingleItem() async {
-      var response = await http.get(
-        Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Literature/getLiteratureById/${widget.poetId}'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${Database.box.get('authorization')}'
-        },
-      );
-
-      // print()
-
-      return response.body;
-    }
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -62,6 +69,74 @@ class _SinglePoetState extends State<SinglePoet> {
                 CupertinoIcons.xmark,
                 color: Colors.black,
               )),
+          actions: [
+            InkWell(
+              onTap: () {
+                deletePost().then((response) {
+                  if (json.decode(response.data.toString())['status'] ==
+                      'success') {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Post deleted successfully")));
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Politics()));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Unable to delete")));
+                  }
+                });
+              },
+              child: Row(
+                children: const [
+                  Text(
+                    "Delete",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.black),
+                  ),
+                  Icon(
+                    CupertinoIcons.delete,
+                    color: Colors.black,
+                    size: 15,
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            InkWell(
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditPost(
+                            postId: widget.postId!.toInt(),
+                            content: widget.content,
+                            title: widget.title,
+                            author: widget.author,
+                            category: widget.category,
+                            image: widget.image,
+                          ))),
+              child: Row(
+                children: const [
+                  Text(
+                    "Edit",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.black),
+                  ),
+                  SizedBox(
+                    width: 2,
+                  ),
+                  Icon(
+                    FontAwesomeIcons.edit,
+                    color: Colors.black,
+                    size: 15,
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            )
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),

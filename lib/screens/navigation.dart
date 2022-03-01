@@ -46,7 +46,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
   ];
 
   // navigation screens
-  List<Widget> screens = [Home(), CreatePost(), BookStore(), Scaffold()];
+  List<Widget> screens = [
+    Home(),
+    CreatePost(),
+    BookStore(),
+    NotificationScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {

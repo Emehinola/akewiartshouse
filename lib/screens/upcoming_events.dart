@@ -11,8 +11,12 @@ import 'package:http/http.dart' as http;
 class UpcomingEvent extends StatelessWidget {
   fetchEvent() async {
     dynamic response = await http.get(
-      Uri.parse('http://placid-001-site50.itempurl.com/api/Events/getListOfEvents'),
-      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ${Database.box.get('authorization')}'},
+      Uri.parse(
+          'http://placid-001-site50.itempurl.com/api/Events/getListOfEvents'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${Database.box.get('authorization')}'
+      },
     );
     return response.body;
   }
@@ -34,7 +38,18 @@ class UpcomingEvent extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               itemBuilder: (BuildContext context, index) {
                 return GestureDetector(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => UpcomingEventView())),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UpcomingEventView(
+                                title: data[index]['title'],
+                                image: data[index]['banner'],
+                                date: data[index]['eventDate'],
+                                description: data[index]['description'],
+                                location: data[index]['location'],
+                                subtitle: data[index]['subTitle'],
+                                time: data[index]['time'],
+                              ))),
                   child: upcomingEventCard(
                     title: data[index]['title'] ?? "",
                     subtitle: data[index]['subTitle'] ?? "",

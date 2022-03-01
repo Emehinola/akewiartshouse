@@ -107,8 +107,8 @@ class _DramaState extends State<Drama> {
                                                       .data
                                                       .toString())['data'][0]
                                                   ['date'],
-                                              likes: 78,
-                                              poetId: json.decode(snapshot.data
+                                              likes: 78,category: 'drama',
+                                              postId: json.decode(snapshot.data
                                                   .toString())['data'][0]['id'],
                                             ))),
                                 child: columnCard(
@@ -139,7 +139,7 @@ class _DramaState extends State<Drama> {
                                                 ['title'],
                                             author: json.decode(snapshot.data
                                                     .toString())['data'][1]
-                                                ['postBy'],
+                                                ['postBy'],category: 'drama',
                                             comment: 90,
                                             content: json.decode(snapshot.data
                                                     .toString())['data'][1]
@@ -148,7 +148,7 @@ class _DramaState extends State<Drama> {
                                                 .data
                                                 .toString())['data'][1]['date'],
                                             likes: 78,
-                                            poetId: json.decode(snapshot.data
+                                            postId: json.decode(snapshot.data
                                                 .toString())['data'][1]['id'],
                                           ))),
                               child: columnCard(
@@ -186,8 +186,8 @@ class _DramaState extends State<Drama> {
                                             datePosted: json.decode(snapshot
                                                 .data
                                                 .toString())['data'][2]['date'],
-                                            likes: 78,
-                                            poetId: json.decode(snapshot.data
+                                            likes: 78,category: 'drama',
+                                            postId: json.decode(snapshot.data
                                                 .toString())['data'][2]['id'],
                                           ))),
                               child: columnCard(
@@ -236,7 +236,7 @@ class _DramaState extends State<Drama> {
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               SinglePoet(
-                                                shares: 87,
+                                                shares: 87,category: 'drama',
                                                 image: json.decode(snapshot.data
                                                         .toString())['data']
                                                     [index]['image'],
@@ -257,7 +257,7 @@ class _DramaState extends State<Drama> {
                                                         .toString())['data']
                                                     [index]['date'],
                                                 likes: 78,
-                                                poetId: json.decode(snapshot
+                                                postId: json.decode(snapshot
                                                         .data
                                                         .toString())['data']
                                                     [index]['id'],

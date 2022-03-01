@@ -12,12 +12,27 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart';
 
 // for politics and editorial
-class CreatePost extends StatefulWidget {
+class EditPost extends StatefulWidget {
+  String? title;
+  String? author;
+  String? category;
+  String? content;
+  String? image;
+  int postId;
+
+  EditPost(
+      {this.title,
+      this.author,
+      this.category,
+      this.content,
+      this.image,
+      required this.postId});
+
   @override
-  _CreatePostState createState() => _CreatePostState();
+  _EditPostState createState() => _EditPostState();
 }
 
-class _CreatePostState extends State<CreatePost> {
+class _EditPostState extends State<EditPost> {
 // controlllers
   TextEditingController categoryCtrl = TextEditingController();
   TextEditingController title = TextEditingController();
@@ -57,17 +72,22 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   // posting article
-  Future createPost(String title, String category, String author, imagePath,
-      String content) async {
+  Future editPost(String title, String category, String author, imagePath,
+      String content, int postId) async {
     try {
       var request = http.MultipartRequest(
-          'POST',
+          'PUT',
           Uri.parse(category.toLowerCase() == 'politics'
-              ? 'http://placid-001-site50.itempurl.com/api/Politics/createPolitics'
-              : 'http://placid-001-site50.itempurl.com/api/Editorial/createEditorial'));
+              ? 'http://placid-001-site50.itempurl.com/api/Politics/updatePolitics'
+              : 'http://placid-001-site50.itempurl.com/api/Editorial/updateEditorial'));
 
-      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+      if (imagePath != null) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image', imagePath));
+      }
+
       request.fields.addAll({
+        'id': postId.toString(),
         'title': title,
         'postedby': author,
         'description': content,
@@ -75,6 +95,7 @@ class _CreatePostState extends State<CreatePost> {
       });
       request.headers['Authorization'] =
           'Bearer ${Database.box.get('authorization')}';
+      // request.headers['Content-Type'] = 'application/json';
 
       var response = await request.send();
       print('response: ${response.statusCode}');
@@ -84,7 +105,7 @@ class _CreatePostState extends State<CreatePost> {
           loading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Post created successfully")));
+            const SnackBar(content: Text("Post edited successfully")));
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Politics()));
       } else {
@@ -108,6 +129,11 @@ class _CreatePostState extends State<CreatePost> {
 
   void initState() {
     _imagePicker = ImagePicker();
+    categoryCtrl.text = widget.category.toString();
+    title.text = widget.title.toString();
+    author.text = widget.author.toString();
+    content.text = widget.content.toString();
+
     super.initState();
   }
 
@@ -125,7 +151,7 @@ class _CreatePostState extends State<CreatePost> {
           ),
         ),
         title: const Text(
-          "Create new post",
+          "Edit post",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
@@ -292,6 +318,9 @@ class _CreatePostState extends State<CreatePost> {
             pickedImage != null
                 ? Text(pickedImage!.path.split('/').last)
                 : const SizedBox.shrink(),
+            pickedImage == null
+                ? Text(widget.image.toString())
+                : const SizedBox.shrink(),
             const SizedBox(
               height: 20,
             ),
@@ -300,18 +329,31 @@ class _CreatePostState extends State<CreatePost> {
             ),
             GestureDetector(
               onTap: () {
-                if (!loading && pickedImage != null) {
+                if (pickedImage == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Please reselect an image")));
                   setState(() {
-                    loading = true;
+                    loading = false;
                   });
+                  return;
+                } else {
+                  if (title.text.isNotEmpty &&
+                      author.text.isNotEmpty &&
+                      categoryCtrl.text.isNotEmpty &&
+                      content.text.isNotEmpty) {
+                    setState(() {
+                      loading = true;
+                    });
+                  }
                   // get lost data
                   getLostData();
-                  createPost(
+                  editPost(
                       title.text.toString(),
                       categoryCtrl.text.toString(),
                       author.text.toString(),
-                      pickedImage!.path,
-                      content.text.toString());
+                      pickedImage == null ? null : pickedImage!.path,
+                      content.text.toString(),
+                      widget.postId);
                 }
               },
               child: Container(

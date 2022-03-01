@@ -1,10 +1,37 @@
+import 'dart:io';
+
 import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:akewiartshouse/screens/live_event_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LiveEvent extends StatelessWidget {
+  // open past event on youtube
+  void openYoutube(String youtubeId) async {
+    var link = "https://youtube.com/?watch/?v=$youtubeId";
+    if (Platform.isIOS) {
+      // for iOS phone only
+      if (await canLaunch(link)) {
+        await launch(link, forceSafariVC: false);
+      } else {
+        //
+      }
+    }
+
+    // launching based on platform
+    else if (Platform.isIOS) {
+      //
+    } else if (Platform.isAndroid) {
+      if (await canLaunch(link)) {
+        launch(link); // launches whatsapp
+      } else {
+        //
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,8 +40,7 @@ class LiveEvent extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         children: [
           GestureDetector(
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => LiveEventView())),
+            onTap: () => openYoutube(''),
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -151,28 +177,28 @@ class LiveEvent extends StatelessWidget {
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book",
             style: TextStyle(fontSize: 12),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: Text(
-              "Comments",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          const Divider(
-            color: Colors.black,
-          ),
-          userCommentTile("Olawale",
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry"),
-          const Divider(
-            color: Colors.black,
-          ),
-          userCommentTile("Big Sam",
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry"),
-          const Divider(
-            color: Colors.black,
-          ),
-          userCommentTile("Michael",
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry"),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(vertical: 5.0),
+          //   child: Text(
+          //     "Comments",
+          //     style: TextStyle(fontWeight: FontWeight.bold),
+          //   ),
+          // ),
+          // const Divider(
+          //   color: Colors.black,
+          // ),
+          // userCommentTile("Olawale",
+          //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry"),
+          // const Divider(
+          //   color: Colors.black,
+          // ),
+          // userCommentTile("Big Sam",
+          //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry"),
+          // const Divider(
+          //   color: Colors.black,
+          // ),
+          // userCommentTile("Michael",
+          //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry"),
         ],
       ),
     );

@@ -1,11 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.placid.akewiartshouse">
 
-    <!--        android:usesCleartextTraffic="true"-->
-    <!--        android:networkSecurityConfig="@xml/network_security_config"-->
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="akewiartshouse"
-        android:icon="@mipmap/ic_launcher">
+        android:usesCleartextTraffic="true"
+        android:label="Akewi Arts"
+        android:icon="@mipmap/akewi_launcher">
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

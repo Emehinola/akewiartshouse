@@ -91,48 +91,41 @@ class _EditorialState extends State<Editorial> {
                       ),
                       SizedBox(
                           height: 170,
-                          child: ListView(
+                          child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
-                            children: [
-                              GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            SinglePoet(
-                                              title: result[0]['title'],
-                                              author: result[0]['postedby'],
-                                              likes: 12,
-                                              poetId: result[0]['id'],
-                                              shares: 23,
-                                              datePosted: result[0]['date'],
-                                              comment: 34,
-                                              image: result[0]['image'],
-                                              content: result[0]['description'],
-                                            ))),
-                                child: columnCard(
-                                    result[0]['title']
-                                        .toString()
-                                        .substring(0, 10),
-                                    result[0]['postedby'],
-                                    result[0]['image']),
-                              ),
-                              const SizedBox(width: 10.0),
-                              columnCard(
-                                  result[1]['title']
-                                      .toString()
-                                      .substring(0, 10),
-                                  result[1]['postedby'],
-                                  result[1]['image']),
-                              const SizedBox(width: 10.0),
-                              columnCard(
-                                  result[0]['title']
-                                      .toString()
-                                      .substring(0, 10),
+                            itemCount: result.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              width: 10.0,
+                            ),
+                            itemBuilder: (context, index) => GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          SinglePost(
+                                            title: result[index]['title'],
+                                            author: result[index]['postedby'],
+                                            likes: 12,
+                                            postId: result[index]['id'],
+                                            shares: 23,
+                                            category: 'editorial',
+                                            datePosted: result[index]['date'],
+                                            comment: 34,
+                                            image: result[index]['image'],
+                                            content: result[index]
+                                                ['description'],
+                                          ))),
+                              child: columnCard(
+                                  result[index]['title'].toString().length <= 10
+                                      ? result[index]['title'].toString()
+                                      : result[index]['title']
+                                          .toString()
+                                          .substring(0, 10),
                                   result[0]['postedby'],
-                                  result[0]['image'])
-                            ],
+                                  result[0]['image']),
+                            ),
                           )),
                       const SizedBox(
                         height: 10,
@@ -153,11 +146,11 @@ class _EditorialState extends State<Editorial> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            SinglePoet(
+                                            SinglePost(
                                               title: result[index]['title'],
                                               author: result[index]['postedby'],
                                               likes: 12,
-                                              poetId: result[index]['id'],
+                                              postId: result[index]['id'],
                                               shares: 23,
                                               datePosted: result[index]['date'],
                                               comment: 34,

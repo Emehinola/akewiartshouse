@@ -57,10 +57,11 @@ class _DonateState extends State<Donate> {
 
       final ChargeResponse response =
           await flutterwave.initializeForUiPayments();
-      print("response: ${response.data!.id}");
+
       if (response.status == 'success') {
         // record donation to database
-        registerDonation(name, email, phone, address, city, country);
+        registerDonation(name, email, phone, address, city, country,
+            response.data!.id.toString());
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(response.message.toString())));
@@ -72,7 +73,7 @@ class _DonateState extends State<Donate> {
   }
 
   Future registerDonation(String name, String email, String phone,
-      String address, String city, String country) async {
+      String address, String city, String country, String transactionId) async {
     try {
       var request = await http.post(
           Uri.parse(
@@ -84,7 +85,8 @@ class _DonateState extends State<Donate> {
             'phonenumber': phone,
             'address': address,
             'city': city,
-            'country': country
+            'country': country,
+            'transactionId': transactionId
           }));
 
       if (jsonDecode(request.body.toString())['status'] == 'success') {

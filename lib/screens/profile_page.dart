@@ -9,13 +9,79 @@ import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
-  bool loading = false;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  // text controllers
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController username = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController bio = TextEditingController();
+  TextEditingController website = TextEditingController();
+  TextEditingController twitter = TextEditingController();
+  TextEditingController facebook = TextEditingController();
+  TextEditingController instagram = TextEditingController();
+  TextEditingController currentPassword = TextEditingController();
+  TextEditingController newPassword = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
+
+  bool loading = false;
+  // update profile
+  Future updateProfile(String type) async {
+    var data;
+
+    if (type == 'personal_data') {
+      data = jsonEncode({
+        'firstname': firstName.text.toString(),
+        'lastName': lastName.text.toString(),
+        'username': username.text.toString(),
+        'phonenumber': phone.text.toString()
+      });
+    } else if (type == 'password_reset') {
+      data = jsonEncode({
+        'currentPassword': currentPassword.text.toString(),
+        'newPassword': newPassword.text.toString()
+      });
+    } else if (type == 'about') {
+      data = jsonEncode({
+        'bio': bio.text.toString(),
+        'facebook': facebook.text.toString(),
+        'twitter': twitter.text.toString(),
+        'facebook': facebook.text.toString(),
+        'website': website.text.toString()
+      });
+    }
+    var request = await http.post(
+        Uri.parse('http://placid-001-site50.itempurl.com/api/User/update-user'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        },
+        body: data);
+
+    var response = json.decode(request.body.toString());
+    if (response != null) {
+      if (response['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Profile updated successfully")));
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(response['message'])));
+    }
+  }
+
+  @override
+  void initState() {
+    // populating fields
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // getting user's details
@@ -54,29 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     } else {
                       Map<String, dynamic> _data =
                           jsonDecode(snapshot.data.toString())['data'];
-                      // controllers
-                      TextEditingController firstName =
-                          TextEditingController(text: _data['firstname']);
-                      TextEditingController lastName =
-                          TextEditingController(text: _data['lastname']);
-                      TextEditingController username =
-                          TextEditingController(text: _data['username']);
-                      TextEditingController phonenumber =
-                          TextEditingController(text: _data['phonenumber']);
-                      TextEditingController bio =
-                          TextEditingController(text: _data['bio']);
-                      TextEditingController facebook =
-                          TextEditingController(text: _data['facebook']);
-                      TextEditingController instagram =
-                          TextEditingController(text: _data['instagram']);
-                      TextEditingController twitter =
-                          TextEditingController(text: _data['twitter']);
-                      TextEditingController website =
-                          TextEditingController(text: _data['website']);
-                      TextEditingController cpwd = TextEditingController();
-                      TextEditingController npwd = TextEditingController();
-                      TextEditingController confirmpwd =
-                          TextEditingController();
+
                       return Stack(
                         fit: StackFit.expand,
                         children: [
@@ -124,8 +168,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 height: 100,
                                 width: 100,
                                 child: CircleAvatar(
-                                  backgroundImage: AssetImage(
-                                      './assets/images/profile_image.png'),
+                                  backgroundImage:
+                                      AssetImage('./assets/images/logo.png'),
                                 ),
                               )),
                           Positioned(
@@ -254,7 +298,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 SizedBox(
                                                   height: 50,
                                                   child: TextFormField(
-                                                    controller: phonenumber,
+                                                    controller: phone,
                                                     decoration: InputDecoration(
                                                         hintText:
                                                             "Phone number",
@@ -272,91 +316,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       const EdgeInsets.all(8.0),
                                                   height: 70,
                                                   child: InkWell(
-                                                    onTap: () async {
-                                                      String _firstName =
-                                                              firstName.text,
-                                                          _lastName =
-                                                              lastName.text,
-                                                          _userName =
-                                                              username.text,
-                                                          _phoneNumber =
-                                                              phonenumber.text;
-                                                      if (_firstName == '' ||
-                                                          _lastName == '' ||
-                                                          _userName == '' ||
-                                                          _phoneNumber == '') {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          const SnackBar(
-                                                            content: Text(
-                                                              'One or more of the fields are empty!',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                            backgroundColor:
-                                                                Colors.red,
-                                                          ),
-                                                        );
-                                                      } else {
-                                                        setState(() {
-                                                          widget.loading = true;
-                                                        });
-                                                        var _response =
-                                                            await http.post(
-                                                          Uri.parse(
-                                                              'http://placid-001-site50.itempurl.com/api/User/update-user'),
-                                                          headers: <String,
-                                                              String>{
-                                                            'Content-Type':
-                                                                'application/json',
-                                                            'Authorization':
-                                                                'Bearer ${Database.box.get('authorization')}'
-                                                          },
-                                                          body: jsonEncode({
-                                                            'email': Database
-                                                                .box
-                                                                .get('email'),
-                                                            'password': Database
-                                                                .box
-                                                                .get(
-                                                                    'password'),
-                                                            'firstname':
-                                                                _firstName,
-                                                            'lastname':
-                                                                _lastName,
-                                                            'username':
-                                                                _userName,
-                                                            'phonenumber':
-                                                                _phoneNumber,
-                                                          }),
-                                                        );
-                                                        dynamic _data =
-                                                            jsonDecode(
-                                                                _response.body);
-                                                        if (_data['status'] ==
-                                                            'success') {
-                                                          setState(() {
-                                                            widget.loading =
-                                                                true;
-                                                          });
-                                                          Navigator.pop(
-                                                              context);
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  const SnackBar(
-                                                                      content: Text(
-                                                                          'Profile edited successfully!')));
-                                                          Navigator.pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (BuildContext
-                                                                          context) =>
-                                                                      ProfilePage()));
-                                                        }
-                                                      }
+                                                    onTap: () {
+                                                      setState(() {
+                                                        loading = true;
+                                                      });
+                                                      updateProfile(
+                                                          'personal_data');
                                                     },
                                                     child: Container(
                                                       padding: const EdgeInsets
@@ -367,7 +332,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           Alignment.center,
                                                       height: 45,
                                                       child: Text(
-                                                        widget.loading
+                                                        loading
                                                             ? 'Updating...'
                                                             : 'Update',
                                                         style: const TextStyle(
@@ -430,12 +395,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold)),
                                     Text(
-                                        "${_data['phonenumber'] ?? '+1 (217) 320 5064'}",
+                                        "${_data['phonenumber'] ?? '+1 (000) 000 0000'}",
                                         style: const TextStyle(
                                             color: Colors.black87,
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold)),
-                                    Text("${_data['email'] ?? 'john@doe.com'}",
+                                    Text(
+                                        "${_data['email'] ?? 'example@mail.com'}",
                                         style: const TextStyle(
                                             color: Colors.black87,
                                             fontSize: 17,
@@ -608,92 +574,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             8.0),
                                                     height: 70,
                                                     child: InkWell(
-                                                      onTap: () async {
-                                                        if (bio.text == '' ||
-                                                            facebook.text ==
-                                                                '' ||
-                                                            instagram.text ==
-                                                                '' ||
-                                                            twitter.text ==
-                                                                '' ||
-                                                            website.text ==
-                                                                '') {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                            const SnackBar(
-                                                              content: Text(
-                                                                'One or more of the fields are empty!',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white),
-                                                              ),
-                                                              backgroundColor:
-                                                                  Colors.red,
-                                                            ),
-                                                          );
-                                                        } else {
-                                                          setState(() {
-                                                            widget.loading =
-                                                                true;
-                                                          });
-                                                          var _response =
-                                                              await http.post(
-                                                            Uri.parse(
-                                                                'http://placid-001-site50.itempurl.com/api/User/update-user'),
-                                                            headers: <String,
-                                                                String>{
-                                                              'Content-Type':
-                                                                  'application/json',
-                                                              'Authorization':
-                                                                  'Bearer ${Database.box.get('authorization')}'
-                                                            },
-                                                            body: jsonEncode({
-                                                              'email': Database
-                                                                  .box
-                                                                  .get('email'),
-                                                              'password': Database
-                                                                  .box
-                                                                  .get(
-                                                                      'password'),
-                                                              'bio': bio.text,
-                                                              'facebook':
-                                                                  facebook.text,
-                                                              'instagram':
-                                                                  instagram
-                                                                      .text,
-                                                              'twitter':
-                                                                  twitter.text,
-                                                              'website':
-                                                                  website.text,
-                                                            }),
-                                                          );
-                                                          dynamic _data =
-                                                              jsonDecode(
-                                                                  _response
-                                                                      .body);
-                                                          if (_data['status'] ==
-                                                              'success') {
-                                                            setState(() {
-                                                              widget.loading =
-                                                                  true;
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    const SnackBar(
-                                                                        content:
-                                                                            Text('Profile edited successfully!')));
-                                                            Navigator.pushReplacement(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (BuildContext
-                                                                            context) =>
-                                                                        ProfilePage()));
-                                                          }
-                                                        }
+                                                      onTap: () {
+                                                        setState(() {
+                                                          loading = true;
+                                                        });
+                                                        updateProfile('about');
                                                       },
                                                       child: Container(
                                                         padding:
@@ -706,7 +591,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             Alignment.center,
                                                         height: 45,
                                                         child: Text(
-                                                          widget.loading
+                                                          loading
                                                               ? 'Updating...'
                                                               : 'Update',
                                                           style:
@@ -936,7 +821,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       child:
                                                                           TextFormField(
                                                                         controller:
-                                                                            cpwd,
+                                                                            currentPassword,
                                                                         decoration: InputDecoration(
                                                                             hintText:
                                                                                 "current password",
@@ -954,7 +839,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       child:
                                                                           TextFormField(
                                                                         controller:
-                                                                            npwd,
+                                                                            newPassword,
                                                                         decoration: InputDecoration(
                                                                             hintText:
                                                                                 "new password",
@@ -972,7 +857,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       child:
                                                                           TextFormField(
                                                                         controller:
-                                                                            confirmpwd,
+                                                                            confirmPassword,
                                                                         decoration: InputDecoration(
                                                                             hintText:
                                                                                 "confirm password",
@@ -994,60 +879,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       child:
                                                                           InkWell(
                                                                         onTap:
-                                                                            () async {
-                                                                          if (cpwd.text == '' ||
-                                                                              npwd.text == '' ||
-                                                                              confirmpwd.text == '') {
-                                                                            ScaffoldMessenger.of(context).showSnackBar(
-                                                                              const SnackBar(
-                                                                                content: Text(
-                                                                                  'One or more of the fields are empty!',
-                                                                                  style: TextStyle(color: Colors.white),
-                                                                                ),
-                                                                                backgroundColor: Colors.red,
-                                                                              ),
-                                                                            );
-                                                                          } else if (cpwd.text !=
-                                                                              Database.box.get('password')) {
-                                                                            ScaffoldMessenger.of(context).showSnackBar(
-                                                                              const SnackBar(
-                                                                                content: Text(
-                                                                                  'Invalid Password!',
-                                                                                  style: TextStyle(color: Colors.white),
-                                                                                ),
-                                                                                backgroundColor: Colors.red,
-                                                                              ),
-                                                                            );
-                                                                          } else {
-                                                                            setState(() {
-                                                                              widget.loading = true;
-                                                                            });
-                                                                            var _response =
-                                                                                await http.post(
-                                                                              Uri.parse('http://placid-001-site50.itempurl.com/api/User/change-password'),
-                                                                              headers: <String, String>{
-                                                                                'Content-Type': 'application/json',
-                                                                                'Authorization': 'Bearer ${Database.box.get('authorization')}'
-                                                                              },
-                                                                              body: jsonEncode({
-                                                                                'email': Database.box.get('email'),
-                                                                                'newPassword': npwd.text,
-                                                                              }),
-                                                                            );
-                                                                            dynamic
-                                                                                _data =
-                                                                                jsonDecode(_response.body);
-                                                                            if (_data['status'] ==
-                                                                                'success') {
-                                                                              Database.box.put('password', npwd.text);
-                                                                              setState(() {
-                                                                                widget.loading = true;
-                                                                              });
-                                                                              Navigator.pop(context);
-                                                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Password changed successfully!')));
-                                                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => ProfilePage()));
-                                                                            }
-                                                                          }
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            loading =
+                                                                                true;
+                                                                          });
+                                                                          updateProfile(
+                                                                              'password_reset');
                                                                         },
                                                                         child:
                                                                             Container(
