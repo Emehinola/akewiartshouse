@@ -9,8 +9,10 @@ import 'package:flutter/cupertino.dart';
 class MusicDisplay extends StatefulWidget {
   String? musicUrl;
   String? imageUrl;
+  String? title;
+  String? artist;
 
-  MusicDisplay({this.musicUrl, this.imageUrl});
+  MusicDisplay({this.musicUrl, this.imageUrl, this.title, this.artist});
 
   @override
   _MusicDisplayState createState() => _MusicDisplayState();
@@ -39,7 +41,7 @@ class _MusicDisplayState extends State<MusicDisplay> {
       value: currentPosition.inMicroseconds.toDouble(),
       inactiveColor: Colors.grey[200],
       min: 0,
-      max: musicLength.inMicroseconds.toDouble(),
+      max: musicLength.inMicroseconds.toDouble() + 1,
       activeColor: Colors.red,
       onChanged: (val) {
         seekToSec(val.round());
@@ -116,13 +118,24 @@ class _MusicDisplayState extends State<MusicDisplay> {
             .showSnackBar(const SnackBar(content: Text("No music")));
       } else {
         try {
+          _player!.stop();
           setState(() {
-            _player!.stop();
             playing = false;
             _player!.setUrl(type == 'forward'
                 ? musicsUrl[currentMusicIndex + 1]['musicPath']
                 : musicsUrl[currentMusicIndex - 1]['musicPath']);
-            playing = true;
+            widget.imageUrl = type == 'forward'
+                ? musicsUrl[currentMusicIndex + 1]['image']
+                : musicsUrl[currentMusicIndex - 1]['image'];
+            widget.artist = type == 'forward'
+                ? musicsUrl[currentMusicIndex + 1]['artistName']
+                : musicsUrl[currentMusicIndex - 1]['artistName'];
+            widget.title = type == 'forward'
+                ? musicsUrl[currentMusicIndex + 1]['musicTitle']
+                : musicsUrl[currentMusicIndex - 1]['musicTitle'];
+
+            _player!.resume().then((value) => playing = true);
+            //
           });
         } catch (error) {
           setState(() {
@@ -145,24 +158,16 @@ class _MusicDisplayState extends State<MusicDisplay> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0.0,
-            title: const Text("Now playing",
-                style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
-            leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(CupertinoIcons.chevron_back,
-                    color: Colors.black)),
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  CupertinoIcons.ellipsis_vertical,
-                  color: Colors.black,
-                ),
-                onPressed: () {},
-              )
-            ]),
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          title: const Text("Now playing",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+          leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon:
+                  const Icon(CupertinoIcons.chevron_back, color: Colors.black)),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
           child: ListView(
@@ -183,13 +188,13 @@ class _MusicDisplayState extends State<MusicDisplay> {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text("Oremi",
-                          style: TextStyle(
+                    children: [
+                      Text(widget.title.toString(),
+                          style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 18)),
-                      Text("Angelique Kidjo")
+                      Text(widget.artist.toString())
                     ],
                   ),
                   Row(

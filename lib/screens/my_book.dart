@@ -138,36 +138,6 @@ class _MyBookState extends State<MyBook> {
                     imageUrl: widget.image.toString(),
                     height: 200,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        CupertinoIcons.star_fill,
-                        color: Colors.black54,
-                        size: 17,
-                      ),
-                      Icon(
-                        CupertinoIcons.star_fill,
-                        color: Colors.black54,
-                        size: 17,
-                      ),
-                      Icon(
-                        CupertinoIcons.star_fill,
-                        color: Colors.black54,
-                        size: 17,
-                      ),
-                      Icon(
-                        CupertinoIcons.star_fill,
-                        color: Colors.black54,
-                        size: 17,
-                      ),
-                      Icon(
-                        CupertinoIcons.star,
-                        color: Colors.grey,
-                        size: 17,
-                      ),
-                    ],
-                  ),
                   const SizedBox(
                     height: 5,
                   ),
@@ -251,42 +221,6 @@ class _MyBookState extends State<MyBook> {
                   ),
                   const SizedBox(
                     height: 20,
-                  ),
-                  const Divider(
-                    height: 0,
-                    color: Colors.black,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.heart,
-                              color: Colors.black)),
-                      Text(widget.likes.toString(),
-                          style: const TextStyle(color: Colors.black54)),
-                      const SizedBox(height: 15.0),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            FontAwesomeIcons.shareAlt,
-                            color: Colors.black54,
-                            size: 19,
-                          )),
-                      Text(widget.shares.toString(),
-                          style: const TextStyle(color: Colors.black54)),
-                      const SizedBox(height: 15.0),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.chat_bubble,
-                              color: Colors.black)),
-                      Text(widget.comments.toString(),
-                          style: const TextStyle(color: Colors.black54))
-                    ],
-                  ),
-                  const Divider(
-                    height: 0,
-                    color: Colors.black,
                   ),
                 ],
               )),

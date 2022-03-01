@@ -140,7 +140,7 @@ Container musicListCard(String image, String name, String author) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: Image.asset(
+          child: Image.network(
             image,
             fit: BoxFit.fitWidth,
           ),
@@ -852,19 +852,22 @@ Container musicTile(
                         fontSize: 12)),
               ])
         ]),
-        Row(
-          children: const [
-            Icon(CupertinoIcons.play_arrow_solid, color: Colors.black),
-            SizedBox(width: 15),
-            Icon(CupertinoIcons.heart, color: Colors.black),
-            SizedBox(width: 15),
-            Icon(CupertinoIcons.ellipsis_vertical, color: Colors.black),
-          ],
-        )
+        const Icon(CupertinoIcons.play_arrow_solid, color: Colors.black),
+        // Row(
+        //   children: const [
+        //     Icon(CupertinoIcons.play_arrow_solid, color: Colors.black),
+        //     SizedBox(width: 15),
+        //     Icon(CupertinoIcons.heart, color: Colors.black),
+        //     SizedBox(width: 15),
+        //     Icon(CupertinoIcons.ellipsis_vertical, color: Colors.black),
+        //   ],
+        // )
       ]));
 }
 
-Container poemCard(String title, String author, String date, String imagePath) {
+Container poemCard(dynamic comments, dynamic likes, String title, String author,
+    String date, String imagePath,
+    [bool liked = false]) {
   return Container(
     height: 150,
     padding: const EdgeInsets.all(15.0),
@@ -904,32 +907,38 @@ Container poemCard(String title, String author, String date, String imagePath) {
                   Text("Posted $date",
                       style: const TextStyle(color: Colors.grey)),
                   const SizedBox(height: 25),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: const [
-                            Icon(CupertinoIcons.heart, color: Colors.grey),
-                            Text("198",
-                                style: TextStyle(color: Colors.black54)),
-                          ],
-                        ),
-                        Row(children: const [
-                          Icon(
-                            FontAwesomeIcons.shareAlt,
-                            color: Colors.grey,
-                            size: 15,
-                          ),
-                          Text("198", style: TextStyle(color: Colors.black54)),
-                        ]),
-                        Row(children: const [
-                          Icon(CupertinoIcons.chat_bubble, color: Colors.grey),
-                          Text("46", style: TextStyle(color: Colors.black54)),
-                        ])
-                      ],
-                    ),
-                  )
+                  // Expanded(
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Row(
+                  //         children: [
+                  //           Icon(
+                  //               liked
+                  //                   ? CupertinoIcons.heart_fill
+                  //                   : CupertinoIcons.heart,
+                  //               color: liked ? Colors.red : Colors.grey),
+                  //           Text(likes ?? '0',
+                  //               style: const TextStyle(color: Colors.black54)),
+                  //         ],
+                  //       ),
+                  //       // Row(children: const [
+                  //       //   Icon(
+                  //       //     FontAwesomeIcons.shareAlt,
+                  //       //     color: Colors.grey,
+                  //       //     size: 15,
+                  //       //   ),
+                  //       //   Text("198", style: TextStyle(color: Colors.black54)),
+                  //       // ]),
+                  //       Row(children: [
+                  //         const Icon(CupertinoIcons.chat_bubble,
+                  //             color: Colors.grey),
+                  //         Text(comments ?? '0',
+                  //             style: const TextStyle(color: Colors.black54)),
+                  //       ])
+                  //     ],
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -968,7 +977,8 @@ columnCard(String title, String author, String imagePath) {
                       image: NetworkImage(imagePath), fit: BoxFit.cover)),
             ),
           ),
-          Text(author, style: const TextStyle(fontSize: 12)),
+          Text(author == null ? '' : author,
+              style: const TextStyle(fontSize: 12)),
           Text(
             title,
             style: const TextStyle(fontWeight: FontWeight.bold),

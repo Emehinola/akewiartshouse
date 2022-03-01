@@ -113,34 +113,18 @@ class _CartState extends State<Cart> {
 
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0.0,
-            leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(
-                  CupertinoIcons.back,
-                  color: Colors.black,
-                )),
-            title: const Text("Book Cart",
-                style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
-            actions: [
-              Row(
-                children: [
-                  const Text(
-                    "Clear Cart",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
-                  ),
-                  roundedContainer(IconButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => Cart())),
-                      icon: const Icon(CupertinoIcons.trash)))
-                ],
-              )
-            ]),
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(
+                CupertinoIcons.back,
+                color: Colors.black,
+              )),
+          title: const Text("Book Cart",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        ),
         floatingActionButton: FloatingActionButton.extended(
             backgroundColor: Colors.black,
             label: const Text(

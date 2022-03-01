@@ -15,6 +15,8 @@ class Politics extends StatefulWidget {
 }
 
 class _PoliticsState extends State<Politics> {
+  // comment/like list
+  List<Map<String, dynamic>> commentLike = [];
   // getting politics articles
   Future getPolitics() async {
     var response = await http.get(
@@ -27,6 +29,32 @@ class _PoliticsState extends State<Politics> {
 
     return response.body;
   }
+
+  // get total number of likes
+  Future getLikes(int postId) async {
+    var request = await http.get(
+        Uri.parse(
+            'http://placid-001-site50.itempurl.com/api/Politics/GetPoliticsCommentLike/$postId'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        });
+
+    var response = json.decode(request.body)['data'];
+    print(response);
+    if (response != null) {
+      commentLike.add({
+        'comments': response['totalComments'],
+        'likes': response['totalLikes']
+      });
+    } else {
+      commentLike.add({'comments': '0', 'likes': '0'});
+    }
+    print(commentLike);
+  }
+
+  // get number of comments
+  // Future getNumberOfComment() {}
 
   @override
   Widget build(BuildContext context) {
@@ -108,11 +136,12 @@ class _PoliticsState extends State<Politics> {
                                           SinglePost(
                                             title: result[index]['title'],
                                             author: result[index]['postedby'],
-                                            likes: 12,
+                                            likes: result[index]['totalLikes'],
                                             postId: result[index]['id'],
                                             shares: 23,
                                             datePosted: result[index]['date'],
-                                            comment: 34,
+                                            comment: result[index]
+                                                ['totalComments'],
                                             image: result[index]['image'],
                                             content: result[index]
                                                 ['description'],
@@ -141,6 +170,7 @@ class _PoliticsState extends State<Politics> {
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
+                            // getLikes(result[index]['id']);
                             return GestureDetector(
                                 onTap: () => Navigator.push(
                                     context,
@@ -149,17 +179,23 @@ class _PoliticsState extends State<Politics> {
                                             SinglePost(
                                               title: result[index]['title'],
                                               author: result[index]['postedby'],
-                                              likes: 12,
+                                              likes: result[index]
+                                                      ['totalLikes'] ??
+                                                  0,
                                               postId: result[index]['id'],
                                               category: 'politics',
                                               shares: 23,
                                               datePosted: result[index]['date'],
-                                              comment: 34,
+                                              comment: result[index]
+                                                      ['totalCommments'] ??
+                                                  0,
                                               image: result[index]['image'],
                                               content: result[index]
                                                   ['description'],
                                             ))),
                                 child: poemCard(
+                                    result[index]['totalComments'] ?? '0',
+                                    result[index]['totalLikes'] ?? '0',
                                     result[index]['title'],
                                     result[index]['postedby'],
                                     result[index]['date'],

@@ -273,6 +273,8 @@ class _Essay extends State<Essay> {
                                             3,
                                     replacement: const SizedBox.shrink(),
                                     child: poemCard(
+                                        '0',
+                                        '0',
                                         json
                                                     .decode(snapshot.data.toString())['data']
                                                         [index]['title']

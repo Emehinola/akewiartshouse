@@ -39,12 +39,17 @@ class _ProfilePageState extends State<ProfilePage> {
         'firstname': firstName.text.toString(),
         'lastName': lastName.text.toString(),
         'username': username.text.toString(),
-        'phonenumber': phone.text.toString()
+        'phonenumber': phone.text.toString(),
+        'id': Database.box.get('userId'),
+        'email': Database.box.get('email')
       });
     } else if (type == 'password_reset') {
       data = jsonEncode({
         'currentPassword': currentPassword.text.toString(),
-        'newPassword': newPassword.text.toString()
+        'newPassword': newPassword.text.toString(),
+        'id': Database.box.get('userId'),
+        'password': Database.box.get('password'),
+        'email': Database.box.get('email')
       });
     } else if (type == 'about') {
       data = jsonEncode({
@@ -52,7 +57,9 @@ class _ProfilePageState extends State<ProfilePage> {
         'facebook': facebook.text.toString(),
         'twitter': twitter.text.toString(),
         'facebook': facebook.text.toString(),
-        'website': website.text.toString()
+        'website': website.text.toString(),
+        'id': Database.box.get('userId'),
+        'email': Database.box.get('email')
       });
     }
     var request = await http.post(
@@ -64,15 +71,63 @@ class _ProfilePageState extends State<ProfilePage> {
         body: data);
 
     var response = json.decode(request.body.toString());
+
     if (response != null) {
       if (response['status'] == 'success') {
+        if (type == 'personal_data') {
+          await Database.box.putAll({
+            'username': username.text.toString(),
+            'firstName': firstName.text.toString(),
+            'lastName': lastName.text.toString(),
+            'phone': phone.text.toString()
+          });
+        } else if (type == 'paswword_reset') {
+          //
+        } else if (type == 'about') {
+          //
+        }
+        setState(() {
+          loading = false;
+        });
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Profile updated successfully")));
       }
     } else {
+      setState(() {
+        loading = false;
+      });
+      Navigator.pop(context);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(response['message'])));
     }
+  }
+
+  // getting user's details
+  Future getUserProfile() async {
+    var response = await http.get(
+        Uri.parse(
+          'http://placid-001-site50.itempurl.com/api/User/getUserByEmail/${Database.box.get('email')}',
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${Database.box.get('authorization')}'
+        });
+
+    var result = json.decode(response.body.toString())['data'];
+
+    // populating data
+    firstName.text = result['firstName'];
+    lastName.text = result['lastName'];
+    bio.text = result['bio'];
+    phone.text = result['phonenumber'];
+    facebook.text = result['facebook'];
+    twitter.text = result['twitter'];
+    website.text = result['website'];
+    username.text = result['username'];
+    instagram.text = result['instagram'];
+
+    return response.body;
   }
 
   @override
@@ -84,20 +139,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    // getting user's details
-    Future getUserProfile() async {
-      var response = await http.get(
-          Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/User/getUserByEmail/${Database.box.get('email')}',
-          ),
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ${Database.box.get('authorization')}'
-          });
-
-      return response.body;
-    }
-
     void launchURL(String url) async {
       if (!await launcher.launch(url)) throw 'Could not launch $url';
     }
@@ -117,10 +158,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
-                    } else {
+                    }
+
+                    try {
                       Map<String, dynamic> _data =
                           jsonDecode(snapshot.data.toString())['data'];
-
                       return Stack(
                         fit: StackFit.expand,
                         children: [
@@ -193,6 +235,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             top: 120,
                             child: GestureDetector(
                               onTap: () {
+                                firstName.text = _data['firstName'];
+                                lastName.text = _data['lastName'];
+                                username.text = _data['username'];
+                                phone.text = _data['phonenumber'];
+
                                 showDialog(
                                   context: context,
                                   builder: (_) => AlertDialog(
@@ -933,6 +980,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               )),
                         ],
+                      );
+                    } catch (error) {
+                      return const Center(
+                        child: Text("Unable to get profile"),
                       );
                     }
                   },

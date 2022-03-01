@@ -116,37 +116,6 @@ class _BookDetailState extends State<BookDetail> {
                   const Divider(
                     color: Colors.black,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.heart,
-                              color: Colors.black)),
-                      Text(widget.likes.toString(),
-                          style: const TextStyle(color: Colors.black54)),
-                      const SizedBox(height: 15.0),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            FontAwesomeIcons.shareAlt,
-                            color: Colors.black54,
-                            size: 19,
-                          )),
-                      Text(widget.shares.toString(),
-                          style: const TextStyle(color: Colors.black54)),
-                      const SizedBox(height: 15.0),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.chat_bubble,
-                              color: Colors.black)),
-                      Text(widget.comments.toString(),
-                          style: const TextStyle(color: Colors.black54))
-                    ],
-                  ),
-                  const Divider(
-                    color: Colors.black,
-                  ),
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(

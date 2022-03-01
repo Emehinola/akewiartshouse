@@ -65,16 +65,15 @@ class _EditorialState extends State<Editorial> {
                     ),
                   );
                 }
-                if (snapshot.hasData) {
+
+                try {
                   var result = json.decode(snapshot.data.toString())[
                       'data']; // returned data in json format
-
                   if (result.length == 0) {
                     return const Center(
                       child: Text("No post here"),
                     );
                   }
-
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -159,6 +158,8 @@ class _EditorialState extends State<Editorial> {
                                                   ['description'],
                                             ))),
                                 child: poemCard(
+                                    '0',
+                                    '0',
                                     result[index]['title'],
                                     result[index]['postedby'],
                                     result[index]['date'],
@@ -172,10 +173,11 @@ class _EditorialState extends State<Editorial> {
                           itemCount: result.length)
                     ],
                   );
+                } catch (error) {
+                  return const Center(
+                    child: Text('Something went wrong'),
+                  );
                 }
-                return const Center(
-                  child: Text('Something went wrong'),
-                );
               }),
         ),
       ),

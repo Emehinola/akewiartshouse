@@ -39,9 +39,14 @@ class SinglePoet extends StatefulWidget {
 }
 
 class _SinglePoetState extends State<SinglePoet> {
+  //
+  bool loading = false;
+
+  TextEditingController commentCtrl = TextEditingController();
+
   // deleting post
-  Future deletePost() async {
-    var response = await http.delete(
+  Future deletePost(int postId) async {
+    var request = await http.delete(
       Uri.parse(
           'http://placid-001-site50.itempurl.com/api/Literature/deleteLiteratureById/${widget.postId}'),
       headers: {
@@ -49,6 +54,22 @@ class _SinglePoetState extends State<SinglePoet> {
         'Authorization': 'Bearer ${Database.box.get('authorization')}'
       },
     );
+
+    var response = json.decode(request.body);
+
+    if (response != null) {
+      if (response['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Post deleted"),
+        ));
+        Navigator.pop(context);
+      }
+    } else {
+      //
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Unable to delete post"),
+      ));
+    }
 
     return response.body;
   }
@@ -71,6 +92,44 @@ class _SinglePoetState extends State<SinglePoet> {
       return response.body;
     }
 
+    // create comment
+    Future createComment(String comment) async {
+      var request = await http.post(
+          Uri.parse(
+              'http://placid-001-site50.itempurl.com/api/Literature/createLiteratureComment'),
+          headers: {
+            'Authorization': 'Bearer ${Database.box.get('authorization')}',
+            'Content-Type': 'application/json'
+          },
+          body:
+              jsonEncode({'coments': comment, 'literatureId': widget.postId}));
+
+      var response = json.decode(request.body.toString());
+
+      if (response != null) {
+        if (response['status'] == 'success') {
+          commentCtrl.clear(); // clear the comment field data
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("comment posted"),
+          ));
+        } else {
+          setState(() {
+            loading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Unable to comment"),
+          ));
+        }
+      } else {
+        setState(() {
+          loading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to comment"),
+        ));
+      }
+    }
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -84,7 +143,7 @@ class _SinglePoetState extends State<SinglePoet> {
           actions: [
             InkWell(
               onTap: () {
-                deletePost().then((response) {
+                deletePost(widget.postId!.toInt()).then((response) {
                   if (json.decode(response.data.toString())['status'] ==
                       'success') {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -196,17 +255,10 @@ class _SinglePoetState extends State<SinglePoet> {
                       IconButton(
                           onPressed: () {},
                           icon: const Icon(
-                            FontAwesomeIcons.shareAlt,
+                            CupertinoIcons.chat_bubble,
                             color: Colors.black54,
                             size: 19,
                           )),
-                      Text(widget.shares.toString(),
-                          style: const TextStyle(color: Colors.black54)),
-                      const SizedBox(height: 15.0),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.chat_bubble,
-                              color: Colors.black)),
                       Text(widget.comment.toString(),
                           style: const TextStyle(color: Colors.black54))
                     ],
@@ -226,6 +278,31 @@ class _SinglePoetState extends State<SinglePoet> {
                   const SizedBox(
                     height: 10,
                   ),
+                  SizedBox(
+                    height: 45,
+                    child: TextField(
+                      controller: commentCtrl,
+                      decoration: InputDecoration(
+                          hintText: 'Write comment here',
+                          suffix: IconButton(
+                            icon: Icon(loading
+                                ? CupertinoIcons.dot_radiowaves_right
+                                : CupertinoIcons.play_arrow_solid),
+                            onPressed: () {
+                              if (!loading && commentCtrl.text.isNotEmpty) {
+                                setState(() {
+                                  loading = true;
+                                });
+                                createComment(commentCtrl.text.toString());
+                              }
+                            },
+                          ),
+                          border: const UnderlineInputBorder()),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  )
                 ],
               )),
         ));

@@ -58,43 +58,56 @@ class ArtWork extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               }
-              return ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PictureDisplay(
-                                    title: json.decode(
-                                            snapshot.data.toString())['data']
-                                        [index]['title'],
-                                    images: json.decode(
-                                            snapshot.data.toString())['data']
-                                        [index]['images'],
-                                  ))),
-                      child: artWorkCard(
-                          context,
-                          json.decode(snapshot.data.toString())['data'][index]
-                              ['images'],
-                          json.decode(snapshot.data.toString())['data'][index]
-                              ['image'],
-                          json.decode(snapshot.data.toString())['data'][index]
-                              ['description'],
-                          'Sam',
-                          json.decode(snapshot.data.toString())['data'][index]
-                              ['title'],
-                          json.decode(snapshot.data.toString())['data'][index]
-                              ['date']),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 10,
-                    );
-                  },
-                  itemCount:
-                      json.decode(snapshot.data.toString())['data'].length);
+              if (snapshot.hasError) {
+                return const Center(
+                  child:
+                      Text("Something went wrong, please check your internet"),
+                );
+              }
+              try {
+                return ListView.separated(
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PictureDisplay(
+                                      title: json.decode(
+                                              snapshot.data.toString())['data']
+                                          [index]['title'],
+                                      images: json.decode(
+                                              snapshot.data.toString())['data']
+                                          [index]['images'],
+                                    ))),
+                        child: artWorkCard(
+                            context,
+                            json.decode(snapshot.data.toString())['data'][index]
+                                ['images'],
+                            json.decode(snapshot.data.toString())['data'][index]
+                                ['image'],
+                            json.decode(snapshot.data.toString())['data'][index]
+                                ['description'],
+                            'Sam',
+                            json.decode(snapshot.data.toString())['data'][index]
+                                ['title'],
+                            json.decode(snapshot.data.toString())['data'][index]
+                                ['date']),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 10,
+                      );
+                    },
+                    itemCount:
+                        json.decode(snapshot.data.toString())['data'].length);
+              } catch (error) {
+                return const Center(
+                  child:
+                      Text("Something went wrong, please check your internet"),
+                );
+              }
             }),
       ),
     );

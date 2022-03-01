@@ -107,7 +107,8 @@ class _DramaState extends State<Drama> {
                                                       .data
                                                       .toString())['data'][0]
                                                   ['date'],
-                                              likes: 78,category: 'drama',
+                                              likes: 78,
+                                              category: 'drama',
                                               postId: json.decode(snapshot.data
                                                   .toString())['data'][0]['id'],
                                             ))),
@@ -139,7 +140,8 @@ class _DramaState extends State<Drama> {
                                                 ['title'],
                                             author: json.decode(snapshot.data
                                                     .toString())['data'][1]
-                                                ['postBy'],category: 'drama',
+                                                ['postBy'],
+                                            category: 'drama',
                                             comment: 90,
                                             content: json.decode(snapshot.data
                                                     .toString())['data'][1]
@@ -186,7 +188,8 @@ class _DramaState extends State<Drama> {
                                             datePosted: json.decode(snapshot
                                                 .data
                                                 .toString())['data'][2]['date'],
-                                            likes: 78,category: 'drama',
+                                            likes: 78,
+                                            category: 'drama',
                                             postId: json.decode(snapshot.data
                                                 .toString())['data'][2]['id'],
                                           ))),
@@ -236,7 +239,8 @@ class _DramaState extends State<Drama> {
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               SinglePoet(
-                                                shares: 87,category: 'drama',
+                                                shares: 87,
+                                                category: 'drama',
                                                 image: json.decode(snapshot.data
                                                         .toString())['data']
                                                     [index]['image'],
@@ -269,6 +273,8 @@ class _DramaState extends State<Drama> {
                                             2,
                                     replacement: const SizedBox.shrink(),
                                     child: poemCard(
+                                        '0',
+                                        '0',
                                         json
                                                     .decode(snapshot.data.toString())['data']
                                                         [index]['title']

@@ -249,7 +249,10 @@ class _LieratureState extends State<Literature> {
                                                         .data
                                                         .toString())['data']
                                                     [index]['postBy'],
-                                                comment: 90,
+                                                comment: json.decode(snapshot
+                                                        .data
+                                                        .toString())['data']
+                                                    [index]['totalCommments'],
                                                 content: json.decode(snapshot
                                                         .data
                                                         .toString())['data']
@@ -258,7 +261,9 @@ class _LieratureState extends State<Literature> {
                                                         .data
                                                         .toString())['data']
                                                     [index]['date'],
-                                                likes: 78,
+                                                likes: json.decode(snapshot.data
+                                                        .toString())['data']
+                                                    [index]['totalLikes'],
                                                 category: 'poetry',
                                                 postId: json.decode(snapshot
                                                         .data
@@ -272,6 +277,8 @@ class _LieratureState extends State<Literature> {
                                             1,
                                     replacement: const SizedBox.shrink(),
                                     child: poemCard(
+                                        '0',
+                                        '0',
                                         json
                                                     .decode(snapshot.data.toString())['data']
                                                         [index]['title']
