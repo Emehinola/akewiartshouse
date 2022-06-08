@@ -28,8 +28,7 @@ class _BookStoreState extends State<BookStore> {
     // getting books
     Future getBooks() async {
       var response = await http.get(
-        Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Books/getAllBooks'),
+        Uri.parse('${EndPoint.baseUrl}/api/Books/getAllBooks'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${Database.box.get('authorization')}'
@@ -43,8 +42,7 @@ class _BookStoreState extends State<BookStore> {
     Future addToCart(
         int bookId, int userId, int quantity, double unitPrice) async {
       var response = await http.post(
-          Uri.parse(
-              'http://placid-001-site50.itempurl.com/api/Cart/createCart'),
+          Uri.parse('http://api.enochojotisa.com/api/Cart/createCart'),
           headers: {
             'Authorization': 'Bearer ${Database.box.get('authorization')}',
             'Content-Type': 'application/json'
@@ -66,15 +64,15 @@ class _BookStoreState extends State<BookStore> {
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(CupertinoIcons.back, color: Colors.black)),
-        actions: [
-          IconButton(
-              icon: const Icon(
-                CupertinoIcons.cart,
-                color: Colors.black,
-              ),
-              onPressed: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Cart())))
-        ],
+        // actions: [
+        //   IconButton(
+        //       icon: const Icon(
+        //         CupertinoIcons.cart,
+        //         color: Colors.black,
+        //       ),
+        //       onPressed: () => Navigator.push(
+        //           context, MaterialPageRoute(builder: (context) => Cart())))
+        // ],
         title: const Text("Bookstore", style: TextStyle(color: Colors.black)),
       ),
       body: Padding(
@@ -104,7 +102,7 @@ class _BookStoreState extends State<BookStore> {
                               color: Colors.black54),
                         )),
                     SizedBox(
-                      height: 180,
+                      height: 150,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         physics: const BouncingScrollPhysics(),
@@ -130,7 +128,8 @@ class _BookStoreState extends State<BookStore> {
                                       [index]['image'],
                                   json.decode(snapshot.data.toString())['data']
                                       [index]['title'],
-                                  "Enoch Ojotisa"));
+                                  json.decode(snapshot.data.toString())['data']
+                                      [index]['author']));
                         },
                         separatorBuilder: (BuildContext context, int index) {
                           return const SizedBox.shrink();
@@ -148,6 +147,7 @@ class _BookStoreState extends State<BookStore> {
                         )),
                     ListView.separated(
                         shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return GestureDetector(
                               onTap: () => Navigator.push(
@@ -163,8 +163,9 @@ class _BookStoreState extends State<BookStore> {
                                                 .toString(),
                                           ))),
                               child: Container(
-                                height: 140,
-                                padding: const EdgeInsets.all(15.0),
+                                height: 100,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 7.0),
                                 width: double.infinity,
                                 margin: const EdgeInsets.all(5.0),
                                 child: Row(
@@ -186,7 +187,7 @@ class _BookStoreState extends State<BookStore> {
                                                       fit: BoxFit.cover)),
                                             )),
                                         const SizedBox(
-                                          width: 5,
+                                          width: 10,
                                         ),
                                         Expanded(
                                           flex: 2,
@@ -206,12 +207,15 @@ class _BookStoreState extends State<BookStore> {
                                                         [index]['title'],
                                                     style: const TextStyle(
                                                         color: Colors.black,
-                                                        fontSize: 15,
+                                                        fontSize: 12,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
                                                   Text(
-                                                      "By ${json.decode(snapshot.data.toString())['data'][index]['author']}"),
+                                                    "By ${json.decode(snapshot.data.toString())['data'][index]['author']}",
+                                                    style: const TextStyle(
+                                                        fontSize: 10),
+                                                  ),
                                                   Row(
                                                       children: List.generate(
                                                     int.parse(double.parse(json
@@ -225,108 +229,119 @@ class _BookStoreState extends State<BookStore> {
                                                     (index) => const Icon(
                                                       CupertinoIcons.star_fill,
                                                       color: Colors.black54,
-                                                      size: 17,
+                                                      size: 13,
                                                     ),
                                                   )),
                                                   Text(
                                                     "NGN ${json.decode(snapshot.data.toString())['data'][index]['amount']}",
                                                     style: const TextStyle(
                                                         color: Colors.black,
-                                                        fontSize: 15,
+                                                        fontSize: 12,
                                                         fontWeight:
                                                             FontWeight.w900),
                                                   ),
                                                 ],
                                               ),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    addToCart(
-                                                            json.decode(snapshot
+                                            ],
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: InkWell(
+                                            onTap: () {
+                                              // addToCart(
+                                              //         json.decode(snapshot.data
+                                              //                 .toString())[
+                                              //             'data'][index]['id'],
+                                              //         Database.box
+                                              //             .get('userId'),
+                                              //         1,
+                                              //         json.decode(snapshot.data
+                                              //                     .toString())[
+                                              //                 'data'][index]
+                                              //             ['amount'])
+                                              //     .then((value) {
+                                              //   if (value == null) {
+                                              //     ScaffoldMessenger.of(context)
+                                              //         .showSnackBar(
+                                              //             const SnackBar(
+                                              //       content: Text(
+                                              //           "Unable to add item"),
+                                              //     ));
+                                              //   } else {
+                                              //     if (json.decode(
+                                              //                 value.toString())[
+                                              //             'status'] ==
+                                              //         'success') {
+                                              //       ScaffoldMessenger.of(
+                                              //               context)
+                                              //           .showSnackBar(
+                                              //               const SnackBar(
+                                              //         content: Text(
+                                              //             "Item added to cart"),
+                                              //       ));
+                                              //     } else {
+                                              //       ScaffoldMessenger.of(
+                                              //               context)
+                                              //           .showSnackBar(SnackBar(
+                                              //         content: Text(json.decode(
+                                              //                 value.toString())[
+                                              //             'message']),
+                                              //       ));
+                                              //     }
+                                              //   }
+                                              // });
+
+                                              // goto buy screen
+                                              Navigator.push(
+                                                  context,
+                                                  CupertinoPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          BookDetail(
+                                                            bookId: json
+                                                                .decode(
+                                                                    snapshot
                                                                         .data
                                                                         .toString())[
                                                                     'data']
-                                                                [index]['id'],
-                                                            Database.box
-                                                                .get('userId'),
-                                                            1,
-                                                            json.decode(snapshot
-                                                                        .data
-                                                                        .toString())[
-                                                                    'data'][index]
-                                                                ['amount'])
-                                                        .then((value) {
-                                                      if (value == null) {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                                const SnackBar(
-                                                          content: Text(
-                                                              "Unable to add item"),
-                                                        ));
-                                                      } else {
-                                                        if (json.decode(value
-                                                                    .toString())[
-                                                                'status'] ==
-                                                            'success') {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  const SnackBar(
-                                                            content: Text(
-                                                                "Item added to cart"),
-                                                          ));
-                                                        } else {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  SnackBar(
-                                                            content: Text(
-                                                                json.decode(value
-                                                                        .toString())[
-                                                                    'message']),
-                                                          ));
-                                                        }
-                                                      }
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                      height: 30,
-                                                      alignment:
-                                                          Alignment.centerRight,
-                                                      width: 150,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.black,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      12.0)),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: const [
-                                                          Text("Add to basket",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      12)),
-                                                          SizedBox(
-                                                            width: 5.0,
-                                                          ),
-                                                          Icon(
-                                                            CupertinoIcons
-                                                                .shopping_cart,
+                                                                    [index]
+                                                                    ['id']
+                                                                .toString(),
+                                                          )));
+                                            },
+                                            child: Container(
+                                                width: 100,
+                                                height: 22,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 3.0),
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.black,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12.0)),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: const [
+                                                    Text("Add to basket",
+                                                        style: TextStyle(
                                                             color: Colors.white,
-                                                          )
-                                                        ],
-                                                      )),
-                                                ),
-                                              ),
-                                            ],
+                                                            fontSize: 12)),
+                                                    SizedBox(
+                                                      width: 5.0,
+                                                    ),
+                                                    Icon(
+                                                      CupertinoIcons
+                                                          .shopping_cart,
+                                                      color: Colors.white,
+                                                      size: 10,
+                                                    )
+                                                  ],
+                                                )),
                                           ),
                                         ),
                                       ]),
@@ -346,7 +361,7 @@ class _BookStoreState extends State<BookStore> {
                               ));
                         },
                         separatorBuilder: (context, index) => const SizedBox(
-                              height: 10,
+                              height: 3.0,
                             ),
                         itemCount: json
                             .decode(snapshot.data.toString())['data']
@@ -355,8 +370,7 @@ class _BookStoreState extends State<BookStore> {
                 );
               } catch (error) {
                 return const Center(
-                  child:
-                      Text("Something went wrong, please check your internet"),
+                  child: Text("Please check your internet and retry"),
                 );
               }
             }),

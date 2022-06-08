@@ -10,6 +10,8 @@ import 'screens.dart';
 class Politics extends StatefulWidget {
   const Politics({Key? key}) : super(key: key);
 
+  get searchType => null;
+
   @override
   _PoliticsState createState() => _PoliticsState();
 }
@@ -20,8 +22,7 @@ class _PoliticsState extends State<Politics> {
   // getting politics articles
   Future getPolitics() async {
     var response = await http.get(
-        Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Politics/getAllPolitics'),
+        Uri.parse('${EndPoint.baseUrl}/api/Politics/getAllPolitics'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${Database.box.get('authorization')}'
@@ -34,14 +35,14 @@ class _PoliticsState extends State<Politics> {
   Future getLikes(int postId) async {
     var request = await http.get(
         Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Politics/GetPoliticsCommentLike/$postId'),
+            '${EndPoint.baseUrl}/api/Politics/GetPoliticsCommentLike/$postId'),
         headers: {
           'Authorization': 'Bearer ${Database.box.get('authorization')}',
           'Content-Type': 'application/json'
         });
 
     var response = json.decode(request.body)['data'];
-    print(response);
+
     if (response != null) {
       commentLike.add({
         'comments': response['totalComments'],
@@ -50,7 +51,6 @@ class _PoliticsState extends State<Politics> {
     } else {
       commentLike.add({'comments': '0', 'likes': '0'});
     }
-    print(commentLike);
   }
 
   // get number of comments
@@ -70,14 +70,6 @@ class _PoliticsState extends State<Politics> {
             )),
         title: const Text("Politics",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => CreatePost())),
-        backgroundColor: Colors.black,
-        child: const Icon(
-          CupertinoIcons.add,
-        ),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -107,7 +99,14 @@ class _PoliticsState extends State<Politics> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      searchContainer("Search for title, writer"),
+                      GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => SearchScreen(
+                                        searchType: 'politics',
+                                      ))),
+                          child: searchContainer("Search for title, writer")),
                       const SizedBox(
                         height: 10,
                       ),
@@ -187,19 +186,30 @@ class _PoliticsState extends State<Politics> {
                                               shares: 23,
                                               datePosted: result[index]['date'],
                                               comment: result[index]
-                                                      ['totalCommments'] ??
+                                                      ['totalComments'] ??
                                                   0,
                                               image: result[index]['image'],
                                               content: result[index]
                                                   ['description'],
                                             ))),
                                 child: poemCard(
-                                    result[index]['totalComments'] ?? '0',
-                                    result[index]['totalLikes'] ?? '0',
+                                    result[index]['totalComments'] == null
+                                        ? '0'
+                                        : result[index]['totalComments']
+                                            .toString(),
+                                    result[index]['totalLikes'] == null
+                                        ? '0'
+                                        : result[index]['totalLikes']
+                                            .toString(),
                                     result[index]['title'],
                                     result[index]['postedby'],
                                     result[index]['date'],
-                                    result[index]['image']));
+                                    result[index]['image'],
+                                    Database.box.get(
+                                            'politicsLike${result[index]['id']}',
+                                            defaultValue: false)
+                                        ? true
+                                        : false));
                           },
                           separatorBuilder: (context, index) {
                             return const SizedBox(
@@ -210,6 +220,7 @@ class _PoliticsState extends State<Politics> {
                     ],
                   );
                 }
+
                 return const Center(
                   child: Text('Something went wrong'),
                 );

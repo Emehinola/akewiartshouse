@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,7 @@ class _EmailInputState extends State<EmailInput> {
   // for requesting password reset
   Future sendPassword(String email) async {
     final response = await http.post(
-      Uri.parse(
-          'http://placid-001-site50.itempurl.com/api/User/forgot-password'),
+      Uri.parse('${EndPoint.baseUrl}/api/User/forgot-password'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email}),
     );

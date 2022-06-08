@@ -17,7 +17,7 @@ class SinglePost extends StatefulWidget {
   String? datePosted;
   int? likes;
   int? shares;
-  int? comment;
+  int comment;
   String? content;
   String? category;
 
@@ -27,7 +27,7 @@ class SinglePost extends StatefulWidget {
       this.title,
       this.content,
       this.author,
-      this.comment,
+      required this.comment,
       this.category,
       this.image,
       this.datePosted,
@@ -43,14 +43,13 @@ class _SinglePostState extends State<SinglePost> {
   GlobalKey<FormState> formKey = GlobalKey();
   TextEditingController commentCtrl = TextEditingController();
   bool loading = false;
-  static List<dynamic> commentLikes = ['0', '0'];
 
   // deleting post
   Future deletePost(int postId) async {
     var request = await http.delete(
       Uri.parse(widget.category.toString().toLowerCase() == 'politics'
-          ? 'http://placid-001-site50.itempurl.com/api/Politics/deletePoliticsById/$postId'
-          : 'http://placid-001-site50.itempurl.com/api/Editorial/deleteEditorialById/$postId'),
+          ? '${EndPoint.baseUrl}/api/Politics/deletePoliticsById/$postId'
+          : '${EndPoint.baseUrl}/api/Editorial/deleteEditorialById/$postId'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Database.box.get('authorization')}'
@@ -76,40 +75,18 @@ class _SinglePostState extends State<SinglePost> {
     return response.body;
   }
 
-  // get total number of likes
-  Future getLikes(int postId) async {
-    var request = await http.get(
-        Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Politics/GetPoliticsCommentLike/$postId'),
-        headers: {
-          'Authorization': 'Bearer ${Database.box.get('authorization')}',
-          'Content-Type': 'application/json'
-        });
-
-    var response = json.decode(request.body)['data'];
-    print(response);
-    if (response != null) {
-      commentLikes[0] = response['totalComments'].toString();
-      commentLikes[1] = response['totalLikes'].toString();
-    } else {
-      commentLikes[0] = '0';
-      commentLikes[1] = '0';
-    }
-    print(commentLikes);
-  }
-
-  // create comment
-  Future createComment(String comment) async {
+  // create like
+  Future createLike() async {
     var request = await http.post(
         Uri.parse(widget.category.toString().toLowerCase() == 'politics'
-            ? 'http://placid-001-site50.itempurl.com/api/Politics/CreatePoliticsComment'
-            : 'http://placid-001-site50.itempurl.com/api/Editorial/createEditorialComment'),
+            ? '${EndPoint.baseUrl}/api/Politics/createPoliticsLike'
+            : '${EndPoint.baseUrl}/api/Editorial/createEditorialLike'),
         headers: {
           'Authorization': 'Bearer ${Database.box.get('authorization')}',
           'Content-Type': 'application/json'
         },
         body: jsonEncode({
-          'coments': comment,
+          'like': 1,
           widget.category.toString().toLowerCase() == 'politics'
               ? 'politicsId'
               : 'editorialId': widget.postId
@@ -121,9 +98,67 @@ class _SinglePostState extends State<SinglePost> {
       if (response['status'] == 'success') {
         commentCtrl.clear(); // clear the comment field data
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("comment posted"),
+          content: Text("post liked"),
         ));
-        setState(() {});
+        if (widget.category.toString().toLowerCase() == 'politics') {
+          Database.box
+              .put('politicsLike${widget.postId}', true)
+              .then((value) => setState(() {}));
+        } else {
+          Database.box
+              .put('editorialLike${widget.postId}', true)
+              .then((value) => setState(() {}));
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to like post"),
+        ));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Unable to like post"),
+      ));
+    }
+  }
+
+  // create comment
+  Future createComment(String comment) async {
+    var request = await http.post(
+        Uri.parse(widget.category.toString().toLowerCase() == 'politics'
+            ? '${EndPoint.baseUrl}/api/Politics/CreatePoliticsComment'
+            : '${EndPoint.baseUrl}/api/Editorial/createEditorialComment'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({
+          'coments': comment,
+          widget.category.toString().toLowerCase() == 'politics'
+              ? 'politicsId'
+              : 'editorialId': widget.postId
+        }));
+
+    try {
+      var response = json.decode(request.body.toString());
+
+      if (response != null) {
+        if (response['status'] == 'success') {
+          commentCtrl.clear(); // clear the comment field data
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("comment posted"),
+          ));
+          setState(() {
+            loading = false;
+            widget.comment += 1;
+          });
+        } else {
+          setState(() {
+            loading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Unable to comment"),
+          ));
+        }
       } else {
         setState(() {
           loading = false;
@@ -132,13 +167,10 @@ class _SinglePostState extends State<SinglePost> {
           content: Text("Unable to comment"),
         ));
       }
-    } else {
+    } catch (error) {
       setState(() {
         loading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Unable to comment"),
-      ));
     }
   }
 
@@ -146,8 +178,8 @@ class _SinglePostState extends State<SinglePost> {
   Future getComments(int postId) async {
     var request = await http.get(
         Uri.parse(widget.category.toString().toLowerCase() == 'politics'
-            ? 'http://placid-001-site50.itempurl.com/api/Politics/GetAllPoliticsComment/$postId'
-            : 'http://placid-001-site50.itempurl.com/api/Editorial/getAllEditorialComments/$postId'),
+            ? '${EndPoint.baseUrl}/api/Politics/GetAllPoliticsComment/$postId'
+            : '${EndPoint.baseUrl}/api/Editorial/getAllEditorialComments/$postId'),
         headers: {
           'Authorization': 'Bearer ${Database.box.get('authorization')}',
           'Content-Type': 'application/json'
@@ -158,7 +190,6 @@ class _SinglePostState extends State<SinglePost> {
 
   @override
   Widget build(BuildContext context) {
-    getLikes(widget.postId!.toInt());
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -169,74 +200,6 @@ class _SinglePostState extends State<SinglePost> {
                 CupertinoIcons.xmark,
                 color: Colors.black,
               )),
-          actions: [
-            InkWell(
-              onTap: () {
-                deletePost(widget.postId!.toInt()).then((response) {
-                  if (json.decode(response.data.toString())['status'] ==
-                      'success') {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Post deleted successfully")));
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => Politics()));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Unable to delete")));
-                  }
-                });
-              },
-              child: Row(
-                children: const [
-                  Text(
-                    "Delete",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
-                  ),
-                  Icon(
-                    CupertinoIcons.delete,
-                    color: Colors.black,
-                    size: 15,
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            InkWell(
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EditPost(
-                            postId: widget.postId!.toInt(),
-                            content: widget.content,
-                            title: widget.title,
-                            author: widget.author,
-                            category: widget.category,
-                            image: widget.image,
-                          ))),
-              child: Row(
-                children: const [
-                  Text(
-                    "Edit",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-                  Icon(
-                    FontAwesomeIcons.edit,
-                    color: Colors.black,
-                    size: 15,
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            )
-          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -275,10 +238,20 @@ class _SinglePostState extends State<SinglePost> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.heart,
-                              color: Colors.black)),
-                      Text(commentLikes[1],
+                          onPressed: () => createLike(),
+                          icon: (widget.category.toString().toLowerCase() ==
+                                      'politics'
+                                  ? Database.box.get(
+                                      'politicsLike${widget.postId}',
+                                      defaultValue: false)
+                                  : Database.box.get(
+                                      'editorialLike${widget.postId}',
+                                      defaultValue: false))
+                              ? const Icon(CupertinoIcons.heart_fill,
+                                  color: Colors.red)
+                              : const Icon(CupertinoIcons.heart,
+                                  color: Colors.black)),
+                      Text(widget.likes.toString(),
                           style: const TextStyle(color: Colors.black54)),
                       const SizedBox(height: 15.0),
                       IconButton(
@@ -288,7 +261,7 @@ class _SinglePostState extends State<SinglePost> {
                             color: Colors.black54,
                             size: 19,
                           )),
-                      Text(commentLikes[0],
+                      Text(widget.comment.toString(),
                           style: const TextStyle(color: Colors.black54))
                     ],
                   ),
@@ -329,11 +302,12 @@ class _SinglePostState extends State<SinglePost> {
                       try {
                         var result =
                             json.decode(snapshot.data.toString())['data'];
+
                         return ListView.separated(
                             shrinkWrap: true,
                             itemBuilder: (context, index) => userCommentTile(
                                 result[index]['postedBy'] ?? 'anonymous',
-                                result[index]['coments']),
+                                result[index]['coments'] ?? 'None'),
                             separatorBuilder: (context, index) =>
                                 const Divider(),
                             itemCount: result.length);

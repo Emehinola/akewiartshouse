@@ -91,18 +91,20 @@ class _MusicDisplayState extends State<MusicDisplay> {
     // cache!.load('johnny.mp3');
 
     _player!.setUrl(widget.musicUrl.toString());
+    Database.box.put('lastPlayedMusic', widget.musicUrl.toString());
+    Database.box.put('lastPlayedTitle', widget.title);
+    Database.box.put('lastPlayedArtist', widget.artist);
+    Database.box.put('lastPlayedImage', widget.imageUrl);
     super.initState();
   }
 
   // get music
   Future getAllMusic() async {
-    var request = await http.get(
-        Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Music/getAllMusic'),
-        headers: {
-          'Authorization': 'Bearer ${Database.box.get('authorization')}',
-          'Content-Type': 'application/json'
-        });
+    var request = await http
+        .get(Uri.parse('${EndPoint.baseUrl}/api/Music/getAllMusic'), headers: {
+      'Authorization': 'Bearer ${Database.box.get('authorization')}',
+      'Content-Type': 'application/json'
+    });
 
     musicsUrl = json.decode(
         request.body)['data']; // list of all the links of available music
@@ -133,6 +135,26 @@ class _MusicDisplayState extends State<MusicDisplay> {
             widget.title = type == 'forward'
                 ? musicsUrl[currentMusicIndex + 1]['musicTitle']
                 : musicsUrl[currentMusicIndex - 1]['musicTitle'];
+
+            if (type == 'forward') {
+              Database.box.put('lastPlayedMusic',
+                  musicsUrl[currentMusicIndex + 1]['musicPath']);
+              Database.box.put('lastPlayedTitle',
+                  musicsUrl[currentMusicIndex + 1]['musicTitle']);
+              Database.box.put('lastPlayedArtist',
+                  musicsUrl[currentMusicIndex + 1]['artistName']);
+              Database.box.put(
+                  'lastPlayedImage', musicsUrl[currentMusicIndex + 1]['image']);
+            } else {
+              Database.box.put('lastPlayedMusic',
+                  musicsUrl[currentMusicIndex - 1]['musicPath']);
+              Database.box.put('lastPlayedTitle',
+                  musicsUrl[currentMusicIndex - 1]['musicTitle']);
+              Database.box.put('lastPlayedArtist',
+                  musicsUrl[currentMusicIndex - 1]['artistName']);
+              Database.box.put(
+                  'lastPlayedImage', musicsUrl[currentMusicIndex - 1]['image']);
+            }
 
             _player!.resume().then((value) => playing = true);
             //

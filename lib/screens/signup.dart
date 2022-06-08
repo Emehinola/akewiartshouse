@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future signUp(
       String email, String username, String phone, String password) async {
     var response = await http.post(
-        Uri.parse('http://placid-001-site50.itempurl.com/api/User/register'),
+        Uri.parse('${EndPoint.baseUrl}/api/User/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': email,
@@ -41,12 +42,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
         setState(() {
           loading = false;
         });
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EmailConfirmationScreen(
-                      email: email,
-                    )));
+        Database.box.putAll({
+          'isLoggedIn': true,
+          'authorization': result['data']['token'],
+          'username': result['data']['username'],
+          'email': email,
+          'userId': result['data']['id'],
+          'password': passwordCtrl.text,
+          'phone': phone
+        }).then((value) {
+          setState(() {
+            loading = false;
+          });
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EmailConfirmationScreen(
+                        email: email,
+                      )));
+        });
       } else {
         // display error message
         setState(() {

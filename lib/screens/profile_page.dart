@@ -56,19 +56,18 @@ class _ProfilePageState extends State<ProfilePage> {
         'bio': bio.text.toString(),
         'facebook': facebook.text.toString(),
         'twitter': twitter.text.toString(),
-        'facebook': facebook.text.toString(),
         'website': website.text.toString(),
         'id': Database.box.get('userId'),
         'email': Database.box.get('email')
       });
     }
-    var request = await http.post(
-        Uri.parse('http://placid-001-site50.itempurl.com/api/User/update-user'),
-        headers: {
-          'Authorization': 'Bearer ${Database.box.get('authorization')}',
-          'Content-Type': 'application/json'
-        },
-        body: data);
+    var request =
+        await http.post(Uri.parse('${EndPoint.baseUrl}/api/User/update-user'),
+            headers: {
+              'Authorization': 'Bearer ${Database.box.get('authorization')}',
+              'Content-Type': 'application/json'
+            },
+            body: data);
 
     var response = json.decode(request.body.toString());
 
@@ -107,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future getUserProfile() async {
     var response = await http.get(
         Uri.parse(
-          'http://placid-001-site50.itempurl.com/api/User/getUserByEmail/${Database.box.get('email')}',
+          '${EndPoint.baseUrl}/api/User/getUserByEmail/${Database.box.get('email')}',
         ),
         headers: {
           'Content-Type': 'application/json',
@@ -116,16 +115,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
     var result = json.decode(response.body.toString())['data'];
 
-    // populating data
-    firstName.text = result['firstName'];
-    lastName.text = result['lastName'];
-    bio.text = result['bio'];
-    phone.text = result['phonenumber'];
-    facebook.text = result['facebook'];
-    twitter.text = result['twitter'];
-    website.text = result['website'];
-    username.text = result['username'];
-    instagram.text = result['instagram'];
+    // // populating data
+    // firstName.text = result['firstName'];
+    // lastName.text = result['lastName'];
+    // bio.text = result['bio'];
+    // phone.text = result['phonenumber'];
+    // facebook.text = result['facebook'];
+    // twitter.text = result['twitter'];
+    // website.text = result['website'];
+    // username.text = result['username'];
+    // instagram.text = result['instagram'];
 
     return response.body;
   }
@@ -235,8 +234,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             top: 120,
                             child: GestureDetector(
                               onTap: () {
-                                firstName.text = _data['firstName'];
-                                lastName.text = _data['lastName'];
+                                firstName.text = _data['firstname'];
+                                lastName.text = _data['lastname'];
                                 username.text = _data['username'];
                                 phone.text = _data['phonenumber'];
 
@@ -436,7 +435,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           fontSize: 21,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Text("@${_data['username'] ?? '@johndoe'}",
+                                    Text("@${_data['username'] ?? '@mail'}",
                                         style: const TextStyle(
                                             color: Colors.black87,
                                             fontSize: 17,
@@ -471,6 +470,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               onTap: () => showDialog(
                                 context: context,
                                 builder: (_) {
+                                  bio.text = _data['bio'];
+                                  facebook.text = _data['facebook'];
+                                  // instagram.text = _data['instagram'];
+                                  twitter.text = _data['twitter'];
+                                  website.text = _data['website'];
+
                                   return AlertDialog(
                                     contentPadding: EdgeInsets.zero,
                                     shape: const RoundedRectangleBorder(
@@ -478,7 +483,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             Radius.circular(20.0))),
                                     content: SingleChildScrollView(
                                       child: SizedBox(
-                                        height: 510,
+                                        height: 450,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -565,22 +570,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           8.0))),
                                                     ),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 50,
-                                                    child: TextFormField(
-                                                      controller: instagram,
-                                                      decoration: InputDecoration(
-                                                          hintText: "instagram",
-                                                          border: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8.0))),
-                                                    ),
-                                                  ),
+                                                  // const SizedBox(
+                                                  //   height: 10,
+                                                  // ),
+                                                  // SizedBox(
+                                                  //   height: 50,
+                                                  //   child: TextFormField(
+                                                  //     controller: instagram,
+                                                  //     decoration: InputDecoration(
+                                                  //         hintText: "instagram",
+                                                  //         border: OutlineInputBorder(
+                                                  //             borderRadius:
+                                                  //                 BorderRadius
+                                                  //                     .circular(
+                                                  //                         8.0))),
+                                                  //   ),
+                                                  // ),
                                                   const SizedBox(
                                                     height: 10,
                                                   ),
@@ -725,21 +730,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                           width: 20,
                                         ),
                                         TextButton(
-                                          onPressed: _data['instagram'] == null
-                                              ? null
-                                              : () {
-                                                  launchURL(_data['instagram']);
-                                                },
-                                          child: const Text("Instagram",
-                                              style: TextStyle(
-                                                  color: Colors.black87,
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        TextButton(
                                           onPressed: _data['twitter'] == null
                                               ? null
                                               : () {
@@ -751,22 +741,43 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   fontSize: 17,
                                                   fontWeight: FontWeight.bold)),
                                         ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        TextButton(
+                                          onPressed: _data['website'] == null
+                                              ? null
+                                              : () {
+                                                  launchURL(_data['website']);
+                                                },
+                                          child: const Text("Website",
+                                              style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        // const SizedBox(
+                                        //   width: 20,
+                                        // ),
+                                        // TextButton(
+                                        //   onPressed: _data['instagram'] == null
+                                        //       ? null
+                                        //       : () {
+                                        //           launchURL(_data['instagram']);
+                                        //         },
+                                        //   child: const Text("Instagram",
+                                        //       style: TextStyle(
+                                        //           color: Colors.black87,
+                                        //           fontSize: 17,
+                                        //           fontWeight: FontWeight.bold)),
+                                        // ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(
                                       height: 20,
-                                    ),
-                                    TextButton(
-                                      onPressed: _data['website'] == null
-                                          ? null
-                                          : () {
-                                              launchURL(_data['website']);
-                                            },
-                                      child: const Text("Website",
-                                          style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold)),
                                     ),
                                     const Divider(
                                       color: Colors.grey,

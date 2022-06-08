@@ -18,8 +18,7 @@ class _EditorialState extends State<Editorial> {
   // getting politics articles
   Future getPolitics() async {
     var response = await http.get(
-        Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Editorial/getAllEditorial'),
+        Uri.parse('${EndPoint.baseUrl}/api/Editorial/getAllEditorial'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${Database.box.get('authorization')}'
@@ -42,14 +41,6 @@ class _EditorialState extends State<Editorial> {
             )),
         title: const Text("Editorial",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => CreatePost())),
-        backgroundColor: Colors.black,
-        child: const Icon(
-          CupertinoIcons.add,
-        ),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -77,7 +68,14 @@ class _EditorialState extends State<Editorial> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      searchContainer("Search for title, writer"),
+                      GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => SearchScreen(
+                                        searchType: 'editorial',
+                                      ))),
+                          child: searchContainer("Search for title, writer")),
                       const SizedBox(
                         height: 10,
                       ),
@@ -148,22 +146,29 @@ class _EditorialState extends State<Editorial> {
                                             SinglePost(
                                               title: result[index]['title'],
                                               author: result[index]['postedby'],
-                                              likes: 12,
+                                              likes: result[index]
+                                                  ['totalLikes'],
                                               postId: result[index]['id'],
                                               shares: 23,
                                               datePosted: result[index]['date'],
-                                              comment: 34,
+                                              comment: result[index]
+                                                  ['totalComments'],
                                               image: result[index]['image'],
                                               content: result[index]
                                                   ['description'],
                                             ))),
                                 child: poemCard(
-                                    '0',
-                                    '0',
+                                    result[index]['totalComments'].toString(),
+                                    result[index]['totalLikes'].toString(),
                                     result[index]['title'],
                                     result[index]['postedby'],
                                     result[index]['date'],
-                                    result[index]['image']));
+                                    result[index]['image'],
+                                    Database.box.get(
+                                            'editorialLike${result[index]['id']}',
+                                            defaultValue: false)
+                                        ? true
+                                        : false));
                           },
                           separatorBuilder: (context, index) {
                             return const SizedBox(

@@ -46,7 +46,10 @@ dependencies:
   cached_network_image: ^3.2.0
   url_launcher: ^6.0.20
   date_count_down: ^2.1.0
-
+  file_picker: ^4.4.0
+  material_design_icons_flutter: ^5.0.6595
+  date_format: ^2.0.6
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -129,6 +132,10 @@ flutter:
     - family: Nunito
       fonts:
         - asset: assets/fonts/Nunito-Regular.ttf
+
+    - family: MyFlutterApp
+      fonts:
+        - asset: assets/fonts/MyFlutterApp.ttf
           # style: italic
   #   - family: Trajan Pro
   #     fonts:

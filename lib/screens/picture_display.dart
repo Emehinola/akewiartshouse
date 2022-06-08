@@ -20,7 +20,7 @@ class _PictureDisplayState extends State<PictureDisplay> {
   Future deletePhoto(int photoId) async {
     var request = await http.delete(
         Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Photography/deletePhotographyById/$photoId'),
+            '${EndPoint.baseUrl}/api/Photography/deletePhotographyById/$photoId'),
         headers: {
           'Authorization': 'Bearer ${Database.box.get('authorization')}',
           'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ class _PictureDisplayState extends State<PictureDisplay> {
           actions: [
             IconButton(
                 icon: const Icon(
-                  CupertinoIcons.cart,
+                  CupertinoIcons.delete,
                   color: Colors.black,
                 ),
                 onPressed: () => deletePhoto(widget.photoId))

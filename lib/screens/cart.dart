@@ -28,8 +28,7 @@ class _CartState extends State<Cart> {
 
   Future getCartItems() async {
     var response = await http.get(
-        Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Cart/getAllCartByUserId/3'),
+        Uri.parse('${EndPoint.baseUrl}/api/Cart/getAllCartByUserId/3'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${Database.box.get('authorization')}'
@@ -40,8 +39,7 @@ class _CartState extends State<Cart> {
 
   Future getSingleBook(int bookId) async {
     var response = await http.get(
-        Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Books/getBookById/$bookId'),
+        Uri.parse('${EndPoint.baseUrl}/api/Books/getBookById/$bookId'),
         headers: {'Authorization': '', 'Content-Type': ''});
 
     var result = json.decode(response.body);
@@ -52,8 +50,7 @@ class _CartState extends State<Cart> {
   Future deleteCart(int cartId) async {
     // deleting cart
     var deleteRequest = await http.delete(
-        Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Cart/deleteCartById/$cartId'),
+        Uri.parse('${EndPoint.baseUrl}/api/Cart/deleteCartById/$cartId'),
         headers: {
           'Authorization': 'Bearer ${Database.box.get('authorization')}',
           'Content-Type': 'application/json'

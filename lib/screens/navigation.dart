@@ -2,9 +2,8 @@ import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/screens/create_post.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../icons/my_flutter_app_icons.dart';
 import 'screens.dart';
-import 'package:akewiartshouse/custom_widgets.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
@@ -53,6 +52,20 @@ class _NavigationScreenState extends State<NavigationScreen> {
     NotificationScreen()
   ];
 
+  bool authenticated = false;
+
+  @override
+  void initState() {
+    authenticated = Database.box.get('isLoggedIn', defaultValue: false);
+    super.initState();
+  }
+
+  // snackbar for telling user to login
+  showSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please login to have full access")));
+  }
+
   @override
   Widget build(BuildContext context) {
     // print(Database.box.get('authorization'));
@@ -65,6 +78,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
         unselectedItemColor: Colors.black,
         selectedLabelStyle: const TextStyle(color: Colors.red),
         onTap: (value) {
+          if (!authenticated) {
+            showSnackBar();
+            return;
+          }
           setState(() {
             index = value;
           });
@@ -74,23 +91,24 @@ class _NavigationScreenState extends State<NavigationScreen> {
               icon: Icon(
                 CupertinoIcons.home,
                 color: index == 0 ? Colors.red : Colors.black,
+                size: 28,
               ),
               label: "Home"),
           BottomNavigationBarItem(
               icon: Icon(
-                CupertinoIcons.arrow_down_doc,
+                MyFlutterApp.vector,
                 color: index == 1 ? Colors.red : Colors.black,
               ),
               label: "New post"),
           BottomNavigationBarItem(
               icon: Icon(
-                CupertinoIcons.book,
+                MyFlutterApp.vector_3,
                 color: index == 2 ? Colors.red : Colors.black,
               ),
               label: "Bookstore"),
           BottomNavigationBarItem(
               icon: Icon(
-                CupertinoIcons.bell,
+                MyFlutterApp.vector_1,
                 color: index == 3 ? Colors.red : Colors.black,
               ),
               label: "Notification"),

@@ -56,16 +56,14 @@ class _CreatePhotographState extends State<CreatePhotograph> {
   Future uploadPhotos(String title, String category, String author, imagePaths,
       String content) async {
     try {
-      var request = http.MultipartRequest(
-          'POST',
-          Uri.parse(
-              'http://placid-001-site50.itempurl.com/api/Photography/createPhotography'));
+      var request = http.MultipartRequest('POST',
+          Uri.parse('${EndPoint.baseUrl}/api/Photography/createPhotography'));
 
       request.files.add(await http.MultipartFile.fromPath('mainImage',
           imagePaths[0].path)); // sets the first image as the main image
       imagePaths.removeAt(0); // removes the main image
 
-      for (var i = 1; i < imagePaths!.length; i++) {
+      for (var i = 0; i < imagePaths!.length; i++) {
         request.files.add(
             await http.MultipartFile.fromPath('photos', imagePaths[i].path));
       }

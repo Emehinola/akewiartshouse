@@ -2,9 +2,10 @@
     package="com.placid.akewiartshouse">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
    <application
         android:usesCleartextTraffic="true"
-        android:label="Akewi Arts"
+        android:label="Akewi"
         android:icon="@mipmap/akewi_launcher">
 
         <activity

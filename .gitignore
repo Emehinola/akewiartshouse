@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Miscellaneous
 *.class
 *.log
@@ -67,4 +67,5 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
->>>>>>> bb69c615508e75adcc714015ebdd21e21e4fbf58
+
+*.properties

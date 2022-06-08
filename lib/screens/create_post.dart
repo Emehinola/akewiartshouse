@@ -31,6 +31,14 @@ class _CreatePostState extends State<CreatePost> {
   File? pickedImage;
   ImagePicker? _imagePicker;
 
+  // post categories
+  List<String> postCategories = ["Politics", "Literature", "Editorial"];
+  List<String> subCategoriesList = ["Essay", "Drama", "Poetry"];
+
+  // sub-category
+  String selectedCategory = "Politics";
+  String selectedSubCategory = "Drama";
+
   // get lost data
   getLostData() async {
     final LostDataResponse response = await _imagePicker!.retrieveLostData();
@@ -60,17 +68,28 @@ class _CreatePostState extends State<CreatePost> {
   Future createPost(String title, String category, String author, imagePath,
       String content) async {
     try {
+      int catId = 0;
+      if (selectedCategory.toLowerCase() == 'poetry') {
+        catId = 1;
+      } else if (selectedCategory.toLowerCase() == 'drama') {
+        catId = 2;
+      } else {
+        catId = 3;
+      }
       var request = http.MultipartRequest(
           'POST',
           Uri.parse(category.toLowerCase() == 'politics'
-              ? 'http://placid-001-site50.itempurl.com/api/Politics/createPolitics'
-              : 'http://placid-001-site50.itempurl.com/api/Editorial/createEditorial'));
+              ? category.toLowerCase() == 'literature'
+                  ? '${EndPoint.baseUrl}/api/Literature/createLiterature'
+                  : '${EndPoint.baseUrl}/api/Politics/createPolitics'
+              : '${EndPoint.baseUrl}/api/Editorial/createEditorial'));
 
       request.files.add(await http.MultipartFile.fromPath('image', imagePath));
       request.fields.addAll({
         'title': title,
         'postedby': author,
         'description': content,
+        'catId': catId.toString(),
         'userId': Database.box.get('userId').toString()
       });
       request.headers['Authorization'] =
@@ -135,10 +154,11 @@ class _CreatePostState extends State<CreatePost> {
           physics: const BouncingScrollPhysics(),
           children: [
             SizedBox(
-              height: 45,
+              height: 40,
               child: TextField(
                 controller: title,
                 decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 10),
                     hintText: "Title",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0))),
@@ -148,10 +168,11 @@ class _CreatePostState extends State<CreatePost> {
               height: 20,
             ),
             SizedBox(
-              height: 45,
+              height: 40,
               child: TextField(
                 controller: author,
                 decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 10),
                     hintText: "Author",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0))),
@@ -160,115 +181,51 @@ class _CreatePostState extends State<CreatePost> {
             const SizedBox(
               height: 20,
             ),
-            GestureDetector(
-              onTap: () => showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                        contentPadding: EdgeInsets.zero,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0))),
-                        content: SizedBox(
-                          height: 250,
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 50,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                decoration: const BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(12.0),
-                                        topRight: Radius.circular(12.0))),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text("Select an option",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white)),
-                                    ),
-                                    IconButton(
-                                        icon: const Icon(
-                                          CupertinoIcons.xmark,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () => Navigator.pop(context))
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                  height: 200,
-                                  padding: const EdgeInsets.all(12.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(40.0),
-                                  ),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              categoryCtrl.text = 'Politics';
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                          child: SizedBox(
-                                            height: 120,
-                                            width: 70,
-                                            child: literatureOptionsCard(
-                                                "Politics",
-                                                "./assets/images/poem.png"),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              categoryCtrl.text = 'Editorial';
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                          child: SizedBox(
-                                            height: 120,
-                                            width: 70,
-                                            child: literatureOptionsCard(
-                                                "Editorial",
-                                                "./assets/images/drama.png"),
-                                          ),
-                                        ),
-                                      ])),
-                            ],
-                          ),
-                        ),
-                      )),
-              child: SizedBox(
-                height: 45,
-                child: TextField(
-                  enabled: false,
-                  controller: categoryCtrl,
-                  decoration: InputDecoration(
-                      suffixIcon: const Icon(CupertinoIcons.chevron_down),
-                      hintText: "Select category",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0))),
-                ),
+            DropdownButton(
+              value: selectedCategory,
+              icon: const Icon(CupertinoIcons.chevron_down),
+              items: postCategories
+                  .map((text) => DropdownMenuItem<String>(
+                        child: Text(text),
+                        value: text,
+                      ))
+                  .toList(),
+              onChanged: (String? category) {
+                setState(() {
+                  selectedCategory = category.toString();
+                });
+              },
+            ),
+            SizedBox(
+              height: selectedCategory == 'Literature' ? 20 : 0,
+            ),
+            Visibility(
+              visible: selectedCategory == 'Literature',
+              child: DropdownButton(
+                value: selectedSubCategory,
+                icon: const Icon(CupertinoIcons.chevron_down),
+                items: subCategoriesList
+                    .map((text) => DropdownMenuItem<String>(
+                          child: Text(text),
+                          value: text,
+                        ))
+                    .toList(),
+                onChanged: (String? subCat) {
+                  setState(() {
+                    selectedSubCategory = subCat.toString();
+                  });
+                },
               ),
             ),
             const SizedBox(
               height: 20,
             ),
             SizedBox(
-              height: 150,
+              height: 200,
               child: TextField(
                 controller: content,
-                minLines: 5,
-                maxLines: 6,
+                minLines: 8,
+                maxLines: 9,
                 keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(
                     hintText: "Description/write up",
@@ -292,9 +249,6 @@ class _CreatePostState extends State<CreatePost> {
             pickedImage != null
                 ? Text(pickedImage!.path.split('/').last)
                 : const SizedBox.shrink(),
-            const SizedBox(
-              height: 20,
-            ),
             const SizedBox(
               height: 40,
             ),

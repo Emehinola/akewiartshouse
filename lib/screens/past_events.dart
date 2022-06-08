@@ -36,7 +36,7 @@ class PastEvent extends StatelessWidget {
   Future getEvents() async {
     var request = await http.get(
         Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Events/getListOfEvents'),
+            '${EndPoint.baseUrl}/api/Events/getListOfEventsByStatus/past'),
         headers: {
           'Authorization': 'Bearer ${Database.box.get('authorization')}',
           'Content-Type': 'application/json'
@@ -55,6 +55,9 @@ class PastEvent extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 var result = json.decode(snapshot.data.toString())['data'];
+                if (result.isEmpty) {
+                  return const Center(child: Text("No Past Events"));
+                }
                 return ListView(
                   children: [
                     Padding(

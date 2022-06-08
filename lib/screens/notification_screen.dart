@@ -1,8 +1,20 @@
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class NotificationScreen extends StatelessWidget {
+  // get all notifications
+  Future getNotifications() async {
+    var request = await http.get(Uri.parse('uri'), headers: {
+      'Authorization': 'Bearer ${Database.box.get('authorization')}',
+      'Content-Type': 'application/json'
+    });
+
+    return request.body;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,16 +30,24 @@ class NotificationScreen extends StatelessWidget {
         title: const Text("Notifications",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.separated(
-            itemBuilder: (context, index) =>
-                NotificationTile("Samuel likes your post", "8 mins ago"),
-            separatorBuilder: (context, index) => const SizedBox(
-                  height: 20,
-                ),
-            itemCount: 4),
-      ),
+      body: FutureBuilder(
+          future: getNotifications(),
+          builder: (context, snapshot) {
+            try {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return const Center(
+                child: Text("No notification found"),
+              );
+            } catch (error) {
+              return const Center(
+                child: Text("Error fetching notifications"),
+              );
+            }
+          }),
     );
   }
 }

@@ -18,10 +18,13 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
 
+  // password obscurring
+  bool showPassword = false;
+
   // for logging in
   Future login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('http://placid-001-site50.itempurl.com/api/User/login'),
+      Uri.parse('${EndPoint.baseUrl}/api/User/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );
@@ -79,12 +82,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderSide: BorderSide(color: Colors.black)),
                               disabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black)),
                               contentPadding: EdgeInsets.zero,
                               prefixIcon: Icon(
                                 CupertinoIcons.mail,
                                 color: Colors.black,
+                                size: 20,
                               )),
                         ),
                       ),
@@ -92,18 +94,31 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 30,
                       ),
                       SizedBox(
-                        height: 55,
+                        height: 50,
                         child: TextFormField(
                           controller: passwordCtrl,
-                          obscureText: true,
-                          decoration: const InputDecoration(
+                          obscureText: !showPassword,
+                          decoration: InputDecoration(
                               hintText: "Password",
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.zero,
-                              prefixIcon: Icon(
+                              border: const OutlineInputBorder(),
+                              contentPadding: const EdgeInsets.only(bottom: 30),
+                              prefixIcon: const Icon(
                                 CupertinoIcons.lock,
                                 color: Colors.black,
-                              )),
+                                size: 20,
+                              ),
+                              suffix: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showPassword = !showPassword;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    showPassword
+                                        ? CupertinoIcons.eye
+                                        : CupertinoIcons.eye_slash,
+                                    size: 15,
+                                  ))),
                         ),
                       ),
                       const SizedBox(
@@ -127,14 +142,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                     'isLoggedIn': true,
                                     'authorization': result['data']['token'],
                                     'username': result['data']['username'],
-                                    'email': emailCtrl.text,
+                                    'email': emailCtrl.text.toString(),
                                     'userId': result['data']['id'],
-                                    'password': passwordCtrl.text,
+                                    'password': passwordCtrl.text.toString(),
+                                    'fullname':
+                                        '${result['data']['firstname']} ${result['data']['lastname']}',
+                                    'phone': result['data']['phonenumber']
                                   }).then((value) {
                                     setState(() {
                                       loading = false;
                                     });
-                                    Navigator.push(
+                                    Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
                                             builder: (BuildContext context) =>
@@ -151,10 +169,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               } catch (e) {
                                 // error handling
+                                setState(() {
+                                  loading = false;
+                                });
+                                const SnackBar(
+                                    content: Text(
+                                        "Something went wrong. Please retry"));
                               }
                             });
                           } else {
-                            //
+                            const SnackBar(
+                                content: Text("Please fill all fields"));
                           }
                         },
                         child: Container(

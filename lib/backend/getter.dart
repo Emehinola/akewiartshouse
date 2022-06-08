@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class EndPoint {
-  var login = 'http://placid-001-site50.itempurl.com/api/User/login';
+  static const baseUrl = 'http://www.api.enochojotisa.com';
 }
 
 class Database {

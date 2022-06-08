@@ -43,3 +43,7 @@ export 'edit_post.dart';
 export 'edit_literature.dart';
 export 'notification_screen.dart';
 export 'upload_music.dart';
+export 'search.dart';
+export 'pending_posts.dart';
+export 'draft.dart';
+export 'declined_posts.dart';

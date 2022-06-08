@@ -44,7 +44,7 @@ class _MyBookState extends State<MyBook> {
   Future deleteBook() async {
     var response = await http.delete(
         Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Books/deleteBookById/${widget.book_id}'),
+            '${EndPoint.baseUrl}/api/Books/deleteBookById/${widget.book_id}'),
         headers: {
           'Authorization': 'Bearer ${Database.box.get('authorization')}',
           'Content-Type': 'application/json'

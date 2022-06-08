@@ -78,8 +78,8 @@ class _EditPostState extends State<EditPost> {
       var request = http.MultipartRequest(
           'PUT',
           Uri.parse(category.toLowerCase() == 'politics'
-              ? 'http://placid-001-site50.itempurl.com/api/Politics/updatePolitics'
-              : 'http://placid-001-site50.itempurl.com/api/Editorial/updateEditorial'));
+              ? '${EndPoint.baseUrl}/api/Politics/updatePolitics'
+              : '${EndPoint.baseUrl}/api/Editorial/updateEditorial'));
 
       if (imagePath != null) {
         request.files

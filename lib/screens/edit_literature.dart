@@ -83,7 +83,7 @@ class _EditLiteratureState extends State<EditLiterature> {
       var request = http.MultipartRequest(
           'PUT',
           Uri.parse(
-              'http://placid-001-site50.itempurl.com/api/Literature/updateLiterature'));
+              '${EndPoint.baseUrl}/api/Literature/updateLiterature'));
 
       request.files.add(await http.MultipartFile.fromPath('image', imagePath));
       request.fields.addAll({

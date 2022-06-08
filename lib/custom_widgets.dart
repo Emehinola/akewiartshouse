@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:akewiartshouse/screens/screens.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:date_count_down/date_count_down.dart';
+import 'package:intl/intl.dart';
 
 Container poetCard(String title, String author, String imagePath) {
   return Container(
@@ -140,9 +139,17 @@ Container musicListCard(String image, String name, String author) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: Image.network(
-            image,
-            fit: BoxFit.fitWidth,
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    image,
+                  ),
+                )),
           ),
         ),
         Text(
@@ -166,7 +173,7 @@ Container productCard(String image, String productName, String author) {
   return Container(
     height: 100,
     margin: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 5, right: 0),
-    width: 90,
+    width: 80,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -183,7 +190,7 @@ Container productCard(String image, String productName, String author) {
         Text(
           author,
           style: const TextStyle(
-              fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
+              fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey),
         ),
         Text(
           productName,
@@ -212,8 +219,8 @@ Container roundedContainer(Widget child) {
 // cards
 Container itemCard(String text, String imagePath, Color color) {
   return Container(
-    height: 110,
-    width: 110,
+    height: 100,
+    width: 100,
     decoration: BoxDecoration(
       color: Colors.white,
       boxShadow: const [
@@ -240,90 +247,90 @@ Container itemCard(String text, String imagePath, Color color) {
     ),
   );
 }
-
-SizedBox politicsCard(BuildContext context) {
-  return SizedBox(
-    height: 100,
-    child: GestureDetector(
-      onTap: () => Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) => SinglePost())),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(4.0),
-            boxShadow: const [
-              BoxShadow(
-                  offset: Offset(1, 1),
-                  blurRadius: 0.8,
-                  spreadRadius: 2.0,
-                  color: Colors.black12)
-            ]),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-                height: 100,
-                width: 100,
-                child: Image.asset(
-                  './assets/images/painting.jpg',
-                  fit: BoxFit.cover,
-                )),
-            const SizedBox(
-              width: 5.0,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "The post title goes here for the first post",
-                    maxLines: 1,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  const Text(
-                    "Post content follows here... rest truncated...",
-                    style: TextStyle(fontSize: 17, color: Colors.grey),
-                  ),
-                  Row(
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(
-                            CupertinoIcons.time,
-                            color: Colors.grey,
-                          ),
-                          Text(
-                            "21, April, 2021",
-                            style: TextStyle(color: Colors.grey),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 15.0,
-                      ),
-                      Row(
-                        children: const [
-                          Icon(
-                            CupertinoIcons.chat_bubble,
-                            color: Colors.grey,
-                          ),
-                          Text(
-                            "28",
-                            style: TextStyle(color: Colors.grey),
-                          )
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    ),
-  );
-}
+//
+// SizedBox politicsCard(BuildContext context) {
+//   return SizedBox(
+//     height: 100,
+//     child: GestureDetector(
+//       onTap: () => Navigator.push(context,
+//           MaterialPageRoute(builder: (BuildContext context) => SinglePost())),
+//       child: Container(
+//         decoration: BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: BorderRadius.circular(4.0),
+//             boxShadow: const [
+//               BoxShadow(
+//                   offset: Offset(1, 1),
+//                   blurRadius: 0.8,
+//                   spreadRadius: 2.0,
+//                   color: Colors.black12)
+//             ]),
+//         child: Row(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             SizedBox(
+//                 height: 100,
+//                 width: 100,
+//                 child: Image.asset(
+//                   './assets/images/painting.jpg',
+//                   fit: BoxFit.cover,
+//                 )),
+//             const SizedBox(
+//               width: 5.0,
+//             ),
+//             Expanded(
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   const Text(
+//                     "The post title goes here for the first post",
+//                     maxLines: 1,
+//                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+//                   ),
+//                   const Text(
+//                     "Post content follows here... rest truncated...",
+//                     style: TextStyle(fontSize: 17, color: Colors.grey),
+//                   ),
+//                   Row(
+//                     children: [
+//                       Row(
+//                         children: const [
+//                           Icon(
+//                             CupertinoIcons.time,
+//                             color: Colors.grey,
+//                           ),
+//                           Text(
+//                             "21, April, 2021",
+//                             style: TextStyle(color: Colors.grey),
+//                           )
+//                         ],
+//                       ),
+//                       const SizedBox(
+//                         width: 15.0,
+//                       ),
+//                       Row(
+//                         children: const [
+//                           Icon(
+//                             CupertinoIcons.chat_bubble,
+//                             color: Colors.grey,
+//                           ),
+//                           Text(
+//                             "28",
+//                             style: TextStyle(color: Colors.grey),
+//                           )
+//                         ],
+//                       )
+//                     ],
+//                   )
+//                 ],
+//               ),
+//             )
+//           ],
+//         ),
+//       ),
+//     ),
+//   );
+// }
 
 SizedBox musicRow(
     String number, String imagePath, String title, String subtitle) {
@@ -565,35 +572,35 @@ Container artWorkCard(
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: const [
-                  Icon(CupertinoIcons.heart_fill, color: Colors.red),
-                  Text("198", style: TextStyle(color: Colors.black54)),
-                ],
-              ),
-              const SizedBox(
-                width: 7,
-              ),
-              Row(children: const [
-                Icon(
-                  FontAwesomeIcons.shareAlt,
-                  color: Colors.grey,
-                  size: 15,
-                ),
-                Text("198", style: TextStyle(color: Colors.black54)),
-              ]),
-              const SizedBox(
-                width: 7,
-              ),
-              Row(children: const [
-                Icon(CupertinoIcons.chat_bubble, color: Colors.grey),
-                Text("46", style: TextStyle(color: Colors.black54)),
-              ])
-            ],
-          )
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Row(
+          //       children: const [
+          //         Icon(CupertinoIcons.heart_fill, color: Colors.red),
+          //         Text("198", style: TextStyle(color: Colors.black54)),
+          //       ],
+          //     ),
+          //     const SizedBox(
+          //       width: 7,
+          //     ),
+          //     Row(children: const [
+          //       Icon(
+          //         FontAwesomeIcons.shareAlt,
+          //         color: Colors.grey,
+          //         size: 15,
+          //       ),
+          //       Text("198", style: TextStyle(color: Colors.black54)),
+          //     ]),
+          //     const SizedBox(
+          //       width: 7,
+          //     ),
+          //     Row(children: const [
+          //       Icon(CupertinoIcons.chat_bubble, color: Colors.grey),
+          //       Text("46", style: TextStyle(color: Colors.black54)),
+          //     ])
+          //   ],
+          // )
         ],
       ),
       Text(description)
@@ -814,7 +821,7 @@ Container bookSaleCard(
 Container musicTile(
     String imagePath, String title, String artist, String duration) {
   return Container(
-      height: 70,
+      height: 65,
       padding: const EdgeInsets.all(10.0),
       margin: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
@@ -829,7 +836,18 @@ Container musicTile(
           ]),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Row(children: [
-          Image.network(imagePath, height: 55),
+          Container(
+            height: 55,
+            width: 55,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    imagePath,
+                  ),
+                )),
+          ),
           const SizedBox(width: 5),
           Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -845,23 +863,24 @@ Container musicTile(
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
                         fontSize: 12)),
-                Text(duration,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontSize: 12)),
+                // Text(duration,
+                //     style: const TextStyle(
+                //         fontWeight: FontWeight.bold,
+                //         color: Colors.black,
+                //         fontSize: 12)),
               ])
         ]),
-        const Icon(CupertinoIcons.play_arrow_solid, color: Colors.black),
-        // Row(
-        //   children: const [
-        //     Icon(CupertinoIcons.play_arrow_solid, color: Colors.black),
-        //     SizedBox(width: 15),
-        //     Icon(CupertinoIcons.heart, color: Colors.black),
-        //     SizedBox(width: 15),
-        //     Icon(CupertinoIcons.ellipsis_vertical, color: Colors.black),
-        //   ],
-        // )
+        Row(
+          children: const [
+            Icon(CupertinoIcons.play_arrow_solid,
+                color: Colors.black, size: 18),
+            SizedBox(width: 15),
+            Icon(CupertinoIcons.heart, color: Colors.black, size: 18),
+            SizedBox(width: 15),
+            Icon(CupertinoIcons.ellipsis_vertical,
+                color: Colors.black, size: 18),
+          ],
+        )
       ]));
 }
 
@@ -869,8 +888,8 @@ Container poemCard(dynamic comments, dynamic likes, String title, String author,
     String date, String imagePath,
     [bool liked = false]) {
   return Container(
-    height: 150,
-    padding: const EdgeInsets.all(15.0),
+    height: 110,
+    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
     margin: const EdgeInsets.all(5.0),
     width: double.infinity,
     child: Row(
@@ -879,10 +898,10 @@ Container poemCard(dynamic comments, dynamic likes, String title, String author,
         Expanded(
           child: Row(children: [
             Container(
-              width: 120,
-              height: 140,
+              width: 80,
+              height: 110,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(8.0),
                   image: DecorationImage(
                       image: NetworkImage(imagePath), fit: BoxFit.fill)),
             ),
@@ -904,41 +923,49 @@ Container poemCard(dynamic comments, dynamic likes, String title, String author,
                     "By $author",
                     style: const TextStyle(color: Colors.grey),
                   ),
-                  Text("Posted $date",
-                      style: const TextStyle(color: Colors.grey)),
+                  Text("Posted ${DateFormat().format(DateTime.parse(date))}",
+                      style: const TextStyle(color: Colors.grey, fontSize: 10)),
                   const SizedBox(height: 25),
-                  // Expanded(
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Row(
-                  //         children: [
-                  //           Icon(
-                  //               liked
-                  //                   ? CupertinoIcons.heart_fill
-                  //                   : CupertinoIcons.heart,
-                  //               color: liked ? Colors.red : Colors.grey),
-                  //           Text(likes ?? '0',
-                  //               style: const TextStyle(color: Colors.black54)),
-                  //         ],
-                  //       ),
-                  //       // Row(children: const [
-                  //       //   Icon(
-                  //       //     FontAwesomeIcons.shareAlt,
-                  //       //     color: Colors.grey,
-                  //       //     size: 15,
-                  //       //   ),
-                  //       //   Text("198", style: TextStyle(color: Colors.black54)),
-                  //       // ]),
-                  //       Row(children: [
-                  //         const Icon(CupertinoIcons.chat_bubble,
-                  //             color: Colors.grey),
-                  //         Text(comments ?? '0',
-                  //             style: const TextStyle(color: Colors.black54)),
-                  //       ])
-                  //     ],
-                  //   ),
-                  // )
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              liked
+                                  ? CupertinoIcons.heart_fill
+                                  : CupertinoIcons.heart,
+                              color: liked ? Colors.red : Colors.grey,
+                              size: 12,
+                            ),
+                            Text(likes == null ? '0' : likes.toString(),
+                                style: const TextStyle(
+                                    color: Colors.black54, fontSize: 12)),
+                          ],
+                        ),
+                        // Row(children: const [
+                        //   Icon(
+                        //     FontAwesomeIcons.shareAlt,
+                        //     color: Colors.grey,
+                        //     size: 15,
+                        //   ),
+                        //   Text("198", style: TextStyle(color: Colors.black54)),
+                        // ]),
+                        const SizedBox(width: 10.0),
+                        Row(children: [
+                          const Icon(
+                            CupertinoIcons.chat_bubble,
+                            color: Colors.grey,
+                            size: 12,
+                          ),
+                          Text(comments != null ? comments.toString() : '0',
+                              style: const TextStyle(
+                                  color: Colors.black54, fontSize: 12)),
+                        ])
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -1089,8 +1116,6 @@ Container nowPlayingCard() {
               Icon(CupertinoIcons.pause_solid, color: Colors.white),
               SizedBox(width: 15),
               Icon(CupertinoIcons.heart_fill, color: Colors.red),
-              SizedBox(width: 15),
-              Icon(CupertinoIcons.ellipsis_vertical, color: Colors.white),
             ],
           )
         ]),
@@ -1227,7 +1252,7 @@ Container pastEventCard(
                   decoration: const BoxDecoration(color: Colors.black),
                   child: const Text(
                     'Past',
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white),
                   ),
                 )),
             const Align(
@@ -1254,11 +1279,6 @@ Container pastEventCard(
                           fontWeight: FontWeight.bold,
                           fontSize: 18),
                     ),
-                    const Text("Enoch Ojotisa",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
                     Text("$date | $time",
                         style: const TextStyle(
                             color: Colors.white,
@@ -1289,26 +1309,29 @@ Container attendanceCard(String text, Color bgColor) {
 }
 
 // event time
-Container eventTimeCard(String time) {
+Container eventTimeCard(String? time) {
   return Container(
     color: Colors.white,
     padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),
-    child: CountDownText(
-      due: DateTime.parse(time),
-      finishedText: "Now Live",
-      showLabel: true,
-      longDateName: true,
-      daysTextLong: " DAYS ",
-      hoursTextLong: " HOURS ",
-      minutesTextLong: " MINUTES ",
-      secondsTextLong: " SECONDS ",
-      style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-    ),
+    child: time == null
+        ? const SizedBox.shrink()
+        : CountDownText(
+            due: DateTime.parse(time.toString()),
+            finishedText: "Now Live",
+            showLabel: true,
+            longDateName: true,
+            daysTextLong: " DAYS ",
+            hoursTextLong: " HOURS ",
+            minutesTextLong: " MINUTES ",
+            secondsTextLong: " SECONDS ",
+            style:
+                const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          ),
   );
 }
 
 // published posts
-Container publishedPostCard(String tag) {
+Container publishedPostCard(String tag, String image, String title) {
   return Container(
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.0), color: Colors.transparent),
@@ -1324,9 +1347,8 @@ Container publishedPostCard(String tag) {
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.0),
-                    image: const DecorationImage(
-                        image: AssetImage('./assets/images/bg.jpeg'),
-                        fit: BoxFit.cover)),
+                    image: DecorationImage(
+                        image: NetworkImage(image), fit: BoxFit.cover)),
               ),
               Container(
                 height: 250,
@@ -1346,14 +1368,10 @@ Container publishedPostCard(String tag) {
             ],
           ),
         ),
-        const Text(
-          "Oloju dudu",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Text(
+          title.length >= 15 ? "${title.substring(0, 15)}..." : title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        const Text(
-          "Published 4 days ago",
-          style: TextStyle(),
-        )
       ],
     ),
   );
@@ -1363,16 +1381,17 @@ Container publishedPostCard(String tag) {
 SizedBox imageSelectionCard(BuildContext context,
     [String text = 'Select image here']) {
   return SizedBox(
-    height: 40,
+    height: 30,
     width: MediaQuery.of(context).size.width,
     child: Row(
       children: [
         Expanded(
+          flex: 4,
           child: Container(
-            alignment: Alignment.center,
+            alignment: Alignment.centerLeft,
             height: 40,
             width: double.infinity,
-            padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
             decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: const BorderRadius.only(
@@ -1396,6 +1415,7 @@ SizedBox imageSelectionCard(BuildContext context,
               child: const Icon(
                 CupertinoIcons.cloud_upload,
                 color: Colors.white,
+                size: 20,
               )),
         ),
       ],
@@ -1633,3 +1653,30 @@ showDialog(
                                       ),
                                     ));
 * */
+
+class DrawerItem extends StatelessWidget {
+  String? icon;
+  String? text;
+
+  DrawerItem({this.icon, this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
+      decoration: const BoxDecoration(color: Colors.black),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(icon.toString()),
+          const SizedBox(height: 10.0),
+          Text(
+            text.toString(),
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.white),
+          )
+        ],
+      ),
+    );
+  }
+}

@@ -45,40 +45,72 @@ class _SinglePoetState extends State<SinglePoet> {
 
   TextEditingController commentCtrl = TextEditingController();
 
-  // deleting post
-  Future deletePost(int postId) async {
-    var request = await http.delete(
-      Uri.parse(
-          'http://placid-001-site50.itempurl.com/api/Literature/deleteLiteratureById/${widget.postId}'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${Database.box.get('authorization')}'
-      },
-    );
+  Future createLike() async {
+    var request = await http.post(
+        Uri.parse('${EndPoint.baseUrl}/api/Literature/createLiteratureLike'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({'like': 1, 'literatureId': widget.postId}));
 
-    var response = json.decode(request.body);
+    var response = json.decode(request.body.toString());
 
     if (response != null) {
       if (response['status'] == 'success') {
+        commentCtrl.clear(); // clear the comment field data
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Post deleted"),
+          content: Text("post liked"),
         ));
-        Navigator.pop(context);
+        Database.box
+            .put('literatureLike${widget.postId}', true)
+            .then((value) => setState(() {}));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Unable to like post"),
+        ));
       }
     } else {
-      //
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Unable to delete post"),
+        content: Text("Unable to like post"),
       ));
     }
-
-    return response.body;
   }
+
+  // // deleting post
+  // Future deletePost(int postId) async {
+  //   var request = await http.delete(
+  //     Uri.parse(
+  //         'http://api.enochojotisa.com/api/Literature/deleteLiteratureById/${widget.postId}'),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer ${Database.box.get('authorization')}'
+  //     },
+  //   );
+  //
+  //   var response = json.decode(request.body);
+  //
+  //   if (response != null) {
+  //     if (response['status'] == 'success') {
+  //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //         content: Text("Post deleted"),
+  //       ));
+  //       Navigator.pop(context);
+  //     }
+  //   } else {
+  //     //
+  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //       content: Text("Unable to delete post"),
+  //     ));
+  //   }
+  //
+  //   return response.body;
+  // }
 
   Future getSingleItem() async {
     var response = await http.get(
       Uri.parse(
-          'http://placid-001-site50.itempurl.com/api/Literature/getLiteratureById/${widget.postId}'),
+          'http://api.enochojotisa.com/api/Literature/getLiteratureById/${widget.postId}'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Database.box.get('authorization')}'
@@ -94,7 +126,7 @@ class _SinglePoetState extends State<SinglePoet> {
   Future createComment(String comment) async {
     var request = await http.post(
         Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Literature/createLiteratureComment'),
+            'http://api.enochojotisa.com/api/Literature/createLiteratureComment'),
         headers: {
           'Authorization': 'Bearer ${Database.box.get('authorization')}',
           'Content-Type': 'application/json'
@@ -131,7 +163,7 @@ class _SinglePoetState extends State<SinglePoet> {
   Future getComments(int postId) async {
     var request = await http.get(
         Uri.parse(
-            'http://placid-001-site50.itempurl.com/api/Literature/GetAllLiteratureComment/$postId'),
+            'http://api.enochojotisa.com/api/Literature/GetAllLiteratureComment/$postId'),
         headers: {
           'Authorization': 'Bearer ${Database.box.get('authorization')}',
           'Content-Type': 'application/json'
@@ -153,74 +185,6 @@ class _SinglePoetState extends State<SinglePoet> {
                 CupertinoIcons.xmark,
                 color: Colors.black,
               )),
-          actions: [
-            InkWell(
-              onTap: () {
-                deletePost(widget.postId!.toInt()).then((response) {
-                  if (json.decode(response.data.toString())['status'] ==
-                      'success') {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Post deleted successfully")));
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => Literature()));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Unable to delete")));
-                  }
-                });
-              },
-              child: Row(
-                children: const [
-                  Text(
-                    "Delete",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
-                  ),
-                  Icon(
-                    CupertinoIcons.delete,
-                    color: Colors.black,
-                    size: 15,
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            InkWell(
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EditLiterature(
-                            litId: widget.postId!.toInt(),
-                            image: widget.image,
-                            title: widget.title,
-                            content: widget.content,
-                            category: widget.category,
-                            author: widget.author,
-                          ))),
-              child: Row(
-                children: const [
-                  Text(
-                    "Edit",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-                  Icon(
-                    FontAwesomeIcons.edit,
-                    color: Colors.black,
-                    size: 15,
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            )
-          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -259,9 +223,13 @@ class _SinglePoetState extends State<SinglePoet> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.heart,
-                              color: Colors.black)),
+                          onPressed: () => createLike(),
+                          icon: Database.box.get(
+                                  'editorialLike${widget.postId}',
+                                  defaultValue: false)
+                              ? const Icon(CupertinoIcons.heart_fill,
+                                  color: Colors.red)
+                              : const Icon(CupertinoIcons.heart)),
                       Text(widget.likes.toString(),
                           style: const TextStyle(color: Colors.black54)),
                       const SizedBox(height: 15.0),
@@ -306,7 +274,7 @@ class _SinglePoetState extends State<SinglePoet> {
                             shrinkWrap: true,
                             itemBuilder: (context, index) => userCommentTile(
                                 result[index]['postedBy'] ?? 'anonymous',
-                                result[index]['coments']),
+                                result[index]['comments']),
                             separatorBuilder: (context, index) =>
                                 const Divider(),
                             itemCount: result.length);

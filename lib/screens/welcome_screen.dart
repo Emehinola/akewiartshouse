@@ -80,11 +80,17 @@ class WelcomeScreen extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            const Align(
+            Align(
               alignment: Alignment.centerRight,
-              child: Text("Skip Now",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900, color: Colors.black)),
+              child: GestureDetector(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NavigationScreen())),
+                child: const Text("Skip Now",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w900, color: Colors.black)),
+              ),
             )
           ],
         )

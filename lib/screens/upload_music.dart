@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:akewiartshouse/screens/screens.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:akewiartshouse/screens/politics.dart';
@@ -20,6 +21,8 @@ class MusicUploadScreen extends StatefulWidget {
 class _MusicUploadState extends State<MusicUploadScreen> {
 // controlllers
   TextEditingController author = TextEditingController();
+  TextEditingController musicTitle = TextEditingController();
+  TextEditingController artistName = TextEditingController();
 
   // loading controller
   bool loading = false;
@@ -27,6 +30,9 @@ class _MusicUploadState extends State<MusicUploadScreen> {
   // IMAGE
   File? pickedImage;
   ImagePicker? _imagePicker;
+
+  // Audio
+  File? pickedAudio;
 
   // get lost data
   getLostData() async {
@@ -53,20 +59,34 @@ class _MusicUploadState extends State<MusicUploadScreen> {
     });
   }
 
+  void pickAudio() async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(allowMultiple: false, type: FileType.audio);
+    setState(() {
+      pickedAudio =
+          result!.paths.map((path) => File(path.toString())).toList()[0];
+    });
+    print(pickedAudio!.path);
+  }
+
   // posting article
-  Future uploadMusic(String author, imagePath) async {
+  Future uploadMusic(String author, String artistName, String musicTitle,
+      imagePath, musicPath) async {
     try {
       var request = http.MultipartRequest(
-          'POST',
-          Uri.parse(
-              'http://placid-001-site50.itempurl.com/api/Editorial/createEditorial'));
+          'POST', Uri.parse('${EndPoint.baseUrl}/api/Music/createMusic'));
 
       request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+      request.files
+          .add(await http.MultipartFile.fromPath('musicPath', imagePath));
+
       request.fields.addAll({
         'postedby': author,
-        'musicPath': '',
+        'musicPath': musicPath,
+        'artistName': artistName,
+        'musicTitle': musicTitle,
         'image': imagePath,
-        'userId': Database.box.get('userId')
+        'userId': Database.box.get('userId').toString()
       });
       request.headers['Authorization'] =
           'Bearer ${Database.box.get('authorization')}';
@@ -79,17 +99,18 @@ class _MusicUploadState extends State<MusicUploadScreen> {
           loading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Post created successfully")));
+            const SnackBar(content: Text("Music uploaded successfully")));
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Politics()));
+            context, MaterialPageRoute(builder: (context) => Music()));
       } else {
         setState(() {
           loading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Unable to submit post. Try again")));
+            const SnackBar(content: Text("Unable to post music. Try again")));
       }
     } catch (error) {
+      print('error: $error');
       setState(() {
         loading = false;
       });
@@ -119,7 +140,7 @@ class _MusicUploadState extends State<MusicUploadScreen> {
           ),
         ),
         title: const Text(
-          "Create new post",
+          "Upload new song",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
@@ -133,7 +154,33 @@ class _MusicUploadState extends State<MusicUploadScreen> {
               child: TextField(
                 controller: author,
                 decoration: InputDecoration(
-                    hintText: "Author",
+                    hintText: "Your name",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0))),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 45,
+              child: TextField(
+                controller: artistName,
+                decoration: InputDecoration(
+                    hintText: "Artist name",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0))),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 45,
+              child: TextField(
+                controller: musicTitle,
+                decoration: InputDecoration(
+                    hintText: "Song title",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0))),
               ),
@@ -142,7 +189,7 @@ class _MusicUploadState extends State<MusicUploadScreen> {
               height: 20,
             ),
             const Text(
-              "Featured images",
+              "Select album image",
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
             ),
@@ -159,15 +206,15 @@ class _MusicUploadState extends State<MusicUploadScreen> {
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
             ),
+            pickedImage != null
+                ? Text(pickedImage!.path.split('/').last)
+                : const SizedBox.shrink(),
             const SizedBox(
               height: 5,
             ),
             GestureDetector(
-                onTap: () => pickImage(),
+                onTap: () => pickAudio(),
                 child: imageSelectionCard(context, 'Select music here')),
-            pickedImage != null
-                ? Text(pickedImage!.path.split('/').last)
-                : const SizedBox.shrink(),
             const SizedBox(
               height: 20,
             ),
@@ -181,8 +228,13 @@ class _MusicUploadState extends State<MusicUploadScreen> {
                     loading = true;
                   });
                   // get lost data
-                  getLostData();
-                  uploadMusic(author.text.toString(), pickedImage!.path);
+                  // getLostData();
+                  uploadMusic(
+                      author.text.toString(),
+                      artistName.text.toString(),
+                      musicTitle.text.toString(),
+                      pickedImage!.path,
+                      pickedAudio!.path);
                 }
               },
               child: Container(

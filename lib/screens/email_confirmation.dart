@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/screens/navigation.dart';
+import 'package:akewiartshouse/screens/screens.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class EmailConfirmationScreen extends StatefulWidget {
   String? email;
+  String? firstName;
+  String? lastName;
 
   EmailConfirmationScreen({this.email});
 
@@ -21,10 +24,10 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   TextEditingController codeCtrl = TextEditingController();
   bool loading = false;
 
-  // email verifivation
+  // email verification
   Future verifyEmail(String email, String code) async {
     var response = await http.post(
-        Uri.parse('http://placid-001-site50.itempurl.com/api/User/verify-otp'),
+        Uri.parse('${EndPoint.baseUrl}/api/User/verify-otp'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'code': code}));
 
@@ -36,8 +39,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
           loading = false;
         });
         Database.box.putAll({'email': email}).then((value) => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => NavigationScreen())));
+            context, MaterialPageRoute(builder: (context) => LoginScreen())));
       } else {
         setState(() {
           loading = false;
@@ -109,7 +111,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                         highlightPinBoxColor: Colors.white70,
                         maxLength: 6,
                         hasError: false,
-                        maskCharacter: "😎",
+                        maskCharacter: "*",
                         onTextChanged: (text) {
                           setState(() {});
                         },

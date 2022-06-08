@@ -1,12 +1,10 @@
 import 'dart:convert';
-
 import 'package:akewiartshouse/backend/backend.dart';
 import 'package:flutter/material.dart';
 import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:http/http.dart' as http;
-
 import 'create_photograph.dart';
 
 class ArtWork extends StatelessWidget {
@@ -15,8 +13,7 @@ class ArtWork extends StatelessWidget {
     // getting all photographs
     Future getPhotographs() async {
       var response = await http.get(
-          Uri.parse(
-              'http://placid-001-site50.itempurl.com/api/Photography/getAllPhotography'),
+          Uri.parse('${EndPoint.baseUrl}/api/Photography/getAllPhotography'),
           headers: {
             'Authorization': 'Bearer ${Database.box.get('authorization')}',
             'Content-Type': 'application/json'
@@ -59,6 +56,7 @@ class ArtWork extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
+                print(snapshot.data);
                 return const Center(
                   child:
                       Text("Something went wrong, please check your internet"),

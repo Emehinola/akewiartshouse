@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/custom_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class UpcomingEventView extends StatefulWidget {
   String? image;
@@ -10,12 +14,14 @@ class UpcomingEventView extends StatefulWidget {
   String? description;
   String? location;
   String? subtitle;
+  int? eventId;
 
   UpcomingEventView(
       {this.image,
       this.title,
       this.date,
       this.time,
+      this.eventId,
       this.description,
       this.location,
       this.subtitle});
@@ -25,8 +31,63 @@ class UpcomingEventView extends StatefulWidget {
 }
 
 class _UpcomingEventViewState extends State<UpcomingEventView> {
+  int totalCount = 0;
+
+  Future getAttendanceCount(int eventId) async {
+    var request = await http.get(
+        Uri.parse(
+            '${EndPoint.baseUrl}/api/Events/getEventAttendanceCount/$eventId'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        });
+
+    setState(() {
+      totalCount = json.decode(request.body.toString())['data']['totalCount'];
+    });
+  }
+
+  // take attendance
+  Future takeAttendance(int eventId) async {
+    var request = await http.post(
+        Uri.parse('${EndPoint.baseUrl}/api/Events/createEventAttendance'),
+        headers: {
+          'Authorization': 'Bearer ${Database.box.get('authorization')}',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({
+          'eventId': eventId,
+          'userId': Database.box.get('userId'),
+        }));
+    // print(request.body.toString());
+    var response = json.decode(request.body.toString());
+
+    if (response != null) {
+      if (response['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Attendance marked. Thank you")));
+        setState(() {
+          // reloads
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Unable to mark attendance. Try again")));
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Something went wrong")));
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    getAttendanceCount(widget.eventId!.toInt());
     return Scaffold(
       body: Column(
         children: [
@@ -135,13 +196,13 @@ class _UpcomingEventViewState extends State<UpcomingEventView> {
                                       fontSize: 14,
                                       color: Colors.black),
                                 ),
-                                Text(
-                                  "Set Reminder",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.blue),
-                                ),
+                                // Text(
+                                //   "Set Reminder",
+                                //   style: TextStyle(
+                                //       fontWeight: FontWeight.bold,
+                                //       fontSize: 14,
+                                //       color: Colors.blue),
+                                // ),
                               ],
                             ),
                             const SizedBox(
@@ -151,39 +212,46 @@ class _UpcomingEventViewState extends State<UpcomingEventView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Column(
-                                  children: const [Text("Yes"), Text("21")],
+                                  children: [
+                                    const Text("Yes"),
+                                    Text(
+                                      totalCount.toString(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
                                 ),
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Container(
-                                  color: Colors.grey,
-                                  height: 40,
-                                  width: 2.0,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  children: const [Text("No"), Text("43")],
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Container(
-                                  color: Colors.grey,
-                                  height: 40,
-                                  width: 2.0,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  children: const [Text("Maybe"), Text("23")],
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
+                                // Container(
+                                //   color: Colors.grey,
+                                //   height: 40,
+                                //   width: 2.0,
+                                // ),
+                                // const SizedBox(
+                                //   width: 10,
+                                // ),
+                                // Column(
+                                //   children: const [Text("No"), Text("43")],
+                                // ),
+                                // const SizedBox(
+                                //   width: 10,
+                                // ),
+                                // Container(
+                                //   color: Colors.grey,
+                                //   height: 40,
+                                //   width: 2.0,
+                                // ),
+                                // const SizedBox(
+                                //   width: 10,
+                                // ),
+                                // Column(
+                                //   children: const [Text("Maybe"), Text("23")],
+                                // ),
+                                // const SizedBox(
+                                //   width: 10,
+                                // ),
                               ],
                             ),
                             const SizedBox(
@@ -191,7 +259,10 @@ class _UpcomingEventViewState extends State<UpcomingEventView> {
                             ),
                             Row(
                               children: [
-                                attendanceCard("Yes", Colors.black),
+                                GestureDetector(
+                                    onTap: () =>
+                                        takeAttendance(widget.eventId!.toInt()),
+                                    child: attendanceCard("Yes", Colors.black)),
                                 const SizedBox(
                                   width: 5,
                                 ),

@@ -64,10 +64,8 @@ class _CreateLiteratureState extends State<CreateLiterature> {
       } else {
         catId = 3;
       }
-      var request = http.MultipartRequest(
-          'POST',
-          Uri.parse(
-              'http://placid-001-site50.itempurl.com/api/Literature/createLiterature'));
+      var request = http.MultipartRequest('POST',
+          Uri.parse('${EndPoint.baseUrl}/api/Literature/createLiterature'));
 
       request.files.add(await http.MultipartFile.fromPath('image', imagePath));
       request.fields.addAll({

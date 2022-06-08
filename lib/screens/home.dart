@@ -4,36 +4,54 @@ import 'package:akewiartshouse/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   List<String> texts = [
     "Manage posts",
     "Book store",
-    // "Events",
+    "Events",
     "Donate",
     "Help/Support",
-    // "Settings"
+    "Settings"
   ];
 
-  // drawer icons
   List<String> icons = [
     "manage_post",
     "bookstore",
-    // "events",
+    "events",
     "donate",
     "help",
-    // "settings"
+    "settings"
   ];
 
   List<Widget> drawerScreens = [
     ManagePost(),
     BookStore(),
-    // MyEvents(),
+    MyEvents(),
     Donate(),
     Help(),
-    // Scaffold()
+    Scaffold()
   ];
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
+  bool authenticated = false;
+
+  @override
+  void initState() {
+    authenticated = Database.box.get('isLoggedIn', defaultValue: false);
+    super.initState();
+  }
+
+  // snackbar for telling user to login
+  showSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please login to have full access")));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +77,16 @@ class Home extends StatelessWidget {
                           height: 70,
                           width: 70,
                           child: GestureDetector(
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfilePage())),
+                            onTap: () {
+                              if (!authenticated) {
+                                showSnackBar();
+                                return;
+                              }
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfilePage()));
+                            },
                             child: const CircleAvatar(
                               backgroundImage:
                                   AssetImage('./assets/images/logo.png'),
@@ -109,8 +133,14 @@ class Home extends StatelessWidget {
                   color: Colors.grey,
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfilePage())),
+                  onTap: () {
+                    if (!authenticated) {
+                      showSnackBar();
+                      return;
+                    }
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()));
+                  },
                   child: Container(
                     height: 100,
                     width: double.infinity,
@@ -137,41 +167,120 @@ class Home extends StatelessWidget {
                   height: 20,
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.35,
-                  child: GridView.builder(
-                      itemCount: icons.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 20,
-                              crossAxisSpacing: 20),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => drawerScreens[index])),
-                          child: Container(
-                            decoration:
-                                const BoxDecoration(color: Colors.black),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                    "./assets/images/${icons[index]}.png"),
-                                const SizedBox(height: 10.0),
-                                Text(
-                                  texts[index],
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                )
-                              ],
-                            ),
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  drawerScreens[0]));
+                                    },
+                                    child: DrawerItem(
+                                      icon: "./assets/images/${icons[0]}.png",
+                                      text: texts[0],
+                                    )),
+                              ),
+                              const SizedBox(
+                                width: 10.0,
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                drawerScreens[1]));
+                                  },
+                                  child: DrawerItem(
+                                    icon: "./assets/images/${icons[1]}.png",
+                                    text: texts[1],
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                        );
-                      }),
-                ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  drawerScreens[2]));
+                                    },
+                                    child: DrawerItem(
+                                      icon: "./assets/images/${icons[2]}.png",
+                                      text: texts[2],
+                                    )),
+                              ),
+                              const SizedBox(
+                                width: 10.0,
+                              ),
+                              Expanded(
+                                  child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              drawerScreens[3]));
+                                },
+                                child: DrawerItem(
+                                  icon: "./assets/images/${icons[3]}.png",
+                                  text: texts[3],
+                                ),
+                              ))
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  drawerScreens[4]));
+                                    },
+                                    child: DrawerItem(
+                                      icon: "./assets/images/${icons[4]}.png",
+                                      text: texts[4],
+                                    )),
+                              ),
+                              const SizedBox(
+                                width: 10.0,
+                              ),
+                              Expanded(
+                                  child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              drawerScreens[5]));
+                                },
+                                child: DrawerItem(
+                                  icon: "./assets/images/${icons[5]}.png",
+                                  text: texts[5],
+                                ),
+                              )),
+                            ],
+                          ),
+                        ])),
                 const SizedBox(
                   height: 20,
                 ),
@@ -184,20 +293,20 @@ class Home extends StatelessWidget {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  height: 60,
+                  height: 45,
                   width: double.infinity,
-                  decoration: const BoxDecoration(color: Colors.black),
+                  decoration: const BoxDecoration(color: Colors.white),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Text(
                         "Developed by Placid Global Intl.",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                            fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                       Text(
                         "(Akewi Artshouse limited)",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ],
                   ),
@@ -214,14 +323,14 @@ class Home extends StatelessWidget {
                                 builder: (context) => LoginScreen())));
                   },
                   child: Row(
-                    children: const [
-                      Icon(CupertinoIcons.square_arrow_left_fill),
-                      SizedBox(
+                    children: [
+                      const Icon(CupertinoIcons.square_arrow_left_fill),
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(
-                        "Logout",
-                        style: TextStyle(
+                        authenticated ? "Logout" : "Login",
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       )
@@ -243,7 +352,11 @@ class Home extends StatelessWidget {
               child: Stack(
                 children: [
                   ClipRRect(
-                    child: Image.asset('./assets/images/home_bg.png'),
+                    child: Image.asset(
+                      './assets/images/home_bg.png',
+                      height: 300,
+                      fit: BoxFit.cover,
+                    ),
                     borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(15.0),
                         bottomRight: Radius.circular(15.0)),
@@ -251,7 +364,7 @@ class Home extends StatelessWidget {
                   Container(
                     height: 300,
                     decoration: const BoxDecoration(
-                        color: Color.fromRGBO(0, 0, 0, 0.75),
+                        color: Color.fromRGBO(0, 0, 0, 0.45),
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(15.0),
                             bottomRight: Radius.circular(15.0))),
@@ -273,7 +386,7 @@ class Home extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          "Hi ${Database.box.get('username')}, Welcome to AKEWI!",
+                          "Hi ${Database.box.get('username') ?? 'friend'}, Welcome to AKEWI!",
                           style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -291,6 +404,9 @@ class Home extends StatelessWidget {
                           children: [
                             GestureDetector(
                                 onTap: () {
+                                  if (!authenticated) {
+                                    showSnackBar();
+                                  }
                                   showDialog(
                                       context: context,
                                       builder: (_) => AlertDialog(
@@ -423,11 +539,16 @@ class Home extends StatelessWidget {
                               width: 35,
                             ),
                             GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (BuildContext context) =>
-                                            const BookStore())),
+                                onTap: () {
+                                  if (!authenticated) {
+                                    showSnackBar();
+                                  }
+                                  Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const BookStore()));
+                                },
                                 child: itemCard("Book Store",
                                     "./assets/images/page-1.png", Colors.blue)),
                           ],
@@ -439,11 +560,16 @@ class Home extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Events())),
+                              onTap: () {
+                                if (!authenticated) {
+                                  showSnackBar();
+                                }
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Events()));
+                              },
                               child: itemCard(
                                   "Events",
                                   "./assets/images/red-carpet.png",
@@ -453,11 +579,16 @@ class Home extends StatelessWidget {
                               width: 35,
                             ),
                             GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Music())),
+                              onTap: () {
+                                if (!authenticated) {
+                                  showSnackBar();
+                                }
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Music()));
+                              },
                               child: itemCard(
                                   "Music",
                                   "./assets/images/music-note.png",
@@ -472,11 +603,16 @@ class Home extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Politics())),
+                              onTap: () {
+                                if (!authenticated) {
+                                  showSnackBar();
+                                }
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Politics()));
+                              },
                               child: itemCard("Politics",
                                   "./assets/images/Flat.png", Colors.blue),
                             ),
@@ -484,11 +620,16 @@ class Home extends StatelessWidget {
                               width: 35,
                             ),
                             GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Editorial())),
+                              onTap: () {
+                                if (!authenticated) {
+                                  showSnackBar();
+                                }
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Editorial()));
+                              },
                               child: itemCard(
                                   "Editorial",
                                   "./assets/images/editorial-design.png",
@@ -505,14 +646,19 @@ class Home extends StatelessWidget {
                           ],
                         ),
                         GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ArtWork())),
+                          onTap: () {
+                            if (!authenticated) {
+                              showSnackBar();
+                            }
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (BuildContext context) =>
+                                        ArtWork()));
+                          },
                           child: Container(
-                            height: 120,
-                            width: 260,
+                            height: 110,
+                            width: 240,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: const [
@@ -538,6 +684,34 @@ class Home extends StatelessWidget {
                                 const SizedBox(height: 3)
                               ],
                             ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Visibility(
+                          visible: ((Database.box.get('isLoggedIn') == false) ||
+                              Database.box.get('username') == null),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () => Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginScreen())),
+                                child: const Text(
+                                  "Login here",
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 3.0,
+                              ),
+                              const Text("to enjoy full access")
+                            ],
                           ),
                         ),
                         const SizedBox(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:akewiartshouse/backend/backend.dart';
 import 'package:akewiartshouse/screens/navigation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
@@ -76,8 +77,7 @@ class _DonateState extends State<Donate> {
       String address, String city, String country, String transactionId) async {
     try {
       var request = await http.post(
-          Uri.parse(
-              'http://placid-001-site50.itempurl.com/api/Donation/createDonation'),
+          Uri.parse('${EndPoint.baseUrl}/api/Donation/createDonation'),
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
             'fullname': name,

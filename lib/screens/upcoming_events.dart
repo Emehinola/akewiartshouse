@@ -8,11 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
-class UpcomingEvent extends StatelessWidget {
+class UpcomingEvent extends StatefulWidget {
+  @override
+  State<UpcomingEvent> createState() => _UpcomingEventState();
+}
+
+class _UpcomingEventState extends State<UpcomingEvent> {
   fetchEvent() async {
     dynamic response = await http.get(
       Uri.parse(
-          'http://placid-001-site50.itempurl.com/api/Events/getListOfEvents'),
+          '${EndPoint.baseUrl}/api/Events/getListOfEventsByStatus/upcoming'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${Database.box.get('authorization')}'
@@ -34,6 +39,9 @@ class UpcomingEvent extends StatelessWidget {
             );
           } else {
             List data = jsonDecode(snapshot.data.toString())['data'];
+            if (data.isEmpty) {
+              return const Center(child: Text("No Upcoming Events"));
+            }
             return ListView.separated(
               physics: const BouncingScrollPhysics(),
               itemBuilder: (BuildContext context, index) {
@@ -43,6 +51,7 @@ class UpcomingEvent extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => UpcomingEventView(
                                 title: data[index]['title'],
+                                eventId: data[index]['id'],
                                 image: data[index]['banner'],
                                 date: data[index]['eventDate'],
                                 description: data[index]['description'],
